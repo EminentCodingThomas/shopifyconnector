@@ -41,7 +41,7 @@ class PrepareProductForExport(models.TransientModel):
 
         active_template_ids = self._context.get("active_ids", [])
         templates = self.env["product.template"].browse(active_template_ids)
-        product_templates = templates.filtered(lambda template: template.detailed_type == "product")
+        product_templates = templates.filtered(lambda template: template.type == "consu")
         if not product_templates:
             raise UserError(_("It seems like selected products are not Storable products."))
 

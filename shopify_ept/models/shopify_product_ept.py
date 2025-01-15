@@ -79,7 +79,7 @@ class ShopifyProductProductEpt(models.Model):
         attrib_line_vals = self.shopify_prepare_attribute_vals(result)
         if attrib_line_vals:
             template_vals = {"name": template_title,
-                             "detailed_type": "product",
+                             "type": "consu",
                              "attribute_line_ids": attrib_line_vals}
 
             if self.env["ir.config_parameter"].sudo().get_param("shopify_ept.set_sales_description"):
@@ -702,7 +702,7 @@ class ShopifyProductProductEpt(models.Model):
                     commit_count = 0
                 commit_count += 1
                 odoo_product = shopify_product.product_id
-                if odoo_product.detailed_type == "product":
+                if odoo_product.type == "consu":
                     if not shopify_product.inventory_item_id:
                         message = "Inventory Item Id did not found for Shopify Product Variant ID " \
                                   "%s with name %s for instance %s while Export stock" % (
@@ -834,7 +834,7 @@ class ShopifyProductProductEpt(models.Model):
                     commit_count = 0
                 commit_count += 1
                 odoo_product = shopify_product.product_id
-                if odoo_product.detailed_type == "product":
+                if odoo_product.type == "consu":
                     if not shopify_product.inventory_item_id:
                         message = "Inventory Item Id did not found for Shopify Product Variant ID " \
                                   "%s with name %s for instance %s while Export stock" % (

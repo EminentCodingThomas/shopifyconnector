@@ -6,7 +6,7 @@
         <field name="name">Shopify Product Tree View</field>
         <field name="model">shopify.product.product.ept</field>
         <field name="arch" type="xml">
-            <tree create="false" sample="1">
+            <list create="false" sample="1">
                 <field name="sequence"/>
                 <field name="name"/>
                 <field name="shopify_instance_id"/>
@@ -14,7 +14,7 @@
                 <field name="product_id"/>
                 <field name="variant_id"/>
                 <field name="exported_in_shopify"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -56,7 +56,7 @@
                 <sheet>
                     <field name="active" class="oe_inline" invisible='1'/>
                     <div class="ribbon ribbon-top-right"
-                         attrs="{'invisible': [('active','=',True)]}">
+                         invisible="active == True">
                         <span class="bg-danger"
                               style="left: -4px !important;top: 20px !important">Archived
                         </span>
@@ -72,7 +72,7 @@
                             <group>
                                 <group>
                                     <field name="shopify_instance_id"
-                                           attrs="{'readonly': [('exported_in_shopify','=',True)]}"/>
+                                           readonly="exported_in_shopify == True"/>
                                     <field name="shopify_template_id"/>
                                     <field name="variant_id" readonly="1"/>
                                     <field name="sequence"/>
@@ -91,7 +91,7 @@
                                     <field name="taxable"/>
                                     <field name="inventory_management"/>
                                     <field name="check_product_stock"
-                                           attrs="{'invisible': [('inventory_management', '=','Dont track Inventory')]}"/>
+                                           invisible="inventory_management == 'Dont track Inventory'"/>
                                 </group>
                                 <group>
                                     <field name="fix_stock_type"/>

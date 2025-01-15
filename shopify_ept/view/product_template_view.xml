@@ -5,7 +5,7 @@
         <field name="name">Shopify Product Tree View</field>
         <field name="model">shopify.product.template.ept</field>
         <field name="arch" type="xml">
-            <tree create="false" sample="1">
+            <list create="false" sample="1">
                 <header>
                     <button name="%(shopify_ept.action_wizard_shopify_product_for_update)d" type="action" string="Update Existing Product"/>
                     <button name="%(shopify_ept.action_wizard_shopify_update_stock)d" type="action" string="Export Stock"/>
@@ -17,7 +17,7 @@
                 <field name="total_sync_variants"/>
                 <field name="exported_in_shopify"/>
                 <field name="website_published"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -59,7 +59,7 @@
                 <sheet>
                     <field name="active" class="oe_inline" invisible='1'/>
                     <div class="ribbon ribbon-top-right"
-                         attrs="{'invisible': [('active','=',True)]}">
+                         invisible="active == True">
                         <span class="bg-danger"
                               style="left: -4px !important;top: 20px !important">Archived
                         </span>
@@ -73,21 +73,21 @@
                     </div>
                     <button name="shopify_publish_unpublish_product" class="pull-right"
                             type="object" string="Unpublish Product" context="{'publish': 'shopify_unpublish'}"
-                            attrs="{'invisible': ['|',('exported_in_shopify','=',False),('website_published','=','unpublished')]}"/>
+                            invisible="(exported_in_shopify == False) or (website_published == 'unpublished')"/>
                     <button name="shopify_publish_unpublish_product" class="pull-right"
                             type="object" string="Publish in Web and POS"
                             context="{'publish': 'shopify_publish_global'}"
-                            attrs="{'invisible': ['|',('exported_in_shopify','=',False),('website_published','=','published_global')]}"/>
+                            invisible="(exported_in_shopify == False) or (website_published =='published_global')"/>
                     <button name="shopify_publish_unpublish_product" class="pull-right"
                             type="object" string="Publish in Web Only"
                             context="{'publish': 'shopify_publish_web'}"
-                            attrs="{'invisible': ['|',('exported_in_shopify','=',False),('website_published','=','published_web')]}"/>
+                            invisible="(exported_in_shopify == False) or (website_published == 'published_web')"/>
                     <notebook>
                         <page string="Shopify Info">
                             <group>
                                 <group>
                                     <field name="shopify_instance_id"
-                                           attrs="{'readonly': [('exported_in_shopify','=',True)]}"/>
+                                           readonly="exported_in_shopify == True"/>
                                     <field name="product_tmpl_id" required="1" readonly="1"/>
                                 </group>
                                 <group>
@@ -97,7 +97,7 @@
                                         <button name="action_product_ref_redirect"
                                                 type="object"
                                                 icon="fa-external-link"
-                                                attrs="{'invisible': [('exported_in_shopify','=',False)]}">
+                                                invisible="exported_in_shopify == False">
                                         </button>
                                     </div>
 
@@ -123,7 +123,7 @@
                             </div>
                         </page>
                         <page string="Variants"
-                              attrs="{'invisible': [('active','=',False)]}">
+                              invisible="active == False">
                             <div>
                                 <field name="shopify_product_ids" nolabel="1"/>
                             </div>

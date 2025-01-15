@@ -8,12 +8,12 @@
             <field name="picking_id" position="after">
                 <field name="sale_order_ept_id" invisible="1"/>
             </field>
-            <button name="create_returns" position="attributes">
-                <attribute name="attrs">{'invisible':[('sale_order_ept_id','!=',False)]}</attribute>
+            <button name="action_create_returns" position="attributes">
+                <attribute name="invisible">sale_order_ept_id != False</attribute>
             </button>
-            <button name="create_returns" position="after">
+            <button name="action_create_returns" position="after">
                 <button name="create_returns_ept" string="Return" type="object" class="btn-primary"
-                        attrs="{'invisible':[('picking_id','!=',False)]}"/>
+                        invisible="picking_id != False"/>
             </button>
         </field>
     </record>

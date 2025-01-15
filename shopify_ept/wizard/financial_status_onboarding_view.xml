@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <form class="o_shopify_ept">
                 <div class="oe_title mb-2 ml-2"
-                     attrs="{'invisible': [('shopify_instance_id', '!=', False)]}">
+                    invisible="shopify_instance_id != False">
                     <h1 class="o_on_board_heading">
                         Currently, no instance configuration is underway.
                     </h1>
@@ -26,30 +26,30 @@
                         </b>
                     </div>
                 </div>
-                <div class="oe_title" attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                <div class="oe_title" invisible="shopify_instance_id == False">
                     <h1 class="font-weight-bold o_on_board_heading">
                         <field name="shopify_instance_id" readonly="1" options="{'no_open': True}"/>
                         <field name="shopify_company_id" invisible="1"/>
                     </h1>
                 </div>
                 <div class="o_horizontal_separator o_onboard_header font-weight-bold"
-                     attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                     invisible="shopify_instance_id == False">
                     Stock Configuration
                 </div>
                 <div class="row o_settings_container o_onboard_padding"
-                     attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                    invisible="shopify_instance_id == False">
                     <div class="col-xs-12 col-md-6 o_setting_box o_onboard_setting_box">
                         <div class="ml-2 pl-1 o_onboard_m_p">
                             <label for="shopify_stock_field" class="o_onboard_label"/>
                             <field name="shopify_stock_field"
                                    class="o_onboard_input"
                                    domain="[('model_id.model','=','product.product'),('name','in',['free_qty','virtual_available','qty_available'])]"
-                                   attrs="{'required':[('shopify_instance_id','!=',False)]}"/>
+                                   required="shopify_instance_id != False"/>
                         </div>
                     </div>
                 </div>
                 <div class="row mt6 o_settings_container o_onboard_padding"
-                     attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                     invisible="shopify_instance_id == False">
                     <div class="col-xs-12 col-md-6 o_setting_box o_onboard_setting_box">
                         <div class="o_horizontal_separator o_onboard_header font-weight-bold o_onboard_extra_margin">
                             Notify By Email
@@ -75,7 +75,7 @@
                     </div>
                 </div>
                 <div class="row mt6 o_settings_container o_onboard_padding"
-                     attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                     invisible="shopify_instance_id == False">
                     <div class="col-xs-12 col-md-6 o_setting_box o_onboard_setting_box">
                         <div class="o_horizontal_separator o_onboard_header font-weight-bold o_onboard_extra_margin">
                             Schedule Activity Information
@@ -86,17 +86,17 @@
                             <label for="is_shopify_create_schedule" class="o_onboard_label"/>
                         </div>
                         <div class="ml-2 pl-1 o_onboard_m_p"
-                             attrs="{'invisible': [('is_shopify_create_schedule', '=', False)]}">
+                             invisible="is_shopify_create_schedule == False">
                             <field name="shopify_activity_type_id"
                                    class="o_onboard_input"
-                                   attrs="{'required': [('is_shopify_create_schedule', '=', True)]}"/>
+                                   required="is_shopify_create_schedule == True"/>
                             <label for="shopify_activity_type_id" class="o_onboard_label"/>
                             <a href="javascript:void(0)"
                                title="Select Schedule Activity Type."
                                class="ml-2 o_doc_link o_onboard_doc_link"/>
                         </div>
                         <div class="ml-2 pl-1 o_onboard_m_p"
-                             attrs="{'invisible': [('is_shopify_create_schedule', '=', False)]}">
+                             invisible ="is_shopify_create_schedule == False">
                             <field name="shopify_user_ids" widget="many2many_tags" class="o_onboard_input"/>
                             <label for="shopify_user_ids" class="o_onboard_label"/>
                             <a href="javascript:void(0)"
@@ -104,9 +104,9 @@
                                class="ml-2 o_doc_link o_onboard_doc_link"/>
                         </div>
                         <div class="ml-2 pl-1 o_onboard_m_p"
-                             attrs="{'invisible': [('is_shopify_create_schedule', '=', False)]}">
+                             invisible="is_shopify_create_schedule == False">
                             <field name="shopify_date_deadline" class="o_light_label w-50 o_onboard_input"
-                                   attrs="{'required': [('is_shopify_create_schedule', '=', True)]}"/>
+                                   required="is_shopify_create_schedule == True"/>
                             <label for="shopify_date_deadline" class="o_onboard_label"/>
                             <a href="javascript:void(0)"
                                title="Enter Lead Days For Deadline Date Of Schedule Activity."
@@ -125,11 +125,11 @@
                 </div>
                 <div class="o_horizontal_separator o_onboard_header font-weight-bold"
                      style="font-size: 1.50rem; mb-0"
-                     attrs="{'invisible': [('shopify_instance_id', '=', False)]}">Webhook
+                     invisible="shopify_instance_id == False">Webhook
                     Configuration
                 </div>
                 <div class="row mt16 o_settings_container o_onboard_padding"
-                     attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                     invisible="shopify_instance_id == False">
                     <div class="col-12 col-lg-12 o_setting_box o_onboard_setting_box">
                         <div class="alert alert-warning on_board_alert_warning" role="alert">
                             <h3>Note :</h3>
@@ -190,7 +190,7 @@
                         </div>
                     </div>
                 </div>
-                <notebook attrs="{'invisible': [('shopify_instance_id', '=', False)]}"
+                <notebook invisible ="shopify_instance_id == False"
                           class="o_onboard_notebook">
                     <page string="Financial Status Configurations" name="financial_status_lines">
                         <field name="shopify_financial_status_ids" editable="bottom"
@@ -201,7 +201,7 @@
                     <button string="Save Configuration" type="object"
                             name="shopify_save_financial_status_configurations"
                             class="oe_highlight o_onboard_button"
-                            attrs="{'invisible': [('shopify_instance_id', '=', False)]}"/>
+                            invisible="shopify_instance_id == False"/>
                     <button class="oe_highlight o_onboard_button_white" special="cancel"
                             string="Cancel"/>
                 </footer>

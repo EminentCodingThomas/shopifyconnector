@@ -58,10 +58,10 @@ class AccountMove(models.Model):
         return {
             'name': _('Multi payments'),
             'type': 'ir.actions.act_window',
-            'view_mode': 'tree',
+            'view_mode': 'list',
             'res_model': 'shopify.order.payment.ept',
             'view_id': view_id,
-            'views': [(view_id, 'tree')],
+            'views': [(view_id, 'list')],
             'domain': [('id', 'in', self.line_ids.sale_line_ids.order_id.shopify_payment_ids.ids)],
             "target": "new",
             'context': context

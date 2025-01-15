@@ -5,11 +5,11 @@
         <field name="name">Shopify Instance</field>
         <field name="model">shopify.instance.ept</field>
         <field name="arch" type="xml">
-            <tree create="false" sample="1">
+            <list create="false" sample="1">
                 <field name="name"/>
                 <field name="shopify_host"/>
                 <field name="shopify_company_id"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -42,7 +42,7 @@
                 <header>
                     <button name="shopify_test_connection"
                             string="Check Connection" class="oe_highlight" type="object"
-                            attrs="{'invisible': [('active','=',True)]}"/>
+                            invisible="active == True"/>
                 </header>
                 <sheet>
                     <field name="active" invisible="1"/>
@@ -50,34 +50,34 @@
                         <button type="object" style="width:16% !important"
                                 name="open_reset_credentials_wizard" class="oe_stat_button"
                                 groups="base.group_system" icon="fa-undo"
-                                attrs="{'invisible': [('active','=',False)]}">
+                                invisible="active == False">
                             <span class="o_stat_text">Reset Credentials</span>
                         </button>
                         <button type="object" style="width:16% !important"
                                 name="cron_configuration_action" class="oe_stat_button"
                                 groups="base.group_system" icon="fa-wrench"
-                                attrs="{'invisible': [('active','=',False)]}">
+                                invisible="active == False">
                             <span class="o_stat_text">Configure Schedulers</span>
                         </button>
                         <button type="object" name="action_redirect_to_ir_cron"
                                 class="oe_stat_button" icon="fa-play-circle"
                                 groups="base.group_system"
-                                attrs="{'invisible': [('active','=',False)]}">
+                                invisible="active == False">
                             <span class="o_stat_text">Active Schedulers</span>
                         </button>
                         <button class="oe_stat_button"
                                 name="action_shopify_active_archive_instance" icon="fa-lock"
-                                type="object" attrs="{'invisible': [('active','=',False)]}">
+                                type="object" invisible="active == False">
                             <span class="o_stat_text" style="color:#2dab2d">Active</span>
                         </button>
                         <button class="oe_stat_button"
                                 name="action_shopify_active_archive_instance" icon="fa-unlock"
-                                type="object" attrs="{'invisible': [('active','=',True)]}">
+                                type="object" invisible="active == True">
                             <span class="o_stat_text" style="color:#da3434">Archive</span>
                         </button>
                     </div>
                     <div class="ribbon ribbon-top-right"
-                         attrs="{'invisible': [('active','=',True)]}">
+                         invisible="active == True">
                         <span class="bg-danger"
                               style="left: -4px !important;top: 20px !important">Archived
                         </span>
@@ -95,22 +95,22 @@
                                    readonly="1"/>
                         </group>
                         <group>
-                            <field name="shopify_lang_id" required="1" attrs="{'readonly':[('active','=',True)]}"/>
+                            <field name="shopify_lang_id" required="1" readonly="active == True"/>
                         </group>
                     </group>
                     <group string="Shopify Site Info">
                         <group>
                             <field name="shopify_host"
-                                   attrs="{'readonly': [('active','=',True)]}"/>
+                                   readonly ="active == True"/>
                             <field name="shopify_store_time_zone" readonly="1"/>
                         </group>
                         <group>
                             <field name="shopify_api_key"
-                                   attrs="{'readonly': [('active','=',True)]}"/>
+                                   readonly = "active == True"/>
                             <field name="shopify_password" password="1" string="Access Token"
-                                   attrs="{'readonly': [('active','=',True)]}"/>
+                                   readonly = "active == True"/>
                             <field name="shopify_shared_secret"
-                                   attrs="{'readonly': [('active','=',True)]}"/>
+                                   readonly="active == True"/>
                         </group>
                     </group>
 
@@ -200,23 +200,23 @@
                             <button string="Refresh" name="refresh_webhooks"
                                     type="object" class="oe_right btn-outline-primary"/>
 
-                            <field name="webhook_ids" nolabel="1" mode="tree">
-                                <tree editable="bottom"
+                            <field name="webhook_ids" nolabel="1" mode="list">
+                                <list editable="bottom"
                                       decoration-success="state=='active'">
                                     <field name="webhook_name" required="1"/>
                                     <field name="webhook_action" required="1"/>
                                     <field name="state" required="1"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                         <page string="Payout Configurations" name="payout_configurations">
                             <div name="payout_transaction">
                                 <field name="transaction_line_ids" colspan="4" nolabel="1">
-                                    <tree nolabel="1" editable='bottom'>
+                                    <list nolabel="1" editable='bottom'>
                                         <field name="transaction_type" required="1"/>
                                         <field name="account_id" required="1"
                                                options="{'no_create':True,'no_create_edit': True}"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </div>
                         </page>

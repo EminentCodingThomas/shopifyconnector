@@ -184,7 +184,7 @@ class ShopifyInstanceEpt(models.Model):
     shopify_store_time_zone = fields.Char("Store Time Zone",
                                           help='This field used to import order process')
     discount_product_id = fields.Many2one("product.product", "Discount",
-                                          domain=[('detailed_type', '=', 'service')],
+                                          domain=[('type', '=', 'service')],
                                           default=_default_discount_product,
                                           help="This is used for set discount product in a sale order lines")
 
@@ -251,7 +251,7 @@ class ShopifyInstanceEpt(models.Model):
                                                     help="Last date of sync orders from Shopify to Odoo")
     is_instance_create_from_onboarding_panel = fields.Boolean(default=False)
     is_onboarding_configurations_done = fields.Boolean(default=False)
-    shipping_product_id = fields.Many2one("product.product", domain=[('detailed_type', '=', 'service')],
+    shipping_product_id = fields.Many2one("product.product", domain=[('type', '=', 'service')],
                                           default=_default_shipping_product,
                                           help="This is used for set shipping product in a Carrier.")
     shopify_order_data = fields.Text(compute="_compute_kanban_shopify_order_data")
@@ -260,7 +260,7 @@ class ShopifyInstanceEpt(models.Model):
                                                 default=_default_order_status,
                                                 help="Select order status in which "
                                                      "you want to import the orders from Shopify to Odoo.")
-    gift_card_product_id = fields.Many2one("product.product", domain=[('detailed_type', '=', 'service')],
+    gift_card_product_id = fields.Many2one("product.product", domain=[('type', '=', 'service')],
                                            default=_default_gift_card_product,
                                            help="This is used to manage the gift card in sale order")
     auto_fulfill_gift_card_order = fields.Boolean(
@@ -271,7 +271,7 @@ class ShopifyInstanceEpt(models.Model):
                                                    "given date.", default=_default_shopify_import_after_date)
 
     custom_service_product_id = fields.Many2one("product.product", "Custom Service Product",
-                                                domain=[('detailed_type', '=', 'service')],
+                                                domain=[('type', '=', 'service')],
                                                 default=_default_custom_service_product,
                                                 help="This is used for set custom service products in sale order "
                                                      "lines while receiving the custom item in order response.")
@@ -282,11 +282,11 @@ class ShopifyInstanceEpt(models.Model):
                                                       "lines while receiving the custom item as required shipping in "
                                                       "order response.")
     refund_adjustment_product_id = fields.Many2one("product.product", "Refund Adjustment",
-                                                   domain=[('detailed_type', '=', 'service')],
+                                                   domain=[('type', '=', 'service')],
                                                    default=_default_refund_adjustment_product,
                                                    help="This is used for set refund adjustment in a credit note")
     tip_product_id = fields.Many2one("product.product", "Tip",
-                                     domain=[('detailed_type', '=', 'service')],
+                                     domain=[('type', '=', 'service')],
                                      default=_default_tip_product,
                                      help="This is used for set Tip product in a sale order lines")
     # Analytic
@@ -302,7 +302,7 @@ class ShopifyInstanceEpt(models.Model):
     order_visible_currency = fields.Boolean(string="Import order in customer visible currency?")
 
     duties_product_id = fields.Many2one("product.product", "Duties",
-                                        domain=[('detailed_type', '=', 'service')],
+                                        domain=[('type', '=', 'service')],
                                         default=_default_duties_product,
                                         help="This is used for set duties product in a sale order lines")
 
@@ -740,7 +740,7 @@ class ShopifyInstanceEpt(models.Model):
             'target': view.get('target'),
         }
 
-        if 'tree' in action['views'][0]:
+        if 'list' in action['views'][0]:
             action['views'][0] = (action['view_id'], 'list')
         return action
 
@@ -816,7 +816,7 @@ class ShopifyInstanceEpt(models.Model):
         crm_team_obj = self.env['crm.team']
         vals = {
             'name': name,
-            'use_quotations': True
+            # 'use_quotations': True
         }
         return crm_team_obj.create(vals)
 

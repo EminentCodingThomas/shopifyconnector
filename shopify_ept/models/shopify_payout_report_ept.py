@@ -219,7 +219,7 @@ class ShopifyPaymentReportEpt(models.Model):
         action = self.env.ref('account.action_bank_statement_tree', False)
         form_view = self.env.ref('account.view_bank_statement_tree', False)
         result = action and action.read()[0] or {}
-        result['views'] = [(form_view and form_view.id or False, 'tree')]
+        result['views'] = [(form_view and form_view.id or False, 'list')]
         result['domain'] = [('id','=',self.statement_id.id)]or False
         return result
 

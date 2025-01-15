@@ -2,12 +2,12 @@
 # See LICENSE file for full copyright and licensing details.
 {
     'name': 'Common Connector Library',
-    'version': '1.0',
+    'version': '16.0.3.0.2',
     'category': 'Sales',
     'license': 'OPL-1',
-    'author': 'Eminent Coding',
-    'website': 'https://www.eminentcoding.be/',
-    'maintainer': 'Eminent Coding BV',
+    'author': 'Emipro Technologies Pvt. Ltd.',
+    'website': 'http://www.emiprotechnologies.com',
+    'maintainer': 'Emipro Technologies Pvt. Ltd.',
     'summary': """Develop generalize method to process different operations & auto workflow process to manage
     order process automatically.""",
     'depends': ['delivery'],
@@ -31,6 +31,7 @@
              'wizard/stock_return_picking.xml',
              ],
     'installable': True,
+    'price': 20.00,
     'currency': 'EUR',
     'images': ['static/description/Common-Connector-Library-Cover.jpg'],
     # cloc settings

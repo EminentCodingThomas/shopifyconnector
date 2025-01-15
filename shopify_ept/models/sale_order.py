@@ -1150,7 +1150,7 @@ class SaleOrder(models.Model):
         """
         tracking_numbers = []
         line_items = []
-        for move in product_moves.filtered(lambda line: line.product_id.detailed_type == 'product'):
+        for move in product_moves.filtered(lambda line: line.product_id.is_storable):
             shopify_line_id = move.sale_line_id.shopify_line_id
 
             line_items.append({"id": shopify_line_id, "quantity": int(move.product_qty)})
@@ -1237,7 +1237,7 @@ class SaleOrder(models.Model):
                 continue
             order_lines = sale_order.order_line
             if order_lines and order_lines.filtered(
-                    lambda s: s.product_id.detailed_type != 'service' and not s.shopify_line_id):
+                    lambda s: s.product_id.type != 'service' and not s.shopify_line_id):
                 message = (_(
                     "- Order status could not be updated for order %s.\n- Possible reason can be, Shopify order line "
                     "reference is missing, which is used to update Shopify order status at Shopify store. "
@@ -1794,7 +1794,7 @@ class SaleOrder(models.Model):
         for line in lines:
             shopify_line_id = line.get('id')
             sale_order_line = self.order_line.filtered(lambda order_line: int(
-                order_line.shopify_line_id) == shopify_line_id and order_line.product_id.detailed_type != 'service')
+                order_line.shopify_line_id) == shopify_line_id and order_line.product_id.type != 'service')
             if not sale_order_line:
                 continue
             fulfilled_qty = float(line.get('quantity')) - float(line.get('fulfillable_quantity'))

@@ -15,7 +15,7 @@
                         </h2>
                         <label for="url"/>
                         <br/>
-                        <field name="url" attrs="{'required': [('image', '=', False)]}"/>
+                        <field name="url" required="image == False"/>
                         <br/>
                     </div>
 
@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col">
                                 <field name="image" widget="image"
-                                       attrs="{'required': [('url', '=', '')]}"/>
+                                       required="url == ''"/>
                             </div>
                         </div>
                     </div>

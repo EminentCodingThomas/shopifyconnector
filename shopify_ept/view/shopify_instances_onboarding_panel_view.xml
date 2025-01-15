@@ -4,7 +4,7 @@
 
         <!-- ONBOARDING STEPS -->
         <template id="onboarding_shopify_instance_configuration">
-            <t t-call="base.onboarding_step">
+            <t t-call="onboarding.onboarding_step">
                 <t t-set="title">Create Instance</t>
                 <t t-set="description">Create the new Shopify instance here.</t>
                 <t t-set="done_icon" t-value="'fa-star'"/>
@@ -17,7 +17,7 @@
         </template>
 
         <template id="onboarding_shopify_basic_configuration">
-            <t t-call="base.onboarding_step">
+            <t t-call="onboarding.onboarding_step">
                 <t t-set="title">Manage Configuration</t>
                 <t t-set="description">Manage the configuration for your instance.</t>
                 <t t-set="btn_text">Configure</t>
@@ -29,7 +29,7 @@
             </t>
         </template>
         <template id="onboarding_shopify_financial_status_configuration">
-            <t t-call="base.onboarding_step">
+            <t t-call="onboarding.onboarding_step">
                 <t t-set="title">Financial Status</t>
                 <t t-set="description">Configure the Shopify Financial Status here.</t>
                 <t t-set="btn_text">Configure</t>
@@ -41,7 +41,7 @@
             </t>
         </template>
         <template id="onboarding_shopify_cron_configuration">
-            <t t-call="base.onboarding_step">
+            <t t-call="onboarding.onboarding_step">
                 <t t-set="title">Scheduler Configurations</t>
                 <t t-set="description">Configure the schedule actions for automation.</t>
                 <t t-set="btn_text">Configure</t>
@@ -53,7 +53,7 @@
 
         <!-- ONBOARDING PANEL-->
         <template id="shopify_instances_onboarding_panel_ept" name="shopify.instances.onboarding.panel.ept">
-            <t t-call="base.onboarding_container">
+            <t t-call="onboarding.onboarding_container">
                 <t t-set="is_shopify_panel" t-value="'is_shopify_panel'"/>
                 <t t-set="classes" t-value="'o_onboarding_violet hide_in_mobile_device shopify_onboarding_ept'"/>
                 <t t-set="bg_image" t-value="'/sale/static/src/img/sale_quotation_onboarding_bg.jpg'"/>
@@ -75,9 +75,9 @@
             Added by: Preet Bhatti @Emipro Technologies
             Added on: 29/09/2020
         -->
-        <template id="inherit_onboarding_container" inherit_id="base.onboarding_container">
+        <template id="inherit_onboarding_container" inherit_id="onboarding.onboarding_container">
 
-            <xpath expr="div[hasclass('o_onboarding_container')]" position="before">
+            <xpath expr="div[hasclass('o_onboarding_main')]" position="before">
                 <t t-if="is_shopify_panel">
                     <button id="shopify_button_toggle" t-att-data-company-id="toggle_company_id"
                             type="button" t-att-class="'d-none btn btn-link' if is_button_active else 'btn btn-link'"
@@ -88,8 +88,8 @@
             </xpath>
 
             <!-- Changes to class to toogle the onBoadring panel-->
-            <xpath expr="div[hasclass('o_onboarding_container')]" position="attributes">
-                <attribute name="t-att-class">'o_onboarding_container collapse' if hide_panel else 'o_onboarding_container collapse show'</attribute>
+            <xpath expr="div[hasclass('o_onboarding_main')]" position="attributes">
+                <attribute name="t-att-class">'o_onboarding_main collapse' if hide_panel else 'o_onboarding_main collapse show'</attribute>
             </xpath>
 
             <!--            <xpath expr="//a[hasclass('float-right') and hasclass('o_onboarding_btn_close')]" position="replace">-->
@@ -108,7 +108,7 @@
             <!--            </xpath>-->
 
             <!-- Remove close button from onboarding panel-->
-        <xpath expr="//div[hasclass('o_onboarding_container')]//a" position="attributes">
+        <xpath expr="//div[hasclass('o_onboarding_main')]//a" position="attributes">
                 <attribute name="class">float-right o_onboarding_btn_close common_close_button_hide_ept</attribute>
         </xpath>
 
