@@ -61,7 +61,7 @@ class SaleOrder(models.Model):
         action = {
             'domain': "[('id', 'in', " + str(move_ids) + " )]",
             'name': 'Order Stock Move',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'res_model': 'stock.move',
             'type': 'ir.actions.act_window',
         }

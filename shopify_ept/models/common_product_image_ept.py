@@ -19,7 +19,7 @@ class ProductImageEpt(models.Model):
         """
         results = super(ProductImageEpt, self).create(vals)
         for result in results:
-            if self.user_has_groups('shopify_ept.group_shopify_ept'):
+            if self.env.user.has_group('shopify_ept.group_shopify_ept'):
                 shopify_product_image_obj = self.env["shopify.product.image.ept"]
                 shopify_product_image_vals = {"odoo_image_id": result.id}
                 if result.product_id:
@@ -48,7 +48,7 @@ class ProductImageEpt(models.Model):
         @author: Bhavesh Jadav on Date 17-Dec-2019.
         """
         result = super(ProductImageEpt, self).write(vals)
-        if self.user_has_groups('shopify_ept.group_shopify_ept'):
+        if self.env.user.has_group('shopify_ept.group_shopify_ept'):
             shopify_product_images = self.env["shopify.product.image.ept"]
             for record in self:
                 shopify_product_images += shopify_product_images.search([("odoo_image_id", "=", record.id)])

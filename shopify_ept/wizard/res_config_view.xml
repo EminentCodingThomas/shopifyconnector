@@ -136,7 +136,8 @@
         <field name="inherit_id"
                ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('settings')]" position="inside">
+            <!-- <xpath expr="//div[hasclass('settings')]" position="inside"> -->
+            <xpath expr="//form" position="inside">
                 <div class="app_settings_block" data-string="Shopify" string="Shopify" data-key="shopify_ept">
                     <div name="description_config">
                         <h2 style="font-size:25px;background-color:#e9ecef;">
@@ -194,7 +195,7 @@
                                             type="object"
                                             string="Download Shopify Net Profit Report Module"
                                             class="oe_link"
-                                            attrs="{'invisible':[('show_net_profit_report','=',False)]}"
+                                            invisible = "show_net_profit_report == False"
                                             help="Install this module if you are See Net profit report for all Instances."/>
                                 </div>
                             </div>
@@ -209,7 +210,7 @@
                             <div class="o_setting_right_pane">
                                 <label for="shopify_instance_id" string="Select Instance"/>
                                 <field name="shopify_instance_id"
-                                       attrs="{'required':[('shopify_instance_id','!=',False)]}"
+                                       required="shopify_instance_id != False"
                                        options="{'no_create': True, 'no_create_edit' : True}"/>
                                 <button name="%(res_config_action_shopify_instance)d" icon="fa-arrow-right"
                                         type="action" string="Create More Instance" class="oe_link"/>
@@ -217,11 +218,11 @@
                         </div>
                     </div>
                     <h2 style="font-size:25px;background-color:#e9ecef;"
-                        attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible ="shopify_instance_id == False">
                         General Configuration
                     </h2>
                     <div class="row mt16 o_settings_container"
-                         attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible ="shopify_instance_id == False">
                         <field name="shopify_company_id" invisible="1"/>
                         <div class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_right_pane">
@@ -233,7 +234,7 @@
                                     <div class="mt16">
                                         <field name="shopify_warehouse_id"
                                                class="o_light_label" widget="selection"
-                                               attrs="{'required':[('shopify_instance_id','!=',False)]}"/>
+                                               required="shopify_instance_id != False"/>
                                     </div>
                                 </div>
                             </div>
@@ -248,20 +249,20 @@
                                     <div class="mt16">
                                         <field name="shopify_lang_id" class="oe_inline"
                                                options="{'no_open':True,'no_create':True,'no_create_edit':True}"
-                                               attrs="{'required':[('shopify_instance_id','!=',False)]}"/>
+                                               required = "shopify_instance_id != False"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div name="shopify_webhook_header"
-                         attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible ="shopify_instance_id == False">
                         <h2 style="font-size:25px;background-color:#e9ecef;">Webhook
                             Configuration
                         </h2>
                     </div>
                     <div class="row mt16 o_settings_container"
-                         attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible ="shopify_instance_id == False">
                         <div class="col-12 col-lg-12 o_setting_box">
                             <div class="alert alert-warning" role="alert">
 
@@ -327,11 +328,11 @@
                     </div>
 
                     <h2 style="font-size:25px;background-color:#e9ecef;"
-                        attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible="shopify_instance_id == False">
                         Product Configuration
                     </h2>
                     <div class="row mt16 o_settings_container"
-                         attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible="shopify_instance_id == False">
                         <div class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_left_pane">
                                 <field name="auto_import_product" widget="boolean_toggle"
@@ -384,7 +385,7 @@
                                     <div class="mt16">
                                         <field name="shopify_sync_product_with"
                                                class="o_light_label" widget="selection"
-                                               attrs="{'required':[('shopify_instance_id','!=',False)]}"/>
+                                               required="shopify_instance_id != False "/>
                                     </div>
                                 </div>
                             </div>
@@ -406,18 +407,18 @@
                                     <div class="mt16">
                                         <field name="shopify_pricelist_id"
                                                class="o_light_label"
-                                               attrs="{'required':[('shopify_instance_id','!=',False)]}"/>
+                                               required="shopify_instance_id != False"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <h2 style="font-size:25px;background-color:#e9ecef;"
-                        attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible="shopify_instance_id == False">
                         Order Configuration
                     </h2>
                     <div class="row mt16 o_settings_container"
-                         attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible="shopify_instance_id == False">
                         <div class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_right_pane">
                                 <label for="shopify_order_status_ids" string="Import Order Status"/>
@@ -428,7 +429,7 @@
                                     <div class="mt16">
                                         <field name="shopify_order_status_ids"
                                                widget="many2many_tags"
-                                               attrs="{'required':[('shopify_instance_id','!=',False)]}"
+                                               required="shopify_instance_id != False"
                                                options="{'no_create':True,'no_create_edit': True}"
                                                class="oe_inline"/>
                                     </div>
@@ -537,7 +538,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-6 o_setting_box"
-                             attrs="{'invisible':[('shopify_is_use_default_sequence','=',True)]}">
+                            invisible="shopify_is_use_default_sequence == True">
                             <div class="o_setting_right_pane">
                                 <label for="shopify_order_prefix"/>
                                 <div class="text-muted">
@@ -560,7 +561,7 @@
                                 <div class="content-group">
                                     <div class="mt16">
                                         <field name="shopify_import_order_after_date"
-                                               attrs="{'required':[('shopify_instance_id','!=',False)]}"/>
+                                               required="shopify_instance_id != False"/>
                                     </div>
                                 </div>
 
@@ -600,7 +601,7 @@
                                     </a>
                                 </div>
                                 <br/>
-                                <div attrs="{'invisible':[('is_delivery_fee','=',False)]}">
+                                <div invisible="is_delivery_fee == False">
                                     <label for="delivery_fee_name"/>
                                     <div class="text-muted">
                                         The name you enter here must match the label on the Shopify order that shows the
@@ -609,7 +610,7 @@
                                     <div class="content-group">
                                         <div class="mt16">
                                             <field name="delivery_fee_name"
-                                                   attrs="{'required':[('is_delivery_fee','=',True)]}"
+                                                   required="is_delivery_fee == True"
                                                    class="o_light_label"/>
                                         </div>
                                     </div>
@@ -645,11 +646,11 @@
                     </div>
 
                     <h2 style="font-size:25px;background-color:#e9ecef;"
-                        attrs="{'invisible': [('shopify_instance_id', '=', False)]}">Tax
+                        invisible="shopify_instance_id == False">Tax
                         Configuration
                     </h2>
                     <div class="row mt16 o_settings_container"
-                         attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible="shopify_instance_id == False">
                         <div class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_right_pane">
                                 <label for="shopify_apply_tax_in_order"
@@ -670,14 +671,14 @@
                                     <div class="mt16">
                                         <field name="shopify_apply_tax_in_order"
                                                class="o_light_label"
-                                               attrs="{'required':[('shopify_instance_id','!=',False)]}"/>
+                                               required="shopify_instance_id != False"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-xs-12 col-md-6 o_setting_box"
-                             attrs="{'invisible': [('shopify_apply_tax_in_order', '=', 'odoo_tax')]}">
+                            invisible="shopify_apply_tax_in_order == 'odoo_tax'">
                             <div class="o_setting_right_pane">
                                 <label for="shopify_credit_tax_account_id"
                                        string="Credit Note Tax Account"/>
@@ -689,14 +690,14 @@
                                 <div class="content-group">
                                     <div class="mt16">
                                         <field name="shopify_credit_tax_account_id"
-                                               attrs="{'required' : [('shopify_apply_tax_in_order','=','create_shopify_tax'),('shopify_instance_id','!=',False)]}"
+                                               required = "(shopify_apply_tax_in_order =='create_shopify_tax') and (shopify_instance_id != False)"
                                                class="o_light_label"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-6 o_setting_box"
-                             attrs="{'invisible': [('shopify_apply_tax_in_order', '=', 'odoo_tax')]}">
+                             invisible ="shopify_apply_tax_in_order == 'odoo_tax'">
                             <div class="o_setting_right_pane">
                                 <label for="shopify_invoice_tax_account_id"
                                        string="Invoice Tax Account"/>
@@ -708,7 +709,7 @@
                                 <div class="content-group">
                                     <div class="mt16">
                                         <field name="shopify_invoice_tax_account_id"
-                                               attrs="{'required' : [('shopify_apply_tax_in_order','=','create_shopify_tax'),('shopify_instance_id','!=',False)]}"
+                                               required="(shopify_apply_tax_in_order == 'create_shopify_tax') and (shopify_instance_id != False)"
                                                class="o_light_label"/>
                                     </div>
                                 </div>
@@ -717,11 +718,11 @@
                     </div>
 
                     <h2 style="font-size:25px;background-color:#e9ecef;"
-                        attrs="{'invisible': [('shopify_instance_id', '=', False)]}">Notify By
+                        invisible ="shopify_instance_id == False">Notify By
                         Email
                     </h2>
                     <div class="row mt16 o_settings_container"
-                         attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                         invisible ="shopify_instance_id == False">
                         <div class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_left_pane">
                                 <field name="shopify_notify_customer" widget="boolean_toggle"
@@ -739,11 +740,11 @@
                         </div>
                     </div>
                     <h2 style="font-size:25px;background-color:#e9ecef;"
-                        attrs="{'invisible': [('shopify_instance_id', '=', False)]}">Stock
+                        invisible="shopify_instance_id == False">Stock
                         Information
                     </h2>
                     <div class="row mt16 o_settings_container"
-                         attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible ="shopify_instance_id == False">
                         <div class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_right_pane">
                                 <label for="shopify_stock_field"/>
@@ -759,7 +760,7 @@
                                         <field name="shopify_stock_field" class="o_light_label"
                                                widget="selection"
                                                domain="[('model_id.model','=','product.product'),('name','in',['free_qty','virtual_available','qty_available'])]"
-                                               attrs="{'required':[('shopify_instance_id','!=',False)]}"/>
+                                               required="shopify_instance_id != False"/>
                                     </div>
                                 </div>
                             </div>
@@ -767,11 +768,11 @@
                     </div>
 
                     <h2 style="font-size:25px;background-color:#e9ecef;"
-                        attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible="shopify_instance_id == False">
                         Schedule Activity Information
                     </h2>
                     <div class="row mt16 o_settings_container"
-                         attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible="shopify_instance_id == False">
                         <div class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_left_pane">
                                 <field name="is_shopify_create_schedule" widget="boolean_toggle"
@@ -786,7 +787,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-6 o_setting_box"
-                             attrs="{'invisible': [('is_shopify_create_schedule', '=', False)]}">
+                            invisible="is_shopify_create_schedule == False">
                             <div class="o_setting_right_pane">
                                 <label for="shopify_activity_type_id" string="Activity Type"/>
                                 <div class="text-muted">
@@ -794,13 +795,13 @@
                                     <div>
                                         <field name="shopify_activity_type_id"
                                                class="oe_inline"
-                                               attrs="{'required': [('is_shopify_create_schedule', '=', True)]}"/>
+                                               required="is_shopify_create_schedule == True"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-6 o_setting_box"
-                             attrs="{'invisible': [('is_shopify_create_schedule', '=', False)]}">
+                             invisible="is_shopify_create_schedule == False">
                             <div class="o_setting_right_pane">
                                 <label for="shopify_user_ids"/>
                                 <div class="text-muted">
@@ -808,13 +809,13 @@
                                     <div>
                                         <field name="shopify_user_ids" widget="many2many_tags"
                                                class="oe_inline"
-                                               attrs="{'required': [('is_shopify_create_schedule', '=', True)]}"/>
+                                               required="is_shopify_create_schedule == True"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-6 o_setting_box"
-                             attrs="{'invisible': [('is_shopify_create_schedule', '=', False)]}">
+                            invisible="is_shopify_create_schedule == False">
                             <div class="o_setting_left_pane"/>
                             <div class="o_setting_right_pane">
                                 <label for="shopify_date_deadline" string="Deadline Lead Days"/>
@@ -826,18 +827,18 @@
                                     <div class="mt16">
                                         <field name="shopify_date_deadline"
                                                class="o_light_label"
-                                               attrs="{'required': [('is_shopify_create_schedule', '=', True)]}"/>
+                                               required ="is_shopify_create_schedule == True"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <h2 style="font-size:25px;background-color:#e9ecef;"
-                        attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible="shopify_instance_id == False">
                         Payout Report Information
                     </h2>
                     <div class="row mt16 o_settings_container"
-                         attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible="shopify_instance_id == False">
                         <div class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_right_pane">
                                 <label for="shopify_settlement_report_journal_id"/>
@@ -856,11 +857,11 @@
                         </div>
                     </div>
                     <h2 style="font-size:25px;background-color:#e9ecef;"
-                        attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible ="shopify_instance_id == False">
                         Digest
                     </h2>
                     <div class="row mt16 o_settings_container"
-                         attrs="{'invisible': [('shopify_instance_id', '=', False)]}">
+                        invisible="shopify_instance_id == False">
                         <div class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_left_pane">
                                 <field name="is_shopify_digest" widget="boolean_toggle" string="Send Periodic Digest?"

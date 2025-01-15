@@ -11,7 +11,7 @@
                 <field name="shopify_instance_id" invisible="1"/>
                 <button name="action_open_cancel_wizard" string="Cancel In Shopify"
                         type="object"
-                        attrs="{'invisible':['|','|',('state','!=','cancel'),('canceled_in_shopify','=',True),('shopify_instance_id','=',False)]}"
+                        invisible="(state != 'cancel') or (canceled_in_shopify == True) or (shopify_instance_id == False)"
                         class="oe_highlight">
                 </button>
             </button>
@@ -24,7 +24,7 @@
         <field name="model">sale.order</field>
         <field name="priority">100</field>
         <field name="arch" type="xml">
-            <tree sample="1" decoration-success="updated_in_shopify==True" decoration-muted="state=='cancel'"
+            <list sample="1" decoration-success="updated_in_shopify==True" decoration-muted="state=='cancel'"
                   decoration-info="state in ('waiting_date','manual')"
                   decoration-danger="state in ('invoice_except','shipping_except')" create="false">
                 <field name="name" string="Order Number" decoration-bf="1"/>
@@ -37,7 +37,7 @@
                 <field name="risk_ids" invisible="1"/>
                 <field name="is_risky_order" invisible="1"/>
                 <field name="updated_in_shopify" widget="boolean_toggle" readonly="1"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -71,14 +71,14 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <data>
-                <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='warehouse_id_ept']"
+                <xpath expr="//page[@name='order_lines']/field[@name='order_line']/list/field[@name='warehouse_id_ept']"
                        position="attributes">
                     <attribute name="invisible">0</attribute>
                     <attribute name="optional">hide</attribute>
                 </xpath>
                 <notebook position="inside">
                     <page string="Shopify Info" name="shopify_ept"
-                          attrs="{'invisible':[('shopify_instance_id','=',False)]}">
+                          invisible="shopify_instance_id == False">
                         <group>
                             <group>
                                 <label for="shopify_order_id"/>
@@ -106,14 +106,14 @@
                         </group>
                         <div string="Risks">
                             <field name="risk_ids" readonly="1" nolabel="1">
-                                <tree>
+                                <list>
                                     <field name="name"/>
                                     <field name="cause_cancel"/>
                                     <field name="display"/>
                                     <field name="recommendation"/>
                                     <field name="score"/>
                                     <field name="source"/>
-                                </tree>
+                                </list>
                                 <form>
                                     <group>
                                         <group>
@@ -134,14 +134,14 @@
                             </field>
                         </div>
                         <div string="Multi Payments" name="multi_payments"
-                             attrs="{'invisible':[('is_shopify_multi_payment','=',False)]}">
+                             invisible="is_shopify_multi_payment == False">
                             <field name="shopify_payment_ids" readonly="1" nolabel="1">
-                                <tree>
+                                <list>
                                     <field name="payment_gateway_id"/>
                                     <field name="workflow_id"/>
                                     <field name="amount"/>
                                     <field name="remaining_refund_amount"/>
-                                </tree>
+                                </list>
                                 <form>
                                     <group>
                                         <group>
@@ -167,7 +167,7 @@
             model="ir.actions.act_window">
         <field name="name">Shopify Quotations</field>
         <field name="res_model">sale.order</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="context">{"not_shopify_order":False}</field>
         <field name="domain">
             [('shopify_order_id','!=',False),('state','in',('draft','sent','cancel'))]
@@ -240,7 +240,7 @@
             model="ir.actions.act_window">
         <field name="name">Shopify Sales Order</field>
         <field name="res_model">sale.order</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="context">{"not_shopify_order":False}</field>
         <field name="domain">[('shopify_order_id','!=',False),('state','in',('sale','done'))]
         </field>
@@ -313,7 +313,7 @@
             model="ir.actions.act_window">
         <field name="name">Risky Quotations</field>
         <field name="res_model">sale.order</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="context">{"not_shopify_order":False}</field>
         <field name="domain">[('shopify_order_id','!=',False),('is_risky_order','!=',False)]
         </field>
@@ -429,12 +429,12 @@
         <field name="name">Multi Payment</field>
         <field name="model">shopify.order.payment.ept</field>
         <field name="arch" type="xml">
-            <tree create="false" duplicate="false">
+            <list create="false" duplicate="false">
                 <field name="payment_gateway_id"/>
                 <field name="workflow_id"/>
                 <field name="amount"/>
                 <field name="remaining_refund_amount"/>
-            </tree>
+            </list>
         </field>
     </record>
 

@@ -11,7 +11,6 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">5</field>
             <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
         </record>
 
         <!--Auto cron job for process order data queue and it runs every 5 min.-->
@@ -23,7 +22,6 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">5</field>
             <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
         </record>
 
         <!--Auto cron job for process customer data queue and it runs every 5 min.-->
@@ -35,7 +33,6 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">5</field>
             <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
         </record>
 
         <!--Auto cron job for process export data queue and it runs every 15 min.-->
@@ -47,7 +44,6 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">15</field>
             <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
         </record>
 
         <!--Auto cron job for export inventory stock from Odoo to Shopify.-->
@@ -57,9 +53,7 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">1</field>
             <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
             <field name="state">code</field>
-            <field name="doall">False</field>
             <field name="model_id" ref="model_shopify_process_import_export"/>
             <field name="code">model.shopify_export_stock_queue()</field>
         </record>
@@ -71,9 +65,7 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">1</field>
             <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
             <field name="state">code</field>
-            <field name="doall">False</field>
             <field name="model_id" ref="model_shopify_order_data_queue_ept"/>
             <field name="code">model.import_order_cron_action()</field>
         </record>
@@ -85,9 +77,7 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">1</field>
             <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
             <field name="state">code</field>
-            <field name="doall">False</field>
             <field name="model_id" ref="model_shopify_order_data_queue_ept"/>
             <field name="code">model.import_shipped_order_cron_action()</field>
         </record>
@@ -99,9 +89,7 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">1</field>
             <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
             <field name="state">code</field>
-            <field name="doall">False</field>
             <field name="model_id" ref="model_shopify_process_import_export"/>
             <field name="code">model.import_cancel_order_cron_action()</field>
         </record>
@@ -113,9 +101,7 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">1</field>
             <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
             <field name="state">code</field>
-            <field name="doall">False</field>
             <field name="model_id" ref="model_shopify_process_import_export"/>
             <field name="code">model.update_order_status_cron_action()</field>
         </record>
@@ -127,9 +113,7 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
-            <field name="numbercall">-1</field>
             <field name="state">code</field>
-            <field name="doall">False</field>
             <field name="model_id" ref="model_shopify_payout_report_ept"/>
             <field name="code">model.auto_import_payout_report()</field>
         </record>
@@ -141,9 +125,7 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
-            <field name="numbercall">-1</field>
             <field name="state">code</field>
-            <field name="doall">False</field>
             <field name="model_id" ref="model_shopify_payout_report_ept"/>
             <field name="code">model.auto_process_bank_statement()</field>
         </record>
@@ -157,7 +139,6 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">50</field>
             <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
         </record>
     </data>
 </odoo>

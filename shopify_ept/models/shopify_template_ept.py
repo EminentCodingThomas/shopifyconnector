@@ -156,7 +156,7 @@ class ShopifyProductTemplateEpt(models.Model):
 
         if sku or barcode:
             vals = {"name": product_name,
-                    "detailed_type": "product",
+                    "type": "consu",
                     "default_code": sku}
 
             if self.env["ir.config_parameter"].sudo().get_param("shopify_ept.set_sales_description"):

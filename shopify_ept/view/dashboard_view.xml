@@ -5,10 +5,11 @@
         <field name="name">shopify instance</field>
         <field name="model">shopify.instance.ept</field>
         <field name="arch" type="xml">
-            <kanban
+            <!-- <kanban
                     class="oe_background_grey o_kanban_dashboard o_emphasize_colors o_shopify_kanban" sample="1"
                     create="0" style="width:450px;"
-                    banner_route="/shopify_instances/shopify_instances_onboarding_panel" js_class="ShopifyOnBoardingToggle">
+                    banner_route="/shopify_instances/shopify_instances_onboarding_panel" js_class="ShopifyOnBoardingToggle"> -->
+                <kanban>
                 <field name="name"/>
                 <field name="color"/>
                 <templates>

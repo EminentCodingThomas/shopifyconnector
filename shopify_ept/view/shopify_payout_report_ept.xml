@@ -26,9 +26,9 @@
     <record id="shopify_payout_report_tree_view" model="ir.ui.view">
         <field name="name">Shopify Payout Report Tree</field>
         <field name="model">shopify.payout.report.ept</field>
-        <field name="type">tree</field>
+        <field name="type">list</field>
         <field name="arch" type="xml">
-            <tree decoration-danger="state =='partially_processed'"
+            <list decoration-danger="state =='partially_processed'"
                   decoration-info="state== 'processed' "
                   decoration-muted="state == 'partially_generated'"
                   decoration-bf="state == 'generated'"
@@ -40,7 +40,7 @@
                 <field name="instance_id"/>
                 <field name="amount"/>
                 <field name="state"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -53,30 +53,30 @@
                 <header>
 
                     <button name="generate_bank_statement" string="Generate Bank Statement"
-                            attrs="{'invisible': [('statement_id', '!=', False)]}"
+                            invisible="statement_id != False"
                             class="oe_highlight" help="Click Here To Generate Bank Statement"
                             type="object"/>
                     <button name="generate_remaining_bank_statement"
                             string="Generate Remaining Bank Statement"
-                            attrs="{'invisible': ['|',('state', 'not in',['partially_generated']),('statement_id','=',False)]}"
+                            invisible="(state not in ('partially_generated') or (statement_id == False)"
                             class="oe_highlight"
                             help="Click Here To Generate Remaining Bank Statement" type="object"/>
                     <button name="process_bank_statement" string="Reconcile Bank Statement"
-                            attrs="{'invisible': ['|',('state', 'not in',['generated','partially_processed']),('statement_id','=',False)]}"
+                            invisible="(state not in ('generated','partially_processed') or (statement_id == False)"
                             class="oe_highlight" help="Click Here To Process Bank Statement"
                             type="object"/>
                     <button name="validate_statement" string="Validate Statement"
-                            attrs="{'invisible':[('state','not in',['processed'])]}"
+                            invisible="state not in ('processed')"
                             class="oe_highlight" type="object"/>
                     <button name="shopify_view_bank_statement" string="View Statement"
-                            attrs="{'invisible':[('statement_id','=',False)]}"
+                            invisible="statement_id == False"
                             class="oe_highlight"
                             type="object"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="draft,generated,processed,validated"/>
                 </header>
                 <div class="alert alert-danger" role="alert" style="margin-bottom:0px;"
-                     attrs="{'invisible': ['|',('is_skip_from_cron','=',False),('state','=','validated')]}">
+                     invisible="(is_skip_from_cron == False) or (state == 'validated')">
                     <strong>
                         - Due to some issue in the process, This report is not processed via
                         Automatic Scheduler, Please
@@ -110,7 +110,7 @@
                     <notebook name="shopify_instance">
                         <page string="Payout Transaction Lines">
                             <field name="payout_transaction_ids" nolabel="1" readonly="True">
-                                <tree decoration-danger="is_remaining_statement==True" limit="50"
+                                <list decoration-danger="is_remaining_statement==True" limit="50"
                                       editable="bottom" create="false" readonly="1">
                                     <field name="transaction_type" readonly="1"/>
                                     <field name="transaction_id" readonly="1"/>
@@ -119,7 +119,7 @@
                                     <field name="fee" readonly="1"/>
                                     <field name="amount" readonly="1"/>
                                     <field name="is_remaining_statement" invisible="1"/>
-                                </tree>
+                                </list>
                                 <form string="Payout Transactions">
                                     <group>
                                         <group>
