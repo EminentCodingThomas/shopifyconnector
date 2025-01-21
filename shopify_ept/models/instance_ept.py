@@ -316,6 +316,7 @@ class ShopifyInstanceEpt(models.Model):
     _sql_constraints = [('unique_host', 'unique(shopify_host)',
                          "Instance already exists for given host. Host must be Unique for the instance!")]
 
+    @api.model
     def _compute_kanban_shopify_order_data(self):
         if not self._context.get('sort'):
             context = dict(self.env.context)
@@ -868,9 +869,9 @@ class ShopifyInstanceEpt(models.Model):
         """
         shop = host.split("//")
         if len(shop) == 2:
-            shop_url = shop[0] + "//" + api_key + ":" + password + "@" + shop[1] + "/admin/api/2022-01"
+            shop_url = shop[0] + "//" + api_key + ":" + password + "@" + shop[1] + "/admin/api/2025-01"
         else:
-            shop_url = "https://" + api_key + ":" + password + "@" + shop[0] + "/admin/api/2022-01"
+            shop_url = "https://" + api_key + ":" + password + "@" + shop[0] + "/admin/api/2025-01"
 
         return shop_url
 

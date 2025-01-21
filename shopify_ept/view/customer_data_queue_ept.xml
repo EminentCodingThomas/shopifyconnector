@@ -5,8 +5,11 @@
         <field name="name">Shopify Synced Customer Data</field>
         <field name="model">shopify.customer.data.queue.ept</field>
         <field name="arch" type="xml">
-            <list create="0" default_order="name desc" decoration-primary="is_process_queue==True" sample="1"
+            <!-- <list create="0" default_order="name desc" decoration-primary="is_process_queue==True" sample="1"
                   js_class="queue_line_ept_dashboard">
+                  FIXME: A table view above list view have to shown-->
+            <list create="0" default_order="name desc" decoration-primary="is_process_queue==True" sample="1"
+                >      
                 <header>
                     <button name="%(shopify_ept.action_wizard_shopify_import_customer)d"
                             string="Process Queue"
@@ -176,12 +179,6 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers"
-                           groups="base.group_user"/>
-                    <field name="activity_ids" widget="mail_activity"/>
-                    <field name="message_ids" widget="mail_thread"/>
-                </div>
             </form>
         </field>
     </record>

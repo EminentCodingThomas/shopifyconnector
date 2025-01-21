@@ -6,8 +6,11 @@
         <field name="name">Product Queue Data Tree View</field>
         <field name="model">shopify.product.data.queue.ept</field>
         <field name="arch" type="xml">
-            <list create="0" default_order="name desc" sample="1" decoration-primary="is_process_queue==True"
+            <!-- <list create="0" default_order="name desc" sample="1" decoration-primary="is_process_queue==True"
                   js_class="queue_line_ept_dashboard">
+                  FIXME: A table view above list view have to shown -->
+            <list create="0" default_order="name desc" sample="1" decoration-primary="is_process_queue==True"
+                  >      
                 <header>
                     <button
                             name="%(shopify_ept.action_sync_product_queue_data)d"

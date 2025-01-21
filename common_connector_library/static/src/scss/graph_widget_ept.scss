@@ -132,3 +132,9 @@
         width: 30% !important;
     }
 }
+
+.o_shopify_kanban .o_kanban_renderer.o_kanban_ungrouped {
+    .o_kanban_record {
+        width: 450px;
+    }
+}

@@ -145,12 +145,6 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers"
-                           groups="base.group_user"/>
-                    <field name="activity_ids" widget="mail_activity"/>
-                    <field name="message_ids" widget="mail_thread"/>
-                </div>
             </form>
         </field>
     </record>
@@ -160,8 +154,11 @@
         <field name="name">shopify.order.data.queue.ept.tree</field>
         <field name="model">shopify.order.data.queue.ept</field>
         <field name="arch" type="xml">
-            <list create="0" default_order="name desc" sample="1"
+            <!-- <list create="0" default_order="name desc" sample="1"
                   decoration-primary="is_process_queue==True" js_class="queue_line_ept_dashboard">
+                  FIXME: A table view above list view have to shown -->
+                <list create="0" default_order="name desc" sample="1"
+                  decoration-primary="is_process_queue==True">  
                 <header>
                     <button name="%(shopify_ept.action_wizard_shopify_import_order)d"
                             string="Process Queue"

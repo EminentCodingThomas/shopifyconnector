@@ -1,220 +1,150 @@
-odoo.define('graph_widget_ept.graph', function (require) {
-    "use strict";
 
-    var fieldRegistry = require('web.field_registry');
-    var AbstractField = require('web.AbstractField');
-    var core = require('web.core');
-    var QWeb = core.qweb;
+import { useService } from "@web/core/utils/hooks";
+import { useEffect } from "@odoo/owl";
+import { registry } from "@web/core/registry";
+import { JournalDashboardGraphField } from "@web/views/fields/journal_dashboard_graph/journal_dashboard_graph_field";
 
-    var EmiproDashboardGraph = AbstractField.extend({
-        className: "dashboard_graph_ept",
-        events: {
-            'click #perform_operation button':'_performOpration',
-            'change #sort_order_data': '_sortOrders',
-            'click #instance_product': '_getProducts',
-            'click #instance_customer': '_getCustomers',
-            'click #instance_order': '_getOrders',
-            'click #instance_order_shipped': '_getShippedOrders',
-            'click #instance_refund': '_getRefundOrders',
-            'click #instance_report': '_getReport',
-            'click #instance_log': '_getLog',
-        },
-        jsLibs: [
-            '/web/static/lib/Chart/Chart.js',
-        ],
-        init: function () {
-            this._super.apply(this, arguments);
-            this.graph_type = this.attrs.graph_type;
-            // this.data = JSON.parse(this.value);
-            this.data = this.recordData
-            this.match_key = _.find(_.keys(this.data), function(key){ return key.includes('_order_data') })
-            this.graph_data = this.match_key.length ? JSON.parse(this.data[this.match_key]) : {}
+export class EmiproDashboardGraph extends JournalDashboardGraphField {
+    static template = "common_connector_library.graph";
+    setup() {
+        super.setup();
+        console.log("data canvasRef", this.canvasRef);
+        console.log("data", this);
+        this.data = this.props.record.data
+        this.match_key = Object.keys(this.data).find(key => key.includes('_order_data'));
+        console.log("match",this.data['shopify_order_data']);
+        
+        console.log("match_key", this.match_key);
+        this.graph_data = this.match_key ? JSON.parse(this.data[this.match_key]) : {};
+        console.log("graph data", this.graph_data);
+        
+        this.context = this.props.record.context;
+        this.actionService = useService("action");
 
-            this.context = this.record.context
-        },
-        /**
-         * The widget view uses the ChartJS lib to render the graph. This lib
-         * requires that the rendering is done directly into the DOM (so that it can
-         * correctly compute positions). However, the views are always rendered in
-         * fragments, and appended to the DOM once ready (to prevent them from
-         * flickering). We here use the on_attach_callback hook, called when the
-         * widget is attached to the DOM, to perform the rendering. This ensures
-         * that the rendering is always done in the DOM.
-         */
-        on_attach_callback: function () {
-            this._isInDOM = true;
-            this._renderInDOM();
-        },
-        /**
-         * Called when the field is detached from the DOM.
-         */
-        on_detach_callback: function () {
-            this._isInDOM = false;
-        },
+        this.orm = useService("orm");
 
-        //--------------------------------------------------------------------------
-        // Private
-        //--------------------------------------------------------------------------
-
-        /**
-         * Render the widget only when it is in the DOM.
-         *
-         * @override
-         * @private
-         */
-        _render: function () {
-            if (this._isInDOM) {
-                return this._renderInDOM();
-            }
-            return Promise.resolve();
-        },
-        /**
-         * Render the widget. This function assumes that it is attached to the DOM.
-         *
-         * @private
-         */
-        _renderInDOM: function () {
-            this.$el.empty();
-            this.$canvas = $('<canvas/>');
-            this.$el.addClass(cssClass);
-            this.$el.empty();
-            if(this.graph_data){
-                var dashboard = $(QWeb.render('graph_dashboard_ept',{widget: this}))
-                this.$el.append(dashboard);
-                this.$el.find('.graph_ept').append(this.$canvas);
-            } else {
-                this.$el.append(this.$canvas);
-            }
-            var config, cssClass;
-            var context = this.$canvas[0].getContext('2d');
-            if (this.graph_type === 'line') {
-                config = this._getLineChartConfig(context);
-                cssClass = 'o_graph_linechart';
-            }
-            this.chart = new Chart(context, config);
-        },
-
-        _getLineChartConfig: function (context) {
-            if(!_.isEmpty(this.graph_data) && this.graph_data.hasOwnProperty('values')){
-                var labels = this.graph_data.values.map(function (pt) {
-                    return pt.x;
-                });
-                var borderColor = '#0068ff';
-
-                var gradientColor = context.createLinearGradient(0, 0, 0, 450);
-                gradientColor.addColorStop(0.10, 'rgba(0, 155, 255, 0.25)');
-                gradientColor.addColorStop(0.25, 'rgba(255, 255, 255, 0.25)');
-                var backgroundColor;
-                if(gradientColor){
-                    backgroundColor = gradientColor
+        useEffect(() => {
+            this.renderChart();
+            console.log("calleduseEffect");
+            
+            return () => {
+                if (this.chart) {
+                    this.chart.destroy();
                 }
-                else{
-                    backgroundColor = this.graph_data.is_sample_data ? '#ebebeb' : '#dcd0d9';
-                }
-                return {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            data: this.graph_data.values,
-                            fill: 'start',
-                            label: this.graph_data.key,
-                            backgroundColor: backgroundColor,
-                            borderColor: borderColor,
-                            borderWidth: 2,
-                            pointStyle: 'line',
-                        }]
+            };
+        },
+        () => [this.context.sort]
+    );
+    }
+
+    getLineChartConfig() {
+        console.log("called getLineChartConfig", this.graph_data);
+        
+        if (this.graph_data && this.graph_data.values) {
+            const labels = this.graph_data.values.map(pt => pt.x);
+            const borderColor = '#0068ff';
+            const backgroundColor = '#ebebeb';
+            return {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: this.graph_data.values,
+                        fill: 'start',
+                        label: this.graph_data.key,
+                        backgroundColor: backgroundColor,
+                        borderColor: borderColor,
+                        borderWidth: 2,
+                        pointStyle: 'line',
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false },
                     },
-                    options: {
-                        legend: {display: false},
-                        scales: {
-                            xAxes: [{
-                                position: 'bottom'
-                            }],
-                            yAxes: [{
-                                position: 'left',
-                                ticks: {
-                                    beginAtZero: true
-                                },
-                            }]
-                        },
-                        maintainAspectRatio: false,
-                        elements: {
-                            line: {
-                                tension: 0.5,
-                            }
-                        },
-                        tooltips: {
-                            intersect: false,
-                            position: 'nearest',
-                            caretSize: 0,
-                        },
+                    scales: {
+                        x: { position: 'bottom' },
+                        y: { position: 'left', beginAtZero: true },
                     },
-                };
+                    maintainAspectRatio: false,
+                    elements: { line: { tension: 0.5 } },
+                    interaction: { intersect: false, mode: 'nearest' },
+                },
+            };
+        }
+    }
+
+    _sortOrders(e) {
+        console.log("sort vale", e.target.value);
+          this.context.sort = e.currentTarget.value;
+          console.log("res id ", this.props.record.evalContext.id);
+          
+          this.orm.silent.call("shopify.instance.ept", "read", [[this.props.record.evalContext.id]], {
+            context: {
+                'sort': e.currentTarget.value
             }
-        },
+        }
+        )
+          .then((result) => {
+            console.log("sort vale result", result.length);
+            if (result.length) {
+                this.graph_data = JSON.parse(result[0][this.match_key]);
+                this.renderChart();
+            }
+          })
+      }
 
-        /*Render action for  Sale Orders */
-        _sortOrders: function (e) {
-          var self = this;
-          this.context.sort = e.currentTarget.value
-            return this._rpc({model: self.model,method: 'read',args:[this.res_id],'context':this.context}).then(function (result) {
-                if(result.length) {
-                    self.graph_data = JSON.parse(result[0][self.match_key])
-                    self.on_attach_callback()
-                }
-            })
-        },
+    _performOpration() {
+        this.orm.silent.call("shopify.instance.ept", "perform_operation", [this.props.record.evalContext.id])
+          .then((result) => {
+            return this.actionService.doAction(result);
+          })
+    }
 
-        /*Render action for  Products */
-        _getProducts: function () {
-            return this.do_action(this.graph_data.product_date.product_action)
-        },
+    _getReport() {
+        this.orm.silent.call("shopify.instance.ept", "open_report", [this.props.record.evalContext.id])
+          .then((result) => {
+            return this.actionService.doAction(result);
+          })
+    }
 
-        /*Render action for  Customers */
-        _getCustomers: function () {
-            return this.do_action(this.graph_data.customer_data.customer_action)
-        },
+    _getLog() {
+        this.orm.silent.call("shopify.instance.ept", "open_logs", [this.props.record.evalContext.id])
+          .then((result) => {
+            return this.actionService.doAction(result);
+          })
+    }
 
-        /*Render action for  Sales Order */
-        _getOrders: function () {
-            return this.do_action(this.graph_data.order_data.order_action)
-        },
+    _getProducts() {
+        return this.actionService.doAction(this.graph_data.product_date.product_action);
+    }
 
-        /*Render action for  shipped Order */
-        _getShippedOrders: function () {
-            return this.do_action(this.graph_data.order_shipped.order_action)
-        },
+    _getCustomers() {
+        console.log("customer data,",this.graph_data.customer_data.customer_action);
+        
+        return this.actionService.doAction(this.graph_data.customer_data.customer_action);
+    }
 
-        _getRefundOrders: function () {
-            return this.do_action(this.graph_data.refund_data.refund_action)
-        },
+    _getOrders() {
+        return this.actionService.doAction(this.graph_data.order_data.order_action);
+    }
 
-        /*Render(Open)  Operations wizard*/
-        _performOpration: function () {
-            return this._rpc({model: this.model,method: 'perform_operation',args: [this.res_id]}).then( (result) => {
-                this.do_action(result)
-            });
-        },
+    _getShippedOrders() {
+        return this.actionService.doAction(this.graph_data.order_shipped.order_action);
+    }
 
-        /*Render action for  Sales Analysis */
-        _getReport: function () {
-            return this._rpc({model: this.model,method: 'open_report',args: [this.res_id]}).then( (result) => {
-                this.do_action(result)
-            });
-        },
+    _getRefundOrders() {
+        return this.actionService.doAction(this.graph_data.refund_data.refund_action);
+    }
+}
 
-        /*Render action for  Common Log Book */
-        _getLog: function () {
-         return this._rpc({model: this.model,method: 'open_logs',args: [this.res_id]}).then( (result) => {
-                this.do_action(result)
-            });
-        },
+export const emiproDashboardGraph = {
+    component: EmiproDashboardGraph,
+    supportedTypes: ["text"],
+    extractProps: ({ attrs }) => ({
+        graphType: attrs.graph_type,
+    }),
+};
 
-    });
+registry.category("fields").add("dashboard_graph_ept", emiproDashboardGraph);
 
-    fieldRegistry.add('dashboard_graph_ept', EmiproDashboardGraph);
-    return {
-        EmiproDashboardGraph: EmiproDashboardGraph
-    };
-});
