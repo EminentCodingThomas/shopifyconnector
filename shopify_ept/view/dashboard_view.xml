@@ -13,18 +13,12 @@
                 <field name="name"/>
                 <field name="color"/>
                 <templates>
-                    <t t-name="kanban-box">
+                    <t t-name="card">
                         <div t-attf-class="#{kanban_color(record.color.raw_value)} record_dashboard_ept">
                             <div class="o_kanban_card_header">
-                                <div class="o_kanban_card_header_title">
+                                <div class="o_kanban_card_header_title"  style="display: flex; justify-content: space-between; align-items: center;">
                                     <div class="o_primary">
                                         <t t-esc="record.name.value"/>
-                                    </div>
-                                    <div class="o_kanban_manage_button_section">
-                                        <a class="o_kanban_manage_toggle_button" href="#">
-                                            <i class="fa fa-ellipsis-v" aria-label="Selection"
-                                               role="img" title="Selection"/>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -32,50 +26,41 @@
                                 <field name="shopify_order_data"
                                        graph_type="line" widget="dashboard_graph_ept"/>
                             </div>
-                            <div
-                                    class="container o_kanban_card_manage_pane dropdown-menu"
-                                    role="menu">
-                                <div class="row">
-                                    <div
-                                            class="col-xs-3 o_kanban_card_manage_section o_kanban_manage_view">
-                                        <div role="menuitem" class="o_kanban_card_manage_title">
-                                            <span>Products</span>
-                                        </div>
-                                        <div role="menuitem">
-                                            <a
-                                                    name="%(shopify_ept.action_shopify_product_exported_ept)d"
-                                                    type="action" title="Exported">
+                        </div>
+                    </t>
+                    <t t-name="menu">
+                        <div class="container">
+                            <div class="row" style="min-width:200px">
+                                <div class="col-6 o_kanban_manage_view">
+                                    <h5 role="menuitem" class="o_kanban_card_manage_title">
+                                        <span>Products</span>
+                                    </h5>
+                                    <div role="menuitem">
+                                        <a name="%(shopify_ept.action_shopify_product_exported_ept)d" type="action" title="Exported">
                                                 Exported
-                                            </a>
-                                        </div>
-                                        <div role="menuitem">
-                                            <a
-                                                    name="%(shopify_ept.action_shopify_product_not_exported_ept)d"
-                                                    type="action" title="Ready to Export">
-                                                Ready to Export
-                                            </a>
-                                        </div>
-                                        <div role="menuitem">
-                                            <a
-                                                    name="%(shopify_ept.action_shopify_product_published_ept)d"
-                                                    type="action" title="Published">
-                                                Published
-                                            </a>
-                                        </div>
-                                        <div role="menuitem">
-                                            <a
-                                                    name="%(shopify_ept.action_shopify_product_not_published_ept)d"
-                                                    type="action" title="UnPublished">
-                                                UnPublished
-                                            </a>
-                                        </div>
+                                        </a>
                                     </div>
-                                    <div
-                                            class="col-xs-3 o_kanban_card_manage_section o_kanban_manage_view">
-                                        <div role="menuitem" class="o_kanban_card_manage_title">
-                                            <span>Sales</span>
-                                        </div>
-                                        <div role="menuitem">
+                                    <div role="menuitem">
+                                        <a name="%(shopify_ept.action_shopify_product_not_exported_ept)d" type="action" title="Ready to Export">
+                                                Ready to Export
+                                        </a>
+                                    </div>
+                                    <div role="menuitem">
+                                        <a name="%(shopify_ept.action_shopify_product_published_ept)d" type="action" title="Published">
+                                                Published
+                                        </a>
+                                    </div>
+                                    <div role="menuitem">
+                                        <a name="%(shopify_ept.action_shopify_product_not_published_ept)d" type="action" title="UnPublished">
+                                                UnPublished
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <h5 role="menuitem" class="o_kanban_card_manage_title">
+                                        <span>Sales</span>
+                                    </h5>
+                                    <div role="menuitem">
                                             <a
                                                     name="%(shopify_ept.action_shopify_instance_sale_quotation)d"
                                                     type="action" title="Quotations">
@@ -96,13 +81,12 @@
                                                 Risky Quotations
                                             </a>
                                         </div>
-                                    </div>
-                                    <div
-                                            class="col-xs-3 o_kanban_card_manage_section o_kanban_manage_new">
-                                        <div role="menuitem" class="o_kanban_card_manage_title">
-                                            <span>Delivery</span>
-                                        </div>
-                                        <div role="menuitem">
+                                </div>
+                                <div class="col-6">
+                                    <h5 role="menuitem" class="o_kanban_card_manage_title">
+                                        <span>Delivery</span>
+                                    </h5>
+                                    <div role="menuitem">
                                             <a name="%(shopify_ept.action_picking_view_confirm_ept)d"
                                                type="action" title="Waiting Availability">
                                                 Waiting Availability
@@ -127,13 +111,12 @@
                                                 Transferred
                                             </a>
                                         </div>
-                                    </div>
-                                    <div
-                                            class="col-xs-3 o_kanban_card_manage_section o_kanban_manage_view">
-                                        <div role="menuitem" class="o_kanban_card_manage_title">
-                                            <span>Invoices</span>
-                                        </div>
-                                        <div role="menuitem">
+                                </div>
+                                <div class="col-6">
+                                    <h5 role="menuitem" class="o_kanban_card_manage_title">
+                                        <span>Invoices</span>
+                                    </h5>
+                                    <div role="menuitem">
                                             <a
                                                     name="%(shopify_ept.action_invoice_shopify_invoices_open)d"
                                                     type="action" title="Open">
@@ -154,13 +137,6 @@
                                                 Refunds
                                             </a>
                                         </div>
-                                    </div>
-                                </div>
-                                <div t-if="widget.editable"
-                                     class="o_kanban_card_manage_settings row">
-                                    <div class="col-xs-8">
-                                        <ul class="oe_kanban_colorpicker" data-field="color"/>
-                                    </div>
                                 </div>
                             </div>
                         </div>
