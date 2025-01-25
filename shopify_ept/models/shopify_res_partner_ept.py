@@ -25,6 +25,7 @@ class ShopifyResPartnerEpt(models.Model):
         first_name = vals.get("first_name", "")
         last_name = vals.get("last_name", "")
         email = vals.get("email", "")
+        phone = vals.get("phone","")
 
         if not first_name and not last_name and not email:
             message = "First name, Last name and Email are not found in customer data."
@@ -51,7 +52,12 @@ class ShopifyResPartnerEpt(models.Model):
         if partner:
             if not partner.parent_id:
                 partner = self.update_partner_with_company(instance, vals.get("default_address", {}), False, partner)
-            partner.write({"category_id": tag_ids})
+            updated_partner_vals = self.shopify_prepare_partner_vals(vals.get("default_address", {}), instance)    
+            updated_partner_vals["category_id"] = tag_ids
+            updated_partner_vals["name"] = name
+            updated_partner_vals["email"] = email
+            updated_partner_vals["phone"] = phone
+            partner.write(updated_partner_vals)
             return partner
 
         shopify_partner_values = {"shopify_customer_id": shopify_customer_id,
@@ -72,7 +78,8 @@ class ShopifyResPartnerEpt(models.Model):
             "customer_rank": 1,
             "is_shopify_customer": True,
             "type": "contact",
-            "category_id": tag_ids
+            "category_id": tag_ids,
+            "phone": phone,
         })
         partner = partner_obj.create(partner_vals)
 

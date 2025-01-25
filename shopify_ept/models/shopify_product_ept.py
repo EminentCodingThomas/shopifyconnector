@@ -22,10 +22,10 @@ class ShopifyProductProductEpt(models.Model):
 
     sequence = fields.Integer("Position", default=1)
     name = fields.Char("Title")
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", "Instance", required=1)
+    shopify_instance_id = fields.Many2one("shopify.instance.ept", "Instance", required=True)
     default_code = fields.Char()
-    product_id = fields.Many2one("product.product", required=1)
-    shopify_template_id = fields.Many2one("shopify.product.template.ept", required=1,
+    product_id = fields.Many2one("product.product", required=True)
+    shopify_template_id = fields.Many2one("shopify.product.template.ept", required=True,
                                           ondelete="cascade")
     exported_in_shopify = fields.Boolean(default=False)
     variant_id = fields.Char()
@@ -1075,5 +1075,5 @@ class ShopifyTag(models.Model):
     _name = "shopify.tags"
     _description = "Shopify Tags"
 
-    name = fields.Char(required=1)
-    sequence = fields.Integer(required=1)
+    name = fields.Char(required=True)
+    sequence = fields.Integer(required=True)

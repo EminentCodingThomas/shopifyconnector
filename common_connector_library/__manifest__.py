@@ -5,9 +5,9 @@
     'version': '1.0',
     'category': 'Sales',
     'license': 'OPL-1',
-    'author': 'Emipro Technologies Pvt. Ltd.',
-    'website': 'http://www.emiprotechnologies.com',
-    'maintainer': 'Emipro Technologies Pvt. Ltd.',
+    'author': 'Eminent Coding',
+    'website': 'https://www.eminentcoding.be/',
+    'maintainer': 'Eminent Coding BV',
     'summary': """Develop generalize method to process different operations & auto workflow process to manage
     order process automatically.""",
     'depends': ['delivery'],
@@ -31,7 +31,6 @@
              'wizard/stock_return_picking.xml',
              ],
     'installable': True,
-    'price': 20.00,
     'currency': 'EUR',
     'images': ['static/description/Common-Connector-Library-Cover.jpg'],
     # cloc settings
