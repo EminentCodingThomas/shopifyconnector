@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="ir_attachment_shopify_net_profit_report_module" model="ir.attachment">
+            <field name="name">shopify_net_profit_report_ec.zip</field>
+            <field name="datas" type="base64" file="ec_shopify/data/shopify_net_profit_report_ec.zip"/>
+            <field name="res_model">res.config.settings</field>
+            <field name="public">True</field>
+        </record>
+    </data>
+</odoo>
