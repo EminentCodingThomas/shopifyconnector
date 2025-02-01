@@ -3,7 +3,7 @@
     <!--Tree view of shopify product template-->
     <record id="shopify_product_tree_view_ec" model="ir.ui.view">
         <field name="name">Shopify Product Tree View</field>
-        <field name="model">shopify.product.template.ept</field>
+        <field name="model">shopify.product.template.ec</field>
         <field name="arch" type="xml">
             <list create="false" sample="1">
                 <header>
@@ -23,8 +23,8 @@
 
     <!--Search view of shopify product template-->
     <record model="ir.ui.view" id="shopify_product_search_view_ec">
-        <field name="name">shopify.product.ept</field>
-        <field name="model">shopify.product.template.ept</field>
+        <field name="name">shopify.product.ec</field>
+        <field name="model">shopify.product.template.ec</field>
         <field name="type">search</field>
         <field name="arch" type="xml">
             <search string="Shopify Products">
@@ -53,7 +53,7 @@
     <!--Form view of shopify product template-->
     <record id="shopify_product_form_view_ec" model="ir.ui.view">
         <field name="name">Shopify Product Form View</field>
-        <field name="model">shopify.product.template.ept</field>
+        <field name="model">shopify.product.template.ec</field>
         <field name="arch" type="xml">
             <form string="Shopify Product Form View" create="false">
                 <sheet>
@@ -147,7 +147,7 @@
     <record id="action_shopify_product_ec"
             model="ir.actions.act_window">
         <field name="name">Shopify Product</field>
-        <field name="res_model">shopify.product.template.ept</field>
+        <field name="res_model">shopify.product.template.ec</field>
         <field name="view_id" ref="shopify_product_tree_view_ec"/>
         <field name="help" type="html">
             <div class="oe_empty_shopify_products">
@@ -192,7 +192,7 @@
     <record model="ir.ui.view"
             id="shopify_product_template_search_view_ec">
         <field name="name">shopify Product Template Search View</field>
-        <field name="model">shopify.product.template.ept</field>
+        <field name="model">shopify.product.template.ec</field>
         <field name="arch" type="xml">
             <search string="shopify Products">
                 <field name="name" string="Product"
@@ -227,7 +227,7 @@
     <record id="action_shopify_product_instance_ec"
             model="ir.actions.act_window">
         <field name="name">Shopify Products</field>
-        <field name="res_model">shopify.product.template.ept</field>
+        <field name="res_model">shopify.product.template.ec</field>
         <field name="view_id" ref="shopify_product_tree_view_ec"/>
         <field name="domain">[('shopify_instance_id','=',active_id)]</field>
     </record>
@@ -236,7 +236,7 @@
     <record id="action_shopify_product_exported_ec"
             model="ir.actions.act_window">
         <field name="name">Exported Product</field>
-        <field name="res_model">shopify.product.template.ept</field>
+        <field name="res_model">shopify.product.template.ec</field>
         <field name="view_id" ref="shopify_product_tree_view_ec"/>
         <field name="domain">
             [('exported_in_shopify','=',True),('shopify_instance_id','=',active_id)]
@@ -247,7 +247,7 @@
     <record id="action_shopify_product_not_exported_ec"
             model="ir.actions.act_window">
         <field name="name">Ready to Export Product</field>
-        <field name="res_model">shopify.product.template.ept</field>
+        <field name="res_model">shopify.product.template.ec</field>
         <field name="view_id" ref="shopify_product_tree_view_ec"/>
         <field name="domain">
             [('exported_in_shopify','=',False),('shopify_instance_id','=',active_id)]
@@ -258,7 +258,7 @@
     <record id="action_shopify_product_published_ec"
             model="ir.actions.act_window">
         <field name="name">Published Product</field>
-        <field name="res_model">shopify.product.template.ept</field>
+        <field name="res_model">shopify.product.template.ec</field>
         <field name="view_id" ref="shopify_product_tree_view_ec"/>
         <field name="domain">
             [('website_published','in',('published_web','published_global')),('shopify_instance_id','=',active_id)]
@@ -269,7 +269,7 @@
     <record id="action_shopify_product_not_published_ec"
             model="ir.actions.act_window">
         <field name="name">Unpublished Products</field>
-        <field name="res_model">shopify.product.template.ept</field>
+        <field name="res_model">shopify.product.template.ec</field>
         <field name="view_id" ref="shopify_product_tree_view_ec"/>
         <field name="domain">
             [('website_published','=','unpublished'),('exported_in_shopify','=',True),('shopify_instance_id','=',active_id)]

@@ -19,13 +19,13 @@ class ShopifyCronConfigurationEpt(models.TransientModel):
     """
     Common model for manage cron configuration
     """
-    _name = "shopify.cron.configuration.ept"
+    _name = "shopify.cron.configuration.ec"
     _description = "Shopify Cron Configuration"
 
     def _get_shopify_instance(self):
         return self.env.context.get('shopify_instance_id', False)
 
-    shopify_instance_id = fields.Many2one('shopify.instance.ept', 'Shopify Instance',
+    shopify_instance_id = fields.Many2one('shopify.instance.ec', 'Shopify Instance',
                                           help="Select Shopify Instance that you want to configure.",
                                           default=_get_shopify_instance, readonly=True)
 
@@ -522,7 +522,7 @@ class ShopifyCronConfigurationEpt(models.TransientModel):
     @api.model
     def action_shopify_open_cron_configuration_wizard(self):
         action = self.env["ir.actions.actions"]._for_xml_id("ec_shopify.action_wizard_shopify_cron_configuration_ec")
-        instance = self.env['shopify.instance.ept'].search_shopify_instance()
+        instance = self.env['shopify.instance.ec'].search_shopify_instance()
         action['context'] = {'is_calling_from_onboarding_panel': True}
         if instance:
             action.get('context').update({'default_shopify_instance_id': instance.id,

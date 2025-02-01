@@ -2,8 +2,8 @@
 <odoo>
     <!--Wizard view of prepre product for export.-->
     <record id="export_product_to_ec_shopify" model="ir.ui.view">
-        <field name="name">shopify.export.products.view.ept</field>
-        <field name="model">shopify.prepare.product.for.export.ept</field>
+        <field name="name">shopify.export.products.view.ec</field>
+        <field name="model">shopify.prepare.product.for.export.ec</field>
         <field name="arch" type="xml">
             <form string="Export Products">
                 <sheet>
@@ -80,7 +80,7 @@
     <!--Action for prepare product for export-->
     <record id="action_shopify_export_odoo_products_ec" model="ir.actions.act_window">
         <field name="name">Shopify - Prepare Product for Export</field>
-        <field name="res_model">shopify.prepare.product.for.export.ept</field>
+        <field name="res_model">shopify.prepare.product.for.export.ec</field>
         <field name="binding_model_id" ref="model_product_template"/>
         <field name="binding_view_types">form,list</field>
         <field name="target">new</field>

@@ -16,13 +16,13 @@ _logger = logging.getLogger("Shopify Layer")
 
 
 class PrepareProductForExport(models.TransientModel):
-    _name = "shopify.prepare.product.for.export.ept"
+    _name = "shopify.prepare.product.for.export.ec"
     _description = "Prepare product for export in Shopify"
 
     export_method = fields.Selection([("direct", "Export in Shopify Layer"),
                                       ("csv", "Export in CSV file"), ("xlsx", "Export in XLSX file")],
                                      default="direct")
-    shopify_instance_id = fields.Many2one("shopify.instance.ept")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec")
     choose_file = fields.Binary(help="Select CSV file to upload.")
     file_name = fields.Char(help="Name of CSV file.")
 
@@ -72,7 +72,7 @@ class PrepareProductForExport(models.TransientModel):
 
     def create_or_update_shopify_layer_template(self, shopify_instance, product_template, variant,
                                                 shopify_template_id, sequence):
-        shopify_templates = shopify_template_obj = self.env["shopify.product.template.ept"]
+        shopify_templates = shopify_template_obj = self.env["shopify.product.template.ec"]
 
         shopify_template = shopify_template_obj.search([
             ("shopify_instance_id", "=", shopify_instance.id),
@@ -128,7 +128,7 @@ class PrepareProductForExport(models.TransientModel):
 
     def create_or_update_shopify_layer_variant(self, variant, shopify_template_id, shopify_instance,
                                                shopify_template, sequence):
-        shopify_product_obj = self.env["shopify.product.product.ept"]
+        shopify_product_obj = self.env["shopify.product.product.ec"]
 
         shopify_variant = shopify_product_obj.search([
             ("shopify_instance_id", "=", self.shopify_instance_id.id),
@@ -179,7 +179,7 @@ class PrepareProductForExport(models.TransientModel):
 
         return {
             "type": "ir.actions.act_url",
-            "url": "web/content/?model=shopify.prepare.product.for.export.ept&id=%s&field=choose_file&download=true&"
+            "url": "web/content/?model=shopify.prepare.product.for.export.ec&id=%s&field=choose_file&download=true&"
                    "filename=%s.csv" % (self.id, self.file_name + str(datetime.now().strftime("%d/%m/%Y:%H:%M:%S"))),
             "target": self
         }
@@ -205,7 +205,7 @@ class PrepareProductForExport(models.TransientModel):
         })
         return {
             "type": "ir.actions.act_url",
-            "url": "web/content/?model=shopify.prepare.product.for.export.ept&id=%s&field=choose_file&download=true&"
+            "url": "web/content/?model=shopify.prepare.product.for.export.ec&id=%s&field=choose_file&download=true&"
                    "filename=%s.xlsx" % (self.id, self.file_name + str(datetime.now().strftime("%d/%m/%Y:%H:%M:%S"))),
             "target": self
         }
@@ -225,8 +225,8 @@ class PrepareProductForExport(models.TransientModel):
 
     def create_shopify_template_images(self, shopify_template):
         shopify_product_image_list = []
-        shopify_product_image_obj = self.env["shopify.product.image.ept"]
-        common_product_image_obj = self.env["common.product.image.ept"]
+        shopify_product_image_obj = self.env["shopify.product.image.ec"]
+        common_product_image_obj = self.env["common.product.image.ec"]
 
         common_product_images = common_product_image_obj.search(
             [('template_id', '=', shopify_template.product_tmpl_id.id)])
@@ -252,8 +252,8 @@ class PrepareProductForExport(models.TransientModel):
         return True
 
     def create_shopify_variant_images(self, shopify_template, shopify_variant):
-        shopify_product_image_obj = self.env["shopify.product.image.ept"]
-        common_product_image_obj = self.env["common.product.image.ept"]
+        shopify_product_image_obj = self.env["shopify.product.image.ec"]
+        common_product_image_obj = self.env["common.product.image.ec"]
 
         common_product_images = common_product_image_obj.search(
             [('product_id', '=', shopify_variant.product_id.id)])

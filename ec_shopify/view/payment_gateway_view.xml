@@ -3,7 +3,7 @@
     <!--Form view of payment gateway-->
     <record id="shopify_payment_gateway_form" model="ir.ui.view">
         <field name="name">Shopify Payment Gateway Form</field>
-        <field name="model">shopify.payment.gateway.ept</field>
+        <field name="model">shopify.payment.gateway.ec</field>
         <field name="arch" type="xml">
             <form string="Payment Gateway">
                 <sheet>
@@ -24,7 +24,7 @@
     <!--Search view of payment gateway-->
     <record id="shopify_payment_gateway_search" model="ir.ui.view">
         <field name="name">Shopify Payment Gateway Search</field>
-        <field name="model">shopify.payment.gateway.ept</field>
+        <field name="model">shopify.payment.gateway.ec</field>
         <field name="type">search</field>
         <field name="arch" type="xml">
             <search string="Payment Gateway">
@@ -45,7 +45,7 @@
     <!--Tree view of payment gateway-->
     <record id="shopify_payment_gateway_tree" model="ir.ui.view">
         <field name="name">Shopify Payment Gateway Tree</field>
-        <field name="model">shopify.payment.gateway.ept</field>
+        <field name="model">shopify.payment.gateway.ec</field>
         <field name="type">list</field>
         <field name="arch" type="xml">
             <list sample="1">
@@ -59,7 +59,7 @@
     <!--Action of payment gateway-->
     <record id="action_shopify_payment_gateway" model="ir.actions.act_window">
         <field name="name">Payment Gateway</field>
-        <field name="res_model">shopify.payment.gateway.ept</field>
+        <field name="res_model">shopify.payment.gateway.ec</field>
         <field name="view_mode">list,form</field>
     </record>
 

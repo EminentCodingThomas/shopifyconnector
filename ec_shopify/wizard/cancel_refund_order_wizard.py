@@ -24,7 +24,7 @@ class ShopifyCancelRefundOrderWizard(models.TransientModel):
                                  help='You can select here the journal to use for the credit note that will be created.'
                                       ' If you leave that field empty, it will use the same journal as the current '
                                       'invoice.')
-    refund_from = fields.Many2one("shopify.payment.gateway.ept", string="Refund From")
+    refund_from = fields.Many2one("shopify.payment.gateway.ec", string="Refund From")
     reason = fields.Char()
     refund_date = fields.Date()
     # Below fields are used for refund process.
@@ -37,7 +37,7 @@ class ShopifyCancelRefundOrderWizard(models.TransientModel):
              "The canceled quantity will be added back to the available count.\n Return:The items were already "
              "delivered,and will be returned to the merchant.The returned quantity will be added back to the available "
              "count")
-    payment_ids = fields.Many2many('shopify.order.payment.ept', 'shopify_payment_refund_rel', string="Payments")
+    payment_ids = fields.Many2many('shopify.order.payment.ec', 'shopify_payment_refund_rel', string="Payments")
 
     def cancel_in_shopify(self):
         active_id = self._context.get('active_id')
@@ -131,7 +131,7 @@ class ShopifyCancelRefundOrderWizard(models.TransientModel):
         do_not_order_process_ids = []
         mismatch_log_lines = []
         shopify_instance = credit_note_id.shopify_instance_id
-        shopify_location_obj = self.env["shopify.location.ept"]
+        shopify_location_obj = self.env["shopify.location.ec"]
         for invoice_line_id in credit_note_id.invoice_line_ids:
             if invoice_line_id.product_id.type == 'service':
                 continue
@@ -154,7 +154,7 @@ class ShopifyCancelRefundOrderWizard(models.TransientModel):
                     else:
                         log_message = "Location is not set in order (%s).Unable to refund in shopify.\n You can see " \
                                       "order location here: Order => Shopify Info => Shopify Location " % order_id.name
-                    log_line = self.env["common.log.lines.ept"].create_common_log_line_ec(
+                    log_line = self.env["common.log.lines.ec"].create_common_log_line_ec(
                         shopify_instance_id=shopify_instance.id, message=log_message,
                         model_name='sale.order',
                         order_ref=order_id.name)
@@ -205,7 +205,7 @@ class ShopifyCancelRefundOrderWizard(models.TransientModel):
             except Exception as error:
                 log_message = "When creating refund in Shopify for order (%s), issue arrive in " \
                               "request (%s)" % (order.name, error)
-                log_line = self.env["common.log.lines.ept"].create_common_log_line_ec(
+                log_line = self.env["common.log.lines.ec"].create_common_log_line_ec(
                     shopify_instance_id=instance.id, message=log_message,
                     model_name=model,
                     order_ref=order.name)
@@ -214,7 +214,7 @@ class ShopifyCancelRefundOrderWizard(models.TransientModel):
             if not bool(result.id):
                 log_message = "When creating refund in Shopify for order (%s), issue arrive in " \
                               "request (%s)" % (order.name, result.errors.errors.get('base'))
-                log_line = self.env["common.log.lines.ept"].create_common_log_line_ec(
+                log_line = self.env["common.log.lines.ec"].create_common_log_line_ec(
                     shopify_instance_id=instance.id, message=log_message,
                     model_name=model,
                     order_ref=order.name)

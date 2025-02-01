@@ -4,7 +4,7 @@
     <record id="export_stock_queue_tree_view_ec"
             model="ir.ui.view">
         <field name="name">Export Stock Queue Tree View</field>
-        <field name="model">shopify.export.stock.queue.ept</field>
+        <field name="model">shopify.export.stock.queue.ec</field>
         <field name="arch" type="xml">
             <!-- <list create="0" default_order="name desc" sample="1" decoration-primary="is_process_queue==True"
                   js_class="queue_line_ec_dashboard"> 
@@ -39,7 +39,7 @@
     <record id="export_stock_form_view_ec"
             model="ir.ui.view">
         <field name="name">Export Stock Queue Form View</field>
-        <field name="model">shopify.export.stock.queue.ept</field>
+        <field name="model">shopify.export.stock.queue.ec</field>
         <field name="arch" type="xml">
             <form string="Export Stock Synced Data" create="0" edit="0" duplicate="0">
                 <header>
@@ -185,7 +185,7 @@
     <!--Search view of export stock queue-->
     <record id="export_stock_queue_filter" model="ir.ui.view">
         <field name="name">shopify.synced.export.stock.filter</field>
-        <field name="model">shopify.export.stock.queue.ept</field>
+        <field name="model">shopify.export.stock.queue.ec</field>
         <field name="arch" type="xml">
             <search string="Filter State Wise">
                 <field name="name"
@@ -223,7 +223,7 @@
     <record id="action_shopify_export_stock_queue"
             model="ir.actions.act_window">
         <field name="name">Export Stock Queues</field>
-        <field name="res_model">shopify.export.stock.queue.ept</field>
+        <field name="res_model">shopify.export.stock.queue.ec</field>
         <field name="view_id" ref="export_stock_queue_tree_view_ec"/>
         <field name="search_view_id"
                ref="ec_shopify.export_stock_queue_filter"/>

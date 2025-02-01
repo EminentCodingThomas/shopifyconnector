@@ -4,7 +4,7 @@
     <record id="shopify_product_product_tree_view_ec"
             model="ir.ui.view">
         <field name="name">Shopify Product Tree View</field>
-        <field name="model">shopify.product.product.ept</field>
+        <field name="model">shopify.product.product.ec</field>
         <field name="arch" type="xml">
             <list create="false" sample="1">
                 <field name="sequence"/>
@@ -21,8 +21,8 @@
     <!--Search view of the shopify product product-->
     <record model="ir.ui.view"
             id="shopify_product_product_search_view_ec">
-        <field name="name">shopify.product.ept</field>
-        <field name="model">shopify.product.product.ept</field>
+        <field name="name">shopify.product.ec</field>
+        <field name="model">shopify.product.product.ec</field>
         <field name="type">search</field>
         <field name="arch" type="xml">
             <search string="Shopify Products">
@@ -50,7 +50,7 @@
     <record id="shopify_product_product_form_view_ec"
             model="ir.ui.view">
         <field name="name">Shopify Product Form View</field>
-        <field name="model">shopify.product.product.ept</field>
+        <field name="model">shopify.product.product.ec</field>
         <field name="arch" type="xml">
             <form string="Shopify Product Form View">
                 <sheet>
@@ -118,7 +118,7 @@
     <record id="action_shopify_product_product_ec"
             model="ir.actions.act_window">
         <field name="name">Shopify Product</field>
-        <field name="res_model">shopify.product.product.ept</field>
+        <field name="res_model">shopify.product.product.ec</field>
         <field name="view_id"
                ref="shopify_product_product_tree_view_ec"/>
         <field name="help" type="html">

@@ -12,19 +12,19 @@ _logger = logging.getLogger("Shopify Product Queue Line")
 
 
 class ShopifyProductDataQueueLineEpt(models.Model):
-    _name = "shopify.product.data.queue.line.ept"
+    _name = "shopify.product.data.queue.line.ec"
     _description = "Shopify Product Data Queue Line"
 
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", string="Instance")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", string="Instance")
     last_process_date = fields.Datetime()
     synced_product_data = fields.Text()
     product_data_id = fields.Char()
     state = fields.Selection([("draft", "Draft"), ("failed", "Failed"), ("done", "Done"),
                               ("cancel", "Cancelled")],
                              default="draft")
-    product_data_queue_id = fields.Many2one("shopify.product.data.queue.ept", required=True,
+    product_data_queue_id = fields.Many2one("shopify.product.data.queue.ec", required=True,
                                             ondelete="cascade", copy=False)
-    common_log_lines_ids = fields.One2many("common.log.lines.ept",
+    common_log_lines_ids = fields.One2many("common.log.lines.ec",
                                            "shopify_product_data_queue_line_id",
                                            help="Log lines created against which line.")
     name = fields.Char(string="Product", help="It contain the name of product")
@@ -33,7 +33,7 @@ class ShopifyProductDataQueueLineEpt(models.Model):
 
     def auto_import_product_queue_line_data(self):
         product_data_queue_ids = []
-        product_data_queue_obj = self.env["shopify.product.data.queue.ept"]
+        product_data_queue_obj = self.env["shopify.product.data.queue.ec"]
 
         query = """select queue.id
                 from shopify_product_data_queue_line_ec as queue_line
@@ -52,7 +52,7 @@ class ShopifyProductDataQueueLineEpt(models.Model):
         return
 
     def process_product_queue_and_post_message(self, queues):
-        common_log_line_obj = self.env["common.log.lines.ept"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
         start = time.time()
         product_queue_process_cron_time = queues.shopify_instance_id.get_shopify_cron_execution_time(
             "ec_shopify.process_shopify_product_queue")
@@ -69,7 +69,7 @@ class ShopifyProductDataQueueLineEpt(models.Model):
                        "automated action to process this queue,<br/>- Ignore, if this queue is already processed.</p>"
                 queue.message_post(body=note)
                 if queue.shopify_instance_id.is_shopify_create_schedule:
-                    common_log_line_obj.create_crash_queue_schedule_activity(queue, "shopify.product.data.queue.ept",
+                    common_log_line_obj.create_crash_queue_schedule_activity(queue, "shopify.product.data.queue.ec",
                                                                              note)
                 return True
 
@@ -80,7 +80,7 @@ class ShopifyProductDataQueueLineEpt(models.Model):
         return True
 
     def process_product_queue_line_data(self):
-        shopify_product_template_obj = self.env["shopify.product.template.ept"]
+        shopify_product_template_obj = self.env["shopify.product.template.ec"]
 
         queue_id = self.product_data_queue_id if len(self.product_data_queue_id) == 1 else False
 
@@ -115,8 +115,8 @@ class ShopifyProductDataQueueLineEpt(models.Model):
         return True
 
     def shopify_image_import(self):
-        shopify_template_obj = self.env['shopify.product.template.ept']
-        instance_obj = self.env['shopify.instance.ept']
+        shopify_template_obj = self.env['shopify.product.template.ec']
+        instance_obj = self.env['shopify.instance.ec']
         start_time = time.time()
         image_import_cron_time = instance_obj.get_shopify_cron_execution_time(
             "ec_shopify.shopify_ir_cron_import_image_explicitly")

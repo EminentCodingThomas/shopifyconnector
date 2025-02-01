@@ -16,19 +16,19 @@ _logger = logging.getLogger("Shopify Product Queue")
 
 
 class ShopifyProductDataQueue(models.Model):
-    _name = "shopify.product.data.queue.ept"
+    _name = "shopify.product.data.queue.ec"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Shopify Product Data Queue"
 
     name = fields.Char(size=120)
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", string="Instance")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", string="Instance")
     state = fields.Selection([("draft", "Draft"), ("partially_completed", "Partially Completed"),
                               ("completed", "Completed"), ("failed", "Failed")], default="draft",
                              compute="_compute_queue_state", store=True, tracking=True)
-    product_data_queue_lines = fields.One2many("shopify.product.data.queue.line.ept",
+    product_data_queue_lines = fields.One2many("shopify.product.data.queue.line.ec",
                                                "product_data_queue_id",
                                                string="Product Queue Lines")
-    common_log_lines_ids = fields.One2many("common.log.lines.ept", compute="_compute_log_lines")
+    common_log_lines_ids = fields.One2many("common.log.lines.ec", compute="_compute_log_lines")
     queue_line_total_records = fields.Integer(string="Total Records",
                                               compute="_compute_queue_line_record")
     queue_line_draft_records = fields.Integer(string="Draft Records",
@@ -89,7 +89,7 @@ class ShopifyProductDataQueue(models.Model):
 
     def create_product_queues(self, instance, results, skip_existing_product, template_ids=""):
         product_queue_list = []
-        order_data_queue_line = self.env['shopify.order.data.queue.line.ept']
+        order_data_queue_line = self.env['shopify.order.data.queue.line.ec']
         count = 125
         for result in results:
             if count == 125:
@@ -192,7 +192,7 @@ class ShopifyProductDataQueue(models.Model):
         return self.create(product_queue_vals)
 
     def shopify_create_product_data_queue_line(self, result, instance, product_data_queue):
-        product_data_queue_line_obj = self.env["shopify.product.data.queue.line.ept"]
+        product_data_queue_line_obj = self.env["shopify.product.data.queue.line.ec"]
 
         # No need to convert the response into dictionary, when response is coming from webhook.
         if not isinstance(result, dict):
@@ -213,7 +213,7 @@ class ShopifyProductDataQueue(models.Model):
 
     def create_schedule_activity_for_product(self, queue_line, from_sale=False):
         mail_activity_obj = self.env['mail.activity']
-        common_log_line_obj = self.env['common.log.lines.ept']
+        common_log_line_obj = self.env['common.log.lines.ec']
         queue_id, model_id, data_ref, note = self.assign_queue_model_date_ref_note(from_sale, queue_line)
         activity_type_id = queue_id and queue_id.shopify_instance_id.shopify_activity_type_id.id
         date_deadline = datetime.strftime(
@@ -239,13 +239,13 @@ class ShopifyProductDataQueue(models.Model):
         ir_model_obj = self.env['ir.model']
         if from_sale:
             queue_id = queue_line.shopify_order_data_queue_id
-            model_id = ir_model_obj.search([('model', '=', 'shopify.order.data.queue.ept')])
+            model_id = ir_model_obj.search([('model', '=', 'shopify.order.data.queue.ec')])
             data_ref = queue_line.shopify_order_id
             note = _('Your order has not been imported because of the product of order Has a new attribute Shopify ' \
                      'Order Reference : %s') % data_ref
         else:
             queue_id = queue_line.product_data_queue_id
-            model_id = ir_model_obj.search([('model', '=', 'shopify.product.data.queue.ept')])
+            model_id = ir_model_obj.search([('model', '=', 'shopify.product.data.queue.ec')])
             data_ref = queue_line.product_data_id
             note = _('Your product was not synced because you tried to add new attribute | Product Data Reference ' \
                      ': %s') % data_ref
@@ -272,4 +272,4 @@ class ShopifyProductDataQueue(models.Model):
     @api.model
     def retrieve_dashboard(self, *args, **kwargs):
         dashboard = self.env['queue.line.dashboard']
-        return dashboard.get_data(table='shopify.product.data.queue.line.ept', )
+        return dashboard.get_data(table='shopify.product.data.queue.line.ec', )

@@ -8,19 +8,19 @@ _logger = logging.getLogger("Shopify Export Stock Queue")
 
 
 class ShopifyExportStockQueueEpt(models.Model):
-    _name = "shopify.export.stock.queue.ept"
+    _name = "shopify.export.stock.queue.ec"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Shopify Export Stock Queue"
 
     name = fields.Char(size=120)
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", string="Instance")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", string="Instance")
     state = fields.Selection([("draft", "Draft"), ("partially_completed", "Partially Completed"),
                               ("completed", "Completed"), ("failed", "Failed")], default="draft",
                              compute="_compute_queue_state", store=True, tracking=True)
-    export_stock_queue_line_ids = fields.One2many("shopify.export.stock.queue.line.ept",
+    export_stock_queue_line_ids = fields.One2many("shopify.export.stock.queue.line.ec",
                                                   "export_stock_queue_id",
                                                   string="Export Stock Queue Lines")
-    common_log_lines_ids = fields.One2many("common.log.lines.ept", compute="_compute_log_lines")
+    common_log_lines_ids = fields.One2many("common.log.lines.ec", compute="_compute_log_lines")
     queue_line_total_records = fields.Integer(string="Total Records",
                                               compute="_compute_queue_line_record")
     queue_line_draft_records = fields.Integer(string="Draft Records",
@@ -103,7 +103,7 @@ class ShopifyExportStockQueueEpt(models.Model):
         return self.create(product_queue_vals)
 
     def shopify_create_export_stock_queue_line(self, data, instance, export_stock_queue):
-        exists_export_stock_queue_line = self.env["shopify.export.stock.queue.line.ept"].search(
+        exists_export_stock_queue_line = self.env["shopify.export.stock.queue.line.ec"].search(
             [('shopify_product_id', '=', data.get("shopify_product_id").id),
              ("location_id", "=", data.get('location_id')),
              ("shopify_instance_id", '=', instance.id),
@@ -119,7 +119,7 @@ class ShopifyExportStockQueueEpt(models.Model):
                 'quantity': int(data.get('quantity')),
                 "export_stock_queue_id": export_stock_queue and export_stock_queue.id or False
             }
-            self.env['shopify.export.stock.queue.line.ept'].create(export_stock_queue_line_vals)
+            self.env['shopify.export.stock.queue.line.ec'].create(export_stock_queue_line_vals)
         else:
             exists_export_stock_queue_line.write({'quantity': int(data.get('quantity'))})
         return True
@@ -127,4 +127,4 @@ class ShopifyExportStockQueueEpt(models.Model):
     @api.model
     def retrieve_dashboard(self, *args, **kwargs):
         dashboard = self.env['queue.line.dashboard']
-        return dashboard.get_data(table='shopify.export.stock.queue.line.ept')
+        return dashboard.get_data(table='shopify.export.stock.queue.line.ec')

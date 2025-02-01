@@ -23,24 +23,6 @@ class ShopifyInstanceConfig(models.TransientModel):
     shopify_company_id = fields.Many2one("res.company", string="Instance Company",
                                          help="Orders and Invoices will be generated of this company.")
 
-    shopify_instance_video_url = fields.Char('Instance Video URL',
-                                             default='https://www.youtube.com/watch?v=kWmHTIujBmQ&list=PLZGehiXauylZAowR8580_18UZUyWRjynd&index=2',
-                                             help='URL of a video for showcasing by instance.')
-    shopify_instance_video_embed_code = fields.Html(compute="_compute_shopify_instance_video_embed_code",
-                                                    sanitize=False)
-
-    shopify_api_video_url = fields.Char('API Video URL',
-                                        default='https://www.youtube.com/watch?v=8QgZ4bp-7MA&list=PLZGehiXauylZAowR8580_18UZUyWRjynd&index=1&t=4s',
-                                        help='URL of a video for showcasing by instance.')
-    shopify_api_video_embed_code = fields.Html(compute="_compute_shopify_instance_video_embed_code",
-                                               sanitize=False)
-
-    @api.depends('shopify_instance_video_url', 'shopify_api_video_url')
-    def _compute_shopify_instance_video_embed_code(self):
-        for image in self:
-            image.shopify_instance_video_embed_code = get_video_embed_code(image.shopify_instance_video_url)
-            image.shopify_api_video_embed_code = get_video_embed_code(image.shopify_api_video_url)
-
     def create_pricelist(self, shop_currency):
         currency_obj = self.env["res.currency"]
         pricelist_obj = self.env["product.pricelist"]
@@ -66,10 +48,10 @@ class ShopifyInstanceConfig(models.TransientModel):
         return pricelist.id
 
     def shopify_test_connection(self):
-        instance_obj = self.env["shopify.instance.ept"]
-        shopify_location_obj = self.env["shopify.location.ept"]
-        payment_gateway_obj = self.env["shopify.payment.gateway.ept"]
-        financial_status_obj = self.env["sale.auto.workflow.configuration.ept"]
+        instance_obj = self.env["shopify.instance.ec"]
+        shopify_location_obj = self.env["shopify.location.ec"]
+        payment_gateway_obj = self.env["shopify.payment.gateway.ec"]
+        financial_status_obj = self.env["sale.auto.workflow.configuration.ec"]
 
         instance_id = instance_obj.with_context(active_test=False).search(
             ["|", ("shopify_api_key", "=", self.shopify_api_key),
@@ -140,7 +122,7 @@ class ShopifyInstanceConfig(models.TransientModel):
         action = self.env["ir.actions.actions"]._for_xml_id(
             "ec_shopify.shopify_on_board_instance_configuration_action")
         action['context'] = {'is_calling_from_onboarding_panel': True}
-        instance = self.env['shopify.instance.ept'].search_shopify_instance()
+        instance = self.env['shopify.instance.ec'].search_shopify_instance()
         if instance:
             action.get('context').update({
                 'default_name': instance.name,
@@ -157,7 +139,7 @@ class ShopifyInstanceConfig(models.TransientModel):
         return action
 
     def reset_credentials(self):
-        shopify_instance_obj = self.env["shopify.instance.ept"]
+        shopify_instance_obj = self.env["shopify.instance.ec"]
         context = self.env.context
         instance_id = context.get("shopify_instance_id")
 
@@ -185,11 +167,11 @@ class ResConfigSettings(models.TransientModel):
 
     def _get_shopify_default_financial_statuses(self):
         if self._context.get('default_shopify_instance_id', False):
-            financial_status_ids = self.env['sale.auto.workflow.configuration.ept'].search(
+            financial_status_ids = self.env['sale.auto.workflow.configuration.ec'].search(
                 [('shopify_instance_id', '=', self._context.get('default_shopify_instance_id', False))]).ids
             return [(6, 0, financial_status_ids)]
 
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", "Shopify Instance", related='company_id.shopify_instance_id', readonly=False)
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", "Shopify Instance", related='company_id.shopify_instance_id', readonly=False)
     shopify_company_id = fields.Many2one("res.company", string="Shopify Instance Company",
                                          help="Orders and Invoices will be generated of this company.")
     shopify_warehouse_id = fields.Many2one("stock.warehouse", string="Shopify Warehouse",
@@ -262,7 +244,7 @@ class ResConfigSettings(models.TransientModel):
                                                            help="Creates Bank Statement using this journal while process Payout Report")
     shopify_payout_last_date_import = fields.Date(string="Import Payout Reports",
                                                   help="It is used to store last update shopify payout report")
-    shopify_financial_status_ids = fields.Many2many('sale.auto.workflow.configuration.ept',
+    shopify_financial_status_ids = fields.Many2many('sale.auto.workflow.configuration.ec',
                                                     'shopify_sale_auto_workflow_conf_rel',
                                                     'financial_onboarding_status_id', 'workflow_id',
                                                     string='Shopify Financial Status',
@@ -449,7 +431,7 @@ class ResConfigSettings(models.TransientModel):
         except:
             digest_exist = False
         if self.is_shopify_digest:
-            shopify_cron = self.env['shopify.cron.configuration.ept']
+            shopify_cron = self.env['shopify.cron.configuration.ec']
             vals = self.prepare_val_for_digest()
             if digest_exist:
                 vals.update({'name': digest_exist.name})
@@ -501,7 +483,7 @@ class ResConfigSettings(models.TransientModel):
             "ec_shopify.action_shopify_instance_config")
         action_data = {'view_id': view_id.id, 'views': [(view_id.id, 'form')], 'target': 'new',
                        'name': 'Configurations'}
-        instance = self.env['shopify.instance.ept'].search_shopify_instance()
+        instance = self.env['shopify.instance.ec'].search_shopify_instance()
         if instance:
             action['context'] = {'default_shopify_instance_id': instance.id}
         else:
@@ -578,7 +560,7 @@ class ResConfigSettings(models.TransientModel):
 
             company = instance.shopify_company_id
             company.set_onboarding_step_done('shopify_financial_status_onboarding_state')
-            financials_status = self.env['sale.auto.workflow.configuration.ept'].search(
+            financials_status = self.env['sale.auto.workflow.configuration.ec'].search(
                 [('shopify_instance_id', '=', instance.id)])
             unlink_for_financials_status = financials_status - self.shopify_financial_status_ids
             unlink_for_financials_status.unlink()

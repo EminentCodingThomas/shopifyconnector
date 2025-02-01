@@ -22,7 +22,7 @@ class ResPartner(models.Model):
         This function map the keys of the key_list with the dictionary and create domain and
         if you have given the extra_domain, then it will merge with _domain (i.e _domain = _domain + extra_domain).
         @requires: vals, key_list
-        @param vals: i.e {'name': 'emipro', 'street': 'address', 'street2': 'address',
+        @param vals: i.e {'name': 'eminent', 'street': 'address', 'street2': 'address',
         'email': 'test@test.com'...}
         @param key_list: i.e ['name', 'street', 'street2', 'email',...]
         @param extra_domain: This domain for you can pass your own custom domain.

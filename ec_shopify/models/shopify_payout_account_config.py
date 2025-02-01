@@ -4,11 +4,11 @@ from odoo import models, fields
 
 
 class ShopifyPaymentReportEpt(models.Model):
-    _name = "shopify.payout.account.config.ept"
+    _name = "shopify.payout.account.config.ec"
     _description = "Shopify Account Configurations"
 
     # Shopify Payout Report
-    instance_id = fields.Many2one('shopify.instance.ept', string="Instance")
+    instance_id = fields.Many2one('shopify.instance.ec', string="Instance")
     account_id = fields.Many2one('account.account', string="Account",
                                  help="The account used for this invoice.")
     transaction_type = fields.Selection(

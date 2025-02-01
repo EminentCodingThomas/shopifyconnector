@@ -8,7 +8,7 @@ import odoo
 class SaleReport(models.Model):
     _inherit = "sale.report"
 
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", "Shopify Instance", copy=False, readonly=True)
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", "Shopify Instance", copy=False, readonly=True)
 
     def _select_additional_fields(self):
         res = super()._select_additional_fields()

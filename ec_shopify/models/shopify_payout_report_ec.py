@@ -13,19 +13,19 @@ _logger = logging.getLogger('Shopify Payout')
 
 
 class ShopifyPaymentReportEpt(models.Model):
-    _name = "shopify.payout.report.ept"
+    _name = "shopify.payout.report.ec"
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = "Shopify Payout Report"
     _order = 'id desc'
 
     name = fields.Char(size=256)
-    instance_id = fields.Many2one('shopify.instance.ept', string="Instance")
+    instance_id = fields.Many2one('shopify.instance.ec', string="Instance")
     payout_reference_id = fields.Char(string="Payout Reference ID",
                                       help="The unique identifier of the payout")
     payout_date = fields.Date(help="The date the payout was issued.")
-    payout_transaction_ids = fields.One2many('shopify.payout.report.line.ept', 'payout_id',
+    payout_transaction_ids = fields.One2many('shopify.payout.report.line.ec', 'payout_id',
                                              string="Payout transaction lines")
-    common_log_line_ids = fields.One2many("common.log.lines.ept",'shopify_payout_report_line_id', string="Log Lines")
+    common_log_line_ids = fields.One2many("common.log.lines.ec",'shopify_payout_report_line_id', string="Log Lines")
     currency_id = fields.Many2one('res.currency', string='Currency',
                                   help="currency code of the payout.")
     amount = fields.Float(string="Total Amount", help="The total amount of the payout.")
@@ -46,7 +46,7 @@ class ShopifyPaymentReportEpt(models.Model):
     is_skip_from_cron = fields.Boolean(string="Skip From Schedule Actions", default=False)
 
     def get_payout_report(self, start_date, end_date, instance):
-        log_line_obj = self.env['common.log.lines.ept']
+        log_line_obj = self.env['common.log.lines.ec']
 
         instance.connect_in_shopify()
         _logger.info("Import Payout Reports....")
@@ -95,7 +95,7 @@ class ShopifyPaymentReportEpt(models.Model):
         return payouts
 
     def create_payout_transaction_lines(self, payout_data):
-        shopify_payout_report_line_obj = self.env['shopify.payout.report.line.ept']
+        shopify_payout_report_line_obj = self.env['shopify.payout.report.line.ec']
 
         transaction_all = shopify.Transactions().find(payout_id=self.payout_reference_id, limit=250)
         if len(transaction_all) == 250:
@@ -496,7 +496,7 @@ class ShopifyPaymentReportEpt(models.Model):
 
     def get_invoices_for_reconcile(self, statement_line):
         log_line = []
-        shopify_payout_report_line_obj = self.env['shopify.payout.report.line.ept']
+        shopify_payout_report_line_obj = self.env['shopify.payout.report.line.ec']
         sale_order_obj = self.env['sale.order']
         shopify_payout_report_line_id = shopify_payout_report_line_obj.search(
             [('transaction_id', '=', statement_line.shopify_transaction_id)])
@@ -708,7 +708,7 @@ class ShopifyPaymentReportEpt(models.Model):
 
     def create(self, vals):
         if vals.get('name', _('New')) == _('New'):
-            vals['name'] = self.env['ir.sequence'].next_by_code('shopify.payout.report.ept') or _('New')
+            vals['name'] = self.env['ir.sequence'].next_by_code('shopify.payout.report.ec') or _('New')
         result = super(ShopifyPaymentReportEpt, self).create(vals)
         return result
 
@@ -719,7 +719,7 @@ class ShopifyPaymentReportEpt(models.Model):
         return super(ShopifyPaymentReportEpt, self).unlink()
 
     def auto_import_payout_report(self, ctx=False):
-        shopify_instance_obj = self.env['shopify.instance.ept']
+        shopify_instance_obj = self.env['shopify.instance.ec']
         if isinstance(ctx, dict):
             shopify_instance_id = ctx.get('shopify_instance_id', False)
             if shopify_instance_id:
@@ -752,14 +752,14 @@ class ShopifyPaymentReportEpt(models.Model):
         return {
             "name": "Logs",
             "type": "ir.actions.act_window",
-            "res_model": "common.log.book.ept",
+            "res_model": "common.log.book.ec",
             "views": [(False, "form")],
             'context': self.env.context
         }
 
     def set_payout_log_line(self, log_lines):
         for log_line in log_lines:
-            self.env["common.log.lines.ept"].create_common_log_line_ec(shopify_instance_id=self.instance_id.id,
+            self.env["common.log.lines.ec"].create_common_log_line_ec(shopify_instance_id=self.instance_id.id,
                                                                         message=log_line.get('message'),
                                                                         model_name=self._name)
 

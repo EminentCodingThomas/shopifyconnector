@@ -13,7 +13,7 @@ class AccountMove(models.Model):
     is_refund_in_shopify = fields.Boolean("Refund In Shopify", default=False,
                                           help="True: Refunded credit note amount in shopify store.\n False: "
                                                "Remaining to refund in Shopify Store")
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", "Instances")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", "Instances")
     shopify_refund_id = fields.Char(help="Id of shopify refund.", copy=False)
     is_shopify_multi_payment = fields.Boolean("Multi Payments?", default=False, copy=False,
                                               help="It is used to identify that order has multi-payment gateway or not")
@@ -49,7 +49,7 @@ class AccountMove(models.Model):
             'name': _('Multi payments'),
             'type': 'ir.actions.act_window',
             'view_mode': 'list',
-            'res_model': 'shopify.order.payment.ept',
+            'res_model': 'shopify.order.payment.ec',
             'view_id': view_id,
             'views': [(view_id, 'list')],
             'domain': [('id', 'in', self.line_ids.sale_line_ids.order_id.shopify_payment_ids.ids)],

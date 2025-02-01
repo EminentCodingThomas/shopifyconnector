@@ -3,7 +3,7 @@
     <!--Sequence For Log -->
     <record id="seq_common_log_book_ec" model="ir.sequence">
         <field name="name">Sequence Common Log Book</field>
-        <field name="code">common.log.book.ept</field>
+        <field name="code">common.log.book.ec</field>
         <field name="prefix">LOG</field>
         <field name="padding">5</field>
         <field name="number_next">1</field>

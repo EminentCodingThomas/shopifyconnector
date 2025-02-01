@@ -4,11 +4,11 @@ from odoo import models, fields
 
 
 class ShopifyPayoutReportLineEpt(models.Model):
-    _name = "shopify.payout.report.line.ept"
+    _name = "shopify.payout.report.line.ec"
     _description = "Shopify Payout Report Line"
     _rec_name = "transaction_id"
 
-    payout_id = fields.Many2one('shopify.payout.report.ept', string="Payout ID", ondelete="cascade")
+    payout_id = fields.Many2one('shopify.payout.report.ec', string="Payout ID", ondelete="cascade")
     transaction_id = fields.Char(string="Transaction ID", help="The unique identifier of the transaction.")
     source_order_id = fields.Char(string="Order Reference ID", help="The id of the Order that this transaction  "
                                                                     "ultimately originated from")

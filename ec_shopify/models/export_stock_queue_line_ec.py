@@ -13,28 +13,28 @@ _logger = logging.getLogger("Shopify Export Stock Queue Line")
 
 
 class ShopifyOrderDataQueueLineEpt(models.Model):
-    _name = "shopify.export.stock.queue.line.ept"
+    _name = "shopify.export.stock.queue.line.ec"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Shopify Export Stock Queue Line"
 
     name = fields.Char()
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", string="Instance")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", string="Instance")
     last_process_date = fields.Datetime()
     inventory_item_id = fields.Char()
     location_id = fields.Char()
     quantity = fields.Integer()
-    shopify_product_id = fields.Many2one('shopify.product.product.ept', string="Product")
+    shopify_product_id = fields.Many2one('shopify.product.product.ec', string="Product")
     state = fields.Selection([("draft", "Draft"), ("failed", "Failed"), ("done", "Done"),
                               ("cancel", "Cancelled")],
                              default="draft")
-    export_stock_queue_id = fields.Many2one("shopify.export.stock.queue.ept", required=True,
+    export_stock_queue_id = fields.Many2one("shopify.export.stock.queue.ec", required=True,
                                             ondelete="cascade", copy=False)
-    common_log_lines_ids = fields.One2many("common.log.lines.ept",
+    common_log_lines_ids = fields.One2many("common.log.lines.ec",
                                            "shopify_export_stock_queue_line_id",
                                            help="Log lines created against which line.")
 
     def auto_export_stock_queue_data(self):
-        export_stock_queue_obj = self.env["shopify.export.stock.queue.ept"]
+        export_stock_queue_obj = self.env["shopify.export.stock.queue.ec"]
         export_stock_queue_ids = []
 
         self.env.cr.execute(
@@ -62,7 +62,7 @@ class ShopifyOrderDataQueueLineEpt(models.Model):
         self.filter_export_stock_queue_lines_and_post_message(queues)
 
     def filter_export_stock_queue_lines_and_post_message(self, queues):
-        common_log_line_obj = self.env["common.log.lines.ept"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
         start = time.time()
         export_stock_queue_process_cron_time = queues.shopify_instance_id.get_shopify_cron_execution_time(
             "ec_shopify.process_shopify_export_stock_queue")
@@ -78,7 +78,7 @@ class ShopifyOrderDataQueueLineEpt(models.Model):
                        "automated action to process this queue,<br/>- Ignore, if this queue is already processed.</p>"
                 queue.message_post(body=note)
                 if queue.shopify_instance_id.is_shopify_create_schedule:
-                    common_log_line_obj.create_crash_queue_schedule_activity(queue, "shopify.export.stock.queue.ept",
+                    common_log_line_obj.create_crash_queue_schedule_activity(queue, "shopify.export.stock.queue.ec",
                                                                              note)
                 continue
 
@@ -88,8 +88,8 @@ class ShopifyOrderDataQueueLineEpt(models.Model):
                 return True
 
     def process_export_stock_queue_data(self):
-        common_log_line_obj = self.env['common.log.lines.ept']
-        model = "shopify.export.stock.queue.ept"
+        common_log_line_obj = self.env['common.log.lines.ec']
+        model = "shopify.export.stock.queue.ec"
         queue_id = self.export_stock_queue_id if len(self.export_stock_queue_id) == 1 else False
         if queue_id:
             instance = queue_id.shopify_instance_id

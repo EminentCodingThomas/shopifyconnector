@@ -4,14 +4,14 @@ from odoo import models, fields
 
 
 class CommonLogLineEpt(models.Model):
-    _name = "common.log.lines.ept"
+    _name = "common.log.lines.ec"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Common log line"
 
     product_id = fields.Many2one('product.product', 'Product')
     order_ref = fields.Char('Order Reference')
     default_code = fields.Char('SKU')
-    log_book_id = fields.Many2one('common.log.book.ept', ondelete="cascade")
+    log_book_id = fields.Many2one('common.log.book.ec', ondelete="cascade")
     message = fields.Text()
     model_id = fields.Many2one("ir.model", string="Model")
     res_id = fields.Integer("Record ID")
@@ -33,7 +33,7 @@ class CommonLogLineEpt(models.Model):
     def create_common_log_line_ec(self, **kwargs):
         """
         It is use to create log lines.
-        @param : **kwargs, Pass the argument like, self.env['common.log.lines.ept'].create_common_log_line_ec(
+        @param : **kwargs, Pass the argument like, self.env['common.log.lines.ec'].create_common_log_line_ec(
         log_book_id=1, message=message, mismatch=True, log_line_type='fail', model_name = 'sale.order')
         """
         values = {}

@@ -6,7 +6,7 @@ from odoo import models
 
 class DataQueueMixinEpt(models.AbstractModel):
     """ Mixin class for delete unused data queue from database."""
-    _inherit = "data.queue.mixin.ept"
+    _inherit = "data.queue.mixin.ec"
 
     def delete_data_queue_ec(self, queue_data=False, is_delete_queue=False):
         """

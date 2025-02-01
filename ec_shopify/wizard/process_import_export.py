@@ -25,7 +25,7 @@ class ShopifyProcessImportExport(models.TransientModel):
     _name = 'shopify.process.import.export'
     _description = 'Shopify Process Import Export'
 
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", string="Instance")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", string="Instance")
     shopify_operation = fields.Selection(
         [("sync_product", "Import Products"),
          ("sync_product_by_remote_ids", "Import Specific Product(s)"),
@@ -44,7 +44,7 @@ class ShopifyProcessImportExport(models.TransientModel):
         default="sync_product", string="Operation")
     orders_from_date = fields.Datetime(string="From Date")
     orders_to_date = fields.Datetime(string="To Date")
-    shopify_instance_ids = fields.Many2many("shopify.instance.ept", "shopify_instance_import_export_rel",
+    shopify_instance_ids = fields.Many2many("shopify.instance.ec", "shopify_instance_import_export_rel",
                                             "process_id", "shopify_instance_id", "Instances")
     shopify_is_set_price = fields.Boolean(string="Set Price ?",
                                           help="If is a mark, it set the price with product in the Shopify store.",
@@ -89,18 +89,9 @@ class ShopifyProcessImportExport(models.TransientModel):
     is_auto_validate_inventory = fields.Boolean(default=False, string='Auto Validate Inventory',
                                                 help="If you mark it, the inventory will be applied automatically.")
 
-    shopify_video_url = fields.Char('Video URL',
-                                    help='URL of a video for showcasing by operations.')
-    shopify_video_embed_code = fields.Html(compute="_compute_shopify_video_embed_code", sanitize=False)
-
-    @api.depends('shopify_video_url')
-    def _compute_shopify_video_embed_code(self):
-        for image in self:
-            image.shopify_video_embed_code = get_video_embed_code(image.shopify_video_url)
-
     def shopify_execute(self):
-        product_data_queue_obj = self.env["shopify.product.data.queue.ept"]
-        order_date_queue_obj = self.env["shopify.order.data.queue.ept"]
+        product_data_queue_obj = self.env["shopify.product.data.queue.ec"]
+        order_date_queue_obj = self.env["shopify.order.data.queue.ec"]
         queue_ids = False
 
         instance = self.shopify_instance_id
@@ -188,7 +179,7 @@ class ShopifyProcessImportExport(models.TransientModel):
             if self.payout_end_date and self.payout_start_date:
                 if self.payout_end_date < self.payout_start_date:
                     raise UserError("The start date must be precede its end date")
-                self.env["shopify.payout.report.ept"].get_payout_report(self.payout_start_date, self.payout_end_date,
+                self.env["shopify.payout.report.ec"].get_payout_report(self.payout_start_date, self.payout_end_date,
                                                                         instance)
 
         elif self.shopify_operation == "import_products_from_csv":
@@ -222,9 +213,9 @@ class ShopifyProcessImportExport(models.TransientModel):
             It calls from the Shopify layer product screen.
         """
         start = time.time()
-        shopify_product_template_obj = self.env["shopify.product.template.ept"]
-        shopify_product_obj = self.env['shopify.product.product.ept']
-        instance_obj = self.env['shopify.instance.ept']
+        shopify_product_template_obj = self.env["shopify.product.template.ec"]
+        shopify_product_obj = self.env['shopify.product.product.ec']
+        instance_obj = self.env['shopify.instance.ec']
 
         shopify_products = self._context.get('active_ids', [])
 
@@ -255,9 +246,9 @@ class ShopifyProcessImportExport(models.TransientModel):
                 and not self.shopify_is_set_image:
             raise UserError("Please Select Any Option To Update Product.")
 
-        shopify_product_template_obj = self.env['shopify.product.template.ept']
-        shopify_product_obj = self.env['shopify.product.product.ept']
-        instance_obj = self.env['shopify.instance.ept']
+        shopify_product_template_obj = self.env['shopify.product.template.ec']
+        shopify_product_obj = self.env['shopify.product.product.ec']
+        instance_obj = self.env['shopify.instance.ec']
 
         start = time.time()
         shopify_products = self._context.get('active_ids', [])
@@ -321,8 +312,8 @@ class ShopifyProcessImportExport(models.TransientModel):
 
     def create_customer_data_queues(self, customer_data):
         customer_queue_list = []
-        customer_data_queue_obj = self.env["shopify.customer.data.queue.ept"]
-        customer_data_queue_line_obj = self.env["shopify.customer.data.queue.line.ept"]
+        customer_data_queue_obj = self.env["shopify.customer.data.queue.ec"]
+        customer_data_queue_line_obj = self.env["shopify.customer.data.queue.line.ec"]
         bus_bus_obj = self.env["bus.bus"]
 
         if len(customer_data) > 0:
@@ -342,7 +333,7 @@ class ShopifyProcessImportExport(models.TransientModel):
         return customer_queue_list
 
     def webhook_customer_create_process(self, res, instance):
-        data_queue_obj = self.env['shopify.customer.data.queue.ept']
+        data_queue_obj = self.env['shopify.customer.data.queue.ec']
 
         customer_queue_id = data_queue_obj.search([("record_created_from", "=", "webhook"), ("state", "=", "draft"),
                                                    ("shopify_instance_id", "=", instance.id)])
@@ -389,7 +380,7 @@ class ShopifyProcessImportExport(models.TransientModel):
         if not isinstance(ctx, dict):
             return True
         instance_id = ctx.get('shopify_instance_id')
-        instance = self.env['shopify.instance.ept'].browse(instance_id)
+        instance = self.env['shopify.instance.ec'].browse(instance_id)
         from_date = instance.last_cancel_order_import_date
         to_date = datetime.now()
         if not from_date:
@@ -401,9 +392,9 @@ class ShopifyProcessImportExport(models.TransientModel):
     def update_stock_in_shopify(self, ctx=False):
         if not isinstance(ctx, dict):
             return True
-        shopify_instance_obj = self.env['shopify.instance.ept']
+        shopify_instance_obj = self.env['shopify.instance.ec']
         product_obj = self.env['product.product']
-        shopify_product_obj = self.env['shopify.product.product.ept']
+        shopify_product_obj = self.env['shopify.product.product.ec']
 
         if self.shopify_instance_id:
             instance = self.shopify_instance_id
@@ -438,9 +429,9 @@ class ShopifyProcessImportExport(models.TransientModel):
         """
         This method used to export stock from odoo to shopify.
         """
-        shopify_instance_obj = self.env['shopify.instance.ept']
+        shopify_instance_obj = self.env['shopify.instance.ec']
         product_obj = self.env['product.product']
-        shopify_product_obj = self.env['shopify.product.product.ept']
+        shopify_product_obj = self.env['shopify.product.product.ec']
 
         instance = self.shopify_instance_id if self.shopify_instance_id else False
         if not instance and ctx.get('shopify_instance_id'):
@@ -471,10 +462,10 @@ class ShopifyProcessImportExport(models.TransientModel):
         return False
 
     def shopify_selective_product_stock_export(self):
-        shopify_product_obj = self.env['shopify.product.product.ept']
+        shopify_product_obj = self.env['shopify.product.product.ec']
         shopify_template_ids = self._context.get('active_ids')
-        export_stock_data_obj = self.env['shopify.export.stock.queue.ept']
-        shopify_instances = self.env['shopify.instance.ept'].search([])
+        export_stock_data_obj = self.env['shopify.export.stock.queue.ec']
+        shopify_instances = self.env['shopify.instance.ec'].search([])
         for instance in shopify_instances:
             shopify_products = shopify_product_obj.search([('shopify_instance_id', '=', instance.id),
                                                            ('shopify_template_id', 'in', shopify_template_ids)])
@@ -509,7 +500,7 @@ class ShopifyProcessImportExport(models.TransientModel):
 
     def import_stock_in_odoo(self):
         instance = self.shopify_instance_id
-        shopify_product_obj = self.env['shopify.product.product.ept']
+        shopify_product_obj = self.env['shopify.product.product.ec']
         # inventory_records = shopify_product_obj.import_shopify_stock(instance, self.is_auto_validate_inventory)
         # return inventory_records
         shopify_product_obj.import_shopify_stock(instance, self.is_auto_validate_inventory)
@@ -528,7 +519,7 @@ class ShopifyProcessImportExport(models.TransientModel):
         if not isinstance(ctx, dict):
             return True
         instance_id = ctx.get('shopify_instance_id')
-        instance = self.env['shopify.instance.ept'].browse(instance_id)
+        instance = self.env['shopify.instance.ec'].browse(instance_id)
         _logger.info(
             _("Auto cron update order status process start with instance: '%s'"), instance.name)
         self.update_order_status(instance)
@@ -541,8 +532,6 @@ class ShopifyProcessImportExport(models.TransientModel):
         self.is_hide_operation_execute_button = False
         current_time = datetime.now()
         if instance:
-            # Attach Shopify Operations Videos
-            self.set_shopify_video_based_on_operation()
 
             if self.shopify_operation == "import_unshipped_orders":
                 self.orders_from_date = instance.last_date_order_import or False
@@ -564,31 +553,6 @@ class ShopifyProcessImportExport(models.TransientModel):
             if instance.payout_last_import_date:
                 self.payout_start_date = instance.payout_last_import_date
             self.payout_end_date = current_time
-
-    def set_shopify_video_based_on_operation(self):
-        if self.shopify_operation in ['sync_product', 'import_products_from_csv']:
-            self.shopify_video_url = 'https://www.youtube.com/watch?v=NbYkqmiUFFs&list=PLZGehiXauylZAowR8580_18UZUyWRjynd&index=3'
-
-        if self.shopify_operation == 'import_customers':
-            self.shopify_video_url = 'https://www.youtube.com/watch?v=_X6ZbxMOMC8&list=PLZGehiXauylZAowR8580_18UZUyWRjynd&index=15'
-
-        if self.shopify_operation == 'import_unshipped_orders':
-            self.shopify_video_url = 'https://www.youtube.com/watch?v=7aboj1fLYrA&list=PLZGehiXauylZAowR8580_18UZUyWRjynd&index=8'
-
-        if self.shopify_operation == 'import_shipped_orders':
-            self.shopify_video_url = 'https://www.youtube.com/watch?v=iiSQINGFY5U&list=PLZGehiXauylZAowR8580_18UZUyWRjynd&index=10'
-
-        if self.shopify_operation == 'update_order_status':
-            self.shopify_video_url = 'https://www.youtube.com/watch?v=qOFObt6qpSw&list=PLZGehiXauylZAowR8580_18UZUyWRjynd&index=9'
-
-        if self.shopify_operation == 'import_stock':
-            self.shopify_video_url = 'https://www.youtube.com/watch?v=BPcGRZ7BKNE&list=PLZGehiXauylZAowR8580_18UZUyWRjynd&index=14'
-
-        if self.shopify_operation == 'export_stock':
-            self.shopify_video_url = 'https://www.youtube.com/watch?v=Ea6ppXEpEXA&list=PLZGehiXauylZAowR8580_18UZUyWRjynd&index=13'
-
-        if self.shopify_operation == 'import_location':
-            self.shopify_video_url = 'https://www.youtube.com/watch?v=41qTs4UQ1QU&list=PLZGehiXauylZAowR8580_18UZUyWRjynd&index=5'
 
     def import_products_from_file(self):
         try:
@@ -623,9 +587,9 @@ class ShopifyProcessImportExport(models.TransientModel):
                 raise UserError(_("Required column is not available in File."))
 
     def create_products_from_file(self, file_data):
-        prepare_product_for_export_obj = self.env["shopify.prepare.product.for.export.ept"]
-        common_log_line_obj = self.env["common.log.lines.ept"]
-        model = "shopify.product.product.ept"
+        prepare_product_for_export_obj = self.env["shopify.prepare.product.for.export.ec"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
+        model = "shopify.product.product.ec"
         instance = self.shopify_instance_id
         sequence = 0
         row_no = 0
@@ -653,8 +617,8 @@ class ShopifyProcessImportExport(models.TransientModel):
         return True
 
     def create_or_update_shopify_template_from_csv(self, instance, record, shopify_template_id, sequence):
-        shopify_product_template = self.env["shopify.product.template.ept"]
-        prepare_product_for_export_obj = self.env["shopify.prepare.product.for.export.ept"]
+        shopify_product_template = self.env["shopify.product.template.ec"]
+        prepare_product_for_export_obj = self.env["shopify.prepare.product.for.export.ec"]
         shopify_template = shopify_product_template.search(
             [("shopify_instance_id", "=", instance.id),
              ("product_tmpl_id", "=", int(record["PRODUCT_TEMPLATE_ID"]))], limit=1)
@@ -682,7 +646,7 @@ class ShopifyProcessImportExport(models.TransientModel):
         return shopify_template, shopify_template_id, sequence
 
     def create_or_update_shopify_variant_from_csv(self, instance, record, shopify_template_id, sequence):
-        shopify_product_obj = self.env["shopify.product.product.ept"]
+        shopify_product_obj = self.env["shopify.product.product.ec"]
         shopify_variant = shopify_product_obj.search(
             [("shopify_instance_id", "=", instance.id),
              ("product_id", "=", int(record["PRODUCT_ID"])),
@@ -728,7 +692,7 @@ class ShopifyProcessImportExport(models.TransientModel):
         return validation_header, product_data
 
     def import_shopify_location(self):
-        shopify_location_obj = self.env["shopify.location.ept"]
+        shopify_location_obj = self.env["shopify.location.ec"]
         shopify_locations = shopify_location_obj.import_shopify_locations(self.shopify_instance_id)
         return shopify_locations
 

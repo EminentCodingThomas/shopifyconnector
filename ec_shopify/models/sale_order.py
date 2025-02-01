@@ -66,14 +66,14 @@ class SaleOrder(models.Model):
 
     shopify_order_id = fields.Char("Shopify Order Ref", copy=False)
     shopify_order_number = fields.Char(copy=False)
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", "Shopify Instance", copy=False)
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", "Shopify Instance", copy=False)
     shopify_order_status = fields.Char(copy=False, tracking=True,
                                        help="Shopify order status when order imported in odoo at the moment order"
                                             "status in Shopify.")
-    shopify_payment_gateway_id = fields.Many2one('shopify.payment.gateway.ept',
+    shopify_payment_gateway_id = fields.Many2one('shopify.payment.gateway.ec',
                                                  string="Payment Gateway", copy=False)
     risk_ids = fields.One2many("shopify.order.risk", 'odoo_order_id', "Risks", copy=False)
-    shopify_location_id = fields.Many2one("shopify.location.ept", "Shopify Location", copy=False)
+    shopify_location_id = fields.Many2one("shopify.location.ec", "Shopify Location", copy=False)
     checkout_id = fields.Char(copy=False)
     is_risky_order = fields.Boolean("Risky Order?", default=False, copy=False)
     updated_in_shopify = fields.Boolean("Updated In Shopify ?", compute=_get_shopify_order_status,
@@ -84,7 +84,7 @@ class SaleOrder(models.Model):
     is_service_tracking_updated = fields.Boolean("Service Tracking Updated", default=False, copy=False)
     is_shopify_multi_payment = fields.Boolean("Multi Payments?", default=False, copy=False,
                                               help="It is used to identify that order has multi-payment gateway or not")
-    shopify_payment_ids = fields.One2many('shopify.order.payment.ept', 'order_id',
+    shopify_payment_ids = fields.One2many('shopify.order.payment.ec', 'order_id',
                                           string="Payment Lines")
 
     _sql_constraints = [('unique_shopify_order',
@@ -93,7 +93,7 @@ class SaleOrder(models.Model):
 
     def prepare_shopify_customer_and_addresses(self, order_response, pos_order, instance, order_data_line):
         res_partner_obj = self.env["res.partner"]
-        shopify_res_partner_obj = self.env["shopify.res.partner.ept"]
+        shopify_res_partner_obj = self.env["shopify.res.partner.ec"]
         message = False
 
         if pos_order:
@@ -112,7 +112,7 @@ class SaleOrder(models.Model):
                 partner = order_response.get("customer") and shopify_res_partner_obj.shopify_create_contact_partner(
                     order_response.get("customer"), instance, False)
         if message:
-            self.env["common.log.lines.ept"].create_common_log_line_ec(shopify_instance_id=instance.id,
+            self.env["common.log.lines.ec"].create_common_log_line_ec(shopify_instance_id=instance.id,
                                                                         message=message,
                                                                         model_name='sale.order',
                                                                         order_ref=order_response.get('name'),
@@ -154,7 +154,7 @@ class SaleOrder(models.Model):
         return partner, delivery_address, invoice_address
 
     def set_shopify_location_and_warehouse(self, order_response, instance, pos_order):
-        shopify_location = shopify_location_obj = self.env["shopify.location.ept"]
+        shopify_location = shopify_location_obj = self.env["shopify.location.ec"]
         if order_response.get("location_id"):
             shopify_location_id = order_response.get("location_id")
         elif order_response.get("fulfillments"):
@@ -309,7 +309,7 @@ class SaleOrder(models.Model):
 
     def import_shopify_orders(self, order_data_lines, instance):
         order_risk_obj = self.env["shopify.order.risk"]
-        common_log_line_obj = self.env["common.log.lines.ept"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
         order_ids = []
         commit_count = 0
 
@@ -447,7 +447,7 @@ class SaleOrder(models.Model):
         return order_ids
 
     def import_shopify_cancel_order(self, instance, from_date, to_date):
-        shopify_order_data_queue_obj = self.env["shopify.order.data.queue.ept"]
+        shopify_order_data_queue_obj = self.env["shopify.order.data.queue.ec"]
         instance.connect_in_shopify()
         order_ids = shopify_order_data_queue_obj.shopify_order_request(instance, from_date, to_date, order_type="any")
         for order in order_ids:
@@ -510,8 +510,8 @@ class SaleOrder(models.Model):
         return sale_order
 
     def check_mismatch_details(self, lines, instance, order_number, order_data_queue_line):
-        shopify_product_template_obj = self.env["shopify.product.template.ept"]
-        common_log_line_obj = self.env["common.log.lines.ept"]
+        shopify_product_template_obj = self.env["shopify.product.template.ec"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
         mismatch = False
 
         for line in lines:
@@ -552,7 +552,7 @@ class SaleOrder(models.Model):
 
     def search_shopify_variant(self, line, instance):
         shopify_variant = False
-        shopify_product_obj = self.env["shopify.product.product.ept"]
+        shopify_product_obj = self.env["shopify.product.product.ec"]
         sku = line.get("sku") or False
         if line.get("variant_id", None):
             shopify_variant = shopify_product_obj.search(
@@ -566,7 +566,7 @@ class SaleOrder(models.Model):
 
     def shopify_create_order(self, instance, partner, shipping_address, invoice_address,
                              order_data_queue_line, order_response, lines, order_number):
-        payment_gateway_obj = self.env["shopify.payment.gateway.ept"]
+        payment_gateway_obj = self.env["shopify.payment.gateway.ec"]
         gateway = order_response.get('gateway') or "no_payment_gateway"
         payment_gateway, workflow, payment_term = \
             payment_gateway_obj.shopify_search_create_gateway_workflow(instance, order_data_queue_line, order_response,
@@ -606,7 +606,7 @@ class SaleOrder(models.Model):
         return order
 
     def set_line_warehouse_based_on_location(self, order, instance):
-        shopify_location_obj = self.env['shopify.location.ept']
+        shopify_location_obj = self.env['shopify.location.ec']
         shopify_order_id = order.shopify_order_id
         shopify_order = shopify.Order().find(shopify_order_id)
         fulfillment_data = shopify_order.get('fulfillment_orders')
@@ -746,7 +746,7 @@ class SaleOrder(models.Model):
         return pricelist
 
     def search_shopify_product_for_order_line(self, line, instance):
-        shopify_product_obj = self.env["shopify.product.product.ept"]
+        shopify_product_obj = self.env["shopify.product.product.ec"]
         variant_id = line.get("variant_id")
         shopify_product = shopify_product_obj.search(
             [("shopify_instance_id", "=", instance.id), ("variant_id", "=", variant_id),
@@ -883,7 +883,7 @@ class SaleOrder(models.Model):
 
     def prepare_vals_shopify_multi_payment(self, instance, order_data_queue_line, order_response,
                                            payment_gateway, workflow):
-        payment_gateway_obj = self.env["shopify.payment.gateway.ept"]
+        payment_gateway_obj = self.env["shopify.payment.gateway.ec"]
         transactions = shopify.Transaction().find(order_id=order_response.get('id'))
         payment_list_vals = []
         for transaction in transactions:
@@ -1009,7 +1009,7 @@ class SaleOrder(models.Model):
         return tracking_numbers, line_items
 
     def update_order_status_in_shopify(self, instance, picking_ids=[]):
-        common_log_line_obj = self.env["common.log.lines.ept"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
         log_lines = []
         notify_customer = instance.notify_customer
         _logger.info(_("Update Order Status process start for '%s' Instance"), instance.name)
@@ -1118,7 +1118,7 @@ class SaleOrder(models.Model):
             return True, {}
 
     def search_shopify_location_for_update_order_status(self, sale_order, instance, line_items):
-        shopify_location_obj = self.env["shopify.location.ept"]
+        shopify_location_obj = self.env["shopify.location.ec"]
         if instance.is_delivery_multi_warehouse:
             line_item_ids = [str(line.get('id')) for line in line_items]
             order_line = sale_order.order_line.filtered(
@@ -1139,7 +1139,7 @@ class SaleOrder(models.Model):
                           "shipping status." % (
                               instance.name)
                 _logger.info(message)
-                self.env["common.log.lines.ept"].create_common_log_line_ec(shopify_instance_id=instance.id,
+                self.env["common.log.lines.ec"].create_common_log_line_ec(shopify_instance_id=instance.id,
                                                                             message=message,
                                                                             model_name=self._name,
                                                                             order_ref=sale_order.client_order_ref)
@@ -1170,7 +1170,7 @@ class SaleOrder(models.Model):
         except Exception as error:
             message = "%s" % str(error)
             _logger.info(message)
-            self.env["common.log.lines.ept"].create_common_log_line_ec(shopify_instance_id=instance.id,
+            self.env["common.log.lines.ec"].create_common_log_line_ec(shopify_instance_id=instance.id,
                                                                         message=message,
                                                                         model_name=self._name,
                                                                         order_ref=sale_order.client_order_ref)
@@ -1190,7 +1190,7 @@ class SaleOrder(models.Model):
             message = "Order(%s) status not updated due to some issue in fulfillment request/response:" % (
                 sale_order.name)
             _logger.info(message)
-            self.env["common.log.lines.ept"].create_common_log_line_ec(shopify_instance_id=instance.id,
+            self.env["common.log.lines.ec"].create_common_log_line_ec(shopify_instance_id=instance.id,
                                                                         message=message,
                                                                         model_name=self._name,
                                                                         order_ref=sale_order.client_order_ref)
@@ -1208,8 +1208,8 @@ class SaleOrder(models.Model):
 
     @api.model
     def process_shopify_order_via_webhook(self, order_data, instance, update_order=False):
-        order_queue_obj = self.env["shopify.order.data.queue.ept"]
-        order_queue_line_obj = self.env["shopify.order.data.queue.line.ept"]
+        order_queue_obj = self.env["shopify.order.data.queue.ec"]
+        order_queue_line_obj = self.env["shopify.order.data.queue.line.ec"]
         queue_type = 'unshipped'
         if order_data.get('fulfillment_status') == 'fulfilled':
             queue_type = 'shipped'
@@ -1224,7 +1224,7 @@ class SaleOrder(models.Model):
 
     @api.model
     def update_shopify_order(self, queue_lines, created_by, instance):
-        common_log_line_obj = self.env["common.log.lines.ept"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
         orders = self
         for queue_line in queue_lines:
             message = ""
@@ -1552,7 +1552,7 @@ class SaleOrder(models.Model):
     def create_schedule_activity_against_loglines(self, log_lines, note):
         mail_activity_obj = self.env['mail.activity']
         ir_model_obj = self.env['ir.model']
-        model_id = ir_model_obj.search([('model', '=', 'common.log.lines.ept')])
+        model_id = ir_model_obj.search([('model', '=', 'common.log.lines.ec')])
         if len(log_lines) > 0:
             for log_line in log_lines:
                 activity_type_id = log_line and log_line.shopify_instance_id.shopify_activity_type_id.id

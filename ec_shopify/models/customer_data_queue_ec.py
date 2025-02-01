@@ -5,16 +5,16 @@ from odoo import models, fields, api
 
 class ShopifyCustomerDataQueueEpt(models.Model):
     """ This model is used to handle the customer data queue."""
-    _name = "shopify.customer.data.queue.ept"
+    _name = "shopify.customer.data.queue.ec"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Shopify Synced Customer Data"
 
     name = fields.Char(size=120, readonly=True)
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", string="Instance")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", string="Instance")
     state = fields.Selection([("draft", "Draft"), ("partially_completed", "Partially Completed"),
                               ("completed", "Completed"), ("failed", "Failed")], compute="_compute_queue_state",
                              default="draft", store=True, tracking=True)
-    synced_customer_queue_line_ids = fields.One2many("shopify.customer.data.queue.line.ept",
+    synced_customer_queue_line_ids = fields.One2many("shopify.customer.data.queue.line.ec",
                                                      "synced_customer_queue_id", "Customers")
     total_record_count = fields.Integer(string="Total Records Count",
                                         compute="_compute_total_record_count")
@@ -22,7 +22,7 @@ class ShopifyCustomerDataQueueEpt(models.Model):
     fail_state_count = fields.Integer(compute="_compute_total_record_count")
     done_state_count = fields.Integer(compute="_compute_total_record_count")
     cancel_state_count = fields.Integer(compute="_compute_total_record_count")
-    common_log_lines_ids = fields.One2many("common.log.lines.ept", compute="_compute_log_lines")
+    common_log_lines_ids = fields.One2many("common.log.lines.ec", compute="_compute_log_lines")
     record_created_from = fields.Selection([("webhook", "From Webhook"), ("import_process", "From Import Process")])
     is_process_queue = fields.Boolean("Is Processing Queue", default=False)
     running_status = fields.Char(default="Running...")
@@ -38,9 +38,6 @@ class ShopifyCustomerDataQueueEpt(models.Model):
     def _compute_total_record_count(self):
         """
         This method used to count records of queue line base on the queue state.
-        It displays the count records in the form view of the queue.
-        :author: Angel Patel @Emipro Technologies Pvt.Ltd on date 02/11/2019.
-        :Task ID: 157065
         """
         for record in self:
             queue_lines = record.synced_customer_queue_line_ids
@@ -65,7 +62,7 @@ class ShopifyCustomerDataQueueEpt(models.Model):
     @api.model_create_multi
     def create(self, vals):
         for val in vals:
-            seq = self.env["ir.sequence"].next_by_code("shopify.customer.data.queue.ept") or "/"
+            seq = self.env["ir.sequence"].next_by_code("shopify.customer.data.queue.ec") or "/"
             val.update({"name": seq or ""})
         return super(ShopifyCustomerDataQueueEpt, self).create(vals)
 
@@ -80,4 +77,4 @@ class ShopifyCustomerDataQueueEpt(models.Model):
     @api.model
     def retrieve_dashboard(self, *args, **kwargs):
         dashboard = self.env['queue.line.dashboard']
-        return dashboard.get_data(table='shopify.customer.data.queue.line.ept')
+        return dashboard.get_data(table='shopify.customer.data.queue.line.ec')

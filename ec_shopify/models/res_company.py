@@ -12,7 +12,7 @@ class ResCompany(models.Model):
     _inherit = 'res.company'
 
     # Shopify Onboarding Panel
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", "Shopify Instance")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", "Shopify Instance")
     shopify_onboarding_state = fields.Selection(selection=SHOPIFY_ONBOARDING_STATES,
                                                 string="State of the shopify onboarding panel", default='not_done')
     shopify_instance_onboarding_state = fields.Selection(selection=SHOPIFY_ONBOARDING_STATES,
@@ -49,10 +49,7 @@ class ResCompany(models.Model):
 
     def action_toggle_shopify_instances_onboarding_panel(self):
         """
-        Use: To change and pass the value of selection of current company to hide / show panel.
-        :return Selection Value
-        Added by: Dipak Gogiya @Emipro Technologies
-        Added on: 07/10/2020
+        This function is to change and pass the value of selection of current company to hide / show panel.
         """
         self.shopify_onboarding_toggle_state = 'closed' if self.shopify_onboarding_toggle_state == 'open' else 'open'
         return self.shopify_onboarding_toggle_state

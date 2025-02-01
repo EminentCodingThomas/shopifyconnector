@@ -5,7 +5,7 @@ from odoo import models, _
 
 
 class ShopifyQueueProcessEpt(models.TransientModel):
-    _name = 'shopify.queue.process.ept'
+    _name = 'shopify.queue.process.ec'
     _description = 'Shopify Queue Process'
 
     def manual_queue_process(self):
@@ -21,9 +21,9 @@ class ShopifyQueueProcessEpt(models.TransientModel):
 
     def process_product_queue_manually(self):
         model = self._context.get('active_model')
-        shopify_product_queue_line_obj = self.env["shopify.product.data.queue.line.ept"]
+        shopify_product_queue_line_obj = self.env["shopify.product.data.queue.line.ec"]
         product_queue_ids = self._context.get('active_ids')
-        if model == 'shopify.product.data.queue.line.ept':
+        if model == 'shopify.product.data.queue.line.ec':
             product_queue_ids = shopify_product_queue_line_obj.search(
                 [('id', 'in', product_queue_ids)]).mapped("product_data_queue_id").ids
         for product_queue_id in product_queue_ids:
@@ -35,9 +35,9 @@ class ShopifyQueueProcessEpt(models.TransientModel):
 
     def process_customer_queue_manually(self):
         model = self._context.get('active_model')
-        customer_queue_line_obj = self.env["shopify.customer.data.queue.line.ept"]
+        customer_queue_line_obj = self.env["shopify.customer.data.queue.line.ec"]
         customer_queue_ids = self._context.get("active_ids")
-        if model == "shopify.customer.data.queue.line.ept":
+        if model == "shopify.customer.data.queue.line.ec":
             customer_queue_ids = customer_queue_line_obj.search([('id', 'in', customer_queue_ids)]).mapped(
                 "synced_customer_queue_id").ids
         for customer_queue_id in customer_queue_ids:
@@ -49,9 +49,9 @@ class ShopifyQueueProcessEpt(models.TransientModel):
 
     def process_order_queue_manually(self):
         model = self._context.get('active_model')
-        shopify_order_queue_line_obj = self.env["shopify.order.data.queue.line.ept"]
+        shopify_order_queue_line_obj = self.env["shopify.order.data.queue.line.ec"]
         order_queue_ids = self._context.get('active_ids')
-        if model == "shopify.order.data.queue.line.ept":
+        if model == "shopify.order.data.queue.line.ec":
             order_queue_ids = shopify_order_queue_line_obj.search([('id', 'in', order_queue_ids)]).mapped(
                 "shopify_order_data_queue_id").ids
         self.env.cr.execute(
@@ -66,9 +66,9 @@ class ShopifyQueueProcessEpt(models.TransientModel):
 
     def process_export_stock_queue_manually(self):
         model = self._context.get('active_model')
-        shopify_export_stock_queue_line_obj = self.env["shopify.export.stock.queue.line.ept"]
+        shopify_export_stock_queue_line_obj = self.env["shopify.export.stock.queue.line.ec"]
         export_stock_queue_ids = self._context.get('active_ids')
-        if model == "shopify.export.stock.queue.line.ept":
+        if model == "shopify.export.stock.queue.line.ec":
             export_stock_queue_ids = shopify_export_stock_queue_line_obj.search(
                 [('id', 'in', export_stock_queue_ids)]).mapped("export_stock_queue_id").ids
         self.env.cr.execute(
@@ -94,7 +94,7 @@ class ShopifyQueueProcessEpt(models.TransientModel):
 
     def set_to_completed_export_stock_queue_manually(self):
         export_stock_queue_ids = self._context.get('active_ids')
-        export_stock_queue_ids = self.env['shopify.export.stock.queue.ept'].browse(export_stock_queue_ids)
+        export_stock_queue_ids = self.env['shopify.export.stock.queue.ec'].browse(export_stock_queue_ids)
 
         for export_stock_queue_id in export_stock_queue_ids:
             queue_lines = export_stock_queue_id.export_stock_queue_line_ids.filtered(
@@ -105,7 +105,7 @@ class ShopifyQueueProcessEpt(models.TransientModel):
 
     def set_to_completed_order_queue_manually(self):
         order_queue_ids = self._context.get('active_ids')
-        order_queue_ids = self.env['shopify.order.data.queue.ept'].browse(order_queue_ids)
+        order_queue_ids = self.env['shopify.order.data.queue.ec'].browse(order_queue_ids)
         for order_queue_id in order_queue_ids:
             queue_lines = order_queue_id.order_data_queue_line_ids.filtered(
                 lambda line: line.state in ['draft', 'failed'])
@@ -116,7 +116,7 @@ class ShopifyQueueProcessEpt(models.TransientModel):
 
     def set_to_completed_product_queue_manually(self):
         product_queue_ids = self._context.get('active_ids')
-        product_queue_ids = self.env['shopify.product.data.queue.ept'].browse(product_queue_ids)
+        product_queue_ids = self.env['shopify.product.data.queue.ec'].browse(product_queue_ids)
         for product_queue_id in product_queue_ids:
             queue_lines = product_queue_id.product_data_queue_lines.filtered(
                 lambda line: line.state in ['draft', 'failed'])
@@ -127,7 +127,7 @@ class ShopifyQueueProcessEpt(models.TransientModel):
 
     def set_to_completed_customer_queue_manually(self):
         customer_queue_ids = self._context.get('active_ids')
-        customer_queue_ids = self.env['shopify.customer.data.queue.ept'].browse(customer_queue_ids)
+        customer_queue_ids = self.env['shopify.customer.data.queue.ec'].browse(customer_queue_ids)
         for customer_queue_id in customer_queue_ids:
             queue_lines = customer_queue_id.synced_customer_queue_line_ids.filtered(
                 lambda line: line.state in ['draft', 'failed'])
@@ -138,7 +138,7 @@ class ShopifyQueueProcessEpt(models.TransientModel):
         """
         :return:
         """
-        instances = self.env['shopify.instance.ept'].browse(self._context.get('active_ids'))
+        instances = self.env['shopify.instance.ec'].browse(self._context.get('active_ids'))
         for instance in instances:
             instance.shopify_action_archive_unarchive()
         return True

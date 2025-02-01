@@ -70,13 +70,6 @@
                                                 Shopify > Configuration > Settings > Select an
                                                 instance.
                                             </li>
-                                            <li>
-                                                For more details please check
-                                                <a href='https://docs.emiprotechnologies.com/shopify-odoo-connector/v15/shopify-configurations-in-odoo/product-configuration.html'
-                                                   target="_blank">
-                                                    User Guide
-                                                </a>
-                                            </li>
                                         </ol>
                                     </b>
                                 </p>
@@ -108,13 +101,6 @@
                                             <li>
                                                 Example of define shopify product template ids:
                                                 4341100314679,4341100314680,4341100314678,4341100314658
-                                            </li>
-                                            <li>
-                                                For more details please check
-                                                <a href='https://docs.emiprotechnologies.com/shopify-odoo-connector/v15/shopify-configurations-in-odoo/product-configuration.html'
-                                                   target="_blank">
-                                                    User Guide
-                                                </a>
                                             </li>
                                         </ol>
                                     </b>
@@ -157,13 +143,6 @@
                                                 date(Shopify > Configuration > Settings > Last Date
                                                 Of Import Process)
                                                 in the configuration.
-                                            </li>
-                                            <li>
-                                                For more details please check
-                                                <a href='https://docs.emiprotechnologies.com/shopify-odoo-connector/v15/shopify-orders-management/import-unshipped-order.html'
-                                                   target="_blank">
-                                                    User Guide
-                                                </a>
                                             </li>
                                         </ol>
                                     </b>
@@ -212,13 +191,6 @@
                                                 Order After Date) in
                                                 the configuration.
                                             </li>
-                                            <li>
-                                                For more details please check
-                                                <a href='https://docs.emiprotechnologies.com/shopify-odoo-connector/v15/shopify-orders-management/import-shipped-order.html'
-                                                   target="_blank">
-                                                    User Guide
-                                                </a>
-                                            </li>
                                         </ol>
                                     </b>
                                 </p>
@@ -248,13 +220,6 @@
                                             <li>
                                                 The default value for 'To Date' will be current date
                                                 and time.
-                                            </li>
-                                            <li>
-                                                For more details please check
-                                                <a href='https://docs.emiprotechnologies.com/shopify-odoo-connector/v15/shopify-orders-management/import-cancel-order.html'
-                                                   target="_blank">
-                                                    User Guide
-                                                </a>
                                             </li>
                                         </ol>
                                     </b>
@@ -369,13 +334,6 @@
                                                 updated since last 30
                                                 days.
                                             </li>
-                                            <li>
-                                                For more details please check
-                                                <a href='https://docs.emiprotechnologies.com/shopify-odoo-connector/v15/shopify-product-management/update-export-product-and-stock.html'
-                                                   target="_blank">
-                                                    User Guide
-                                                </a>
-                                            </li>
                                         </ol>
                                     </b>
                                 </p>
@@ -434,13 +392,6 @@
                                                 An order's status gets updated only once to
                                                 Shopify store.
                                             </li>
-                                            <li>
-                                                For more details please check
-                                                <a href='https://docs.emiprotechnologies.com/shopify-odoo-connector/v15/shopify-orders-management/update-order-shipping-status.html'
-                                                   target="_blank">
-                                                    User Guide
-                                                </a>
-                                            </li>
                                         </ol>
                                     </b>
                                 </p>
@@ -462,13 +413,6 @@
                                                 Payout Report record will be added under Shopify >
                                                 Sales >
                                                 Invoices &amp; Payout > Payout Reports.
-                                            </li>
-                                            <li>
-                                                For more details please check
-                                                <a href='https://docs.emiprotechnologies.com/shopify-odoo-connector/v15/shopify-payouts.html'
-                                                   target="_blank">
-                                                    User Guide
-                                                </a>
                                             </li>
                                         </ol>
                                     </b>
@@ -531,20 +475,9 @@
                                                 Configuration
                                                 > Shopify Locations.
                                             </li>
-                                            <li>
-                                                For more details please check
-                                                <a href='https://docs.emiprotechnologies.com/shopify-odoo-connector/v15/sale-auto-workflow-payment-gateway-and-financial-status-configurations/shopify-locations.html'
-                                                   target="_blank">
-                                                    User Guide
-                                                </a>
-                                            </li>
                                         </ol>
                                     </b>
                                 </p>
-                            </div>
-                            <div class='row' style="display: contents;"
-                                 invisible="shopify_operation not in ('import_customers','update_order_status','import_location')">
-                                <field name="shopify_video_embed_code" string="Shopify Operation Video" nolable="1"/>
                             </div>
                             <div invisible=" not cron_process_notification">
                                 <p colspan="2" class="alert alert-info" role="alert">
@@ -596,10 +529,6 @@
                                             <field name="csv_file" filename="file_name" string="Choose File"
                                                 required = "shopify_operation == 'import_products_from_csv'"/>
                                         </group>
-                                    </div>
-                                    <div class="col-md-6"
-                                        invisible="shopify_operation in ('import_cancel_orders','import_orders_by_remote_ids','sync_product_by_remote_ids','import_payout_report')">
-                                        <field name="shopify_video_embed_code" string="Shopify Operation Video"/>
                                     </div>
                                 </div>
                                 <div class="row"

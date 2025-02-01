@@ -7,8 +7,8 @@ from odoo.exceptions import UserError
 
 
 class ProductImageEpt(models.Model):
-    _name = 'common.product.image.ept'
-    _description = 'common.product.image.ept'
+    _name = 'common.product.image.ec'
+    _description = 'common.product.image.ec'
     _order = 'sequence, id'
 
     name = fields.Char()

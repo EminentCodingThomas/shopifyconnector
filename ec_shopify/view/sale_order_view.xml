@@ -427,7 +427,7 @@
     <record id="shopify_multi_payment_gateway_tree_view_ec"
             model="ir.ui.view">
         <field name="name">Multi Payment</field>
-        <field name="model">shopify.order.payment.ept</field>
+        <field name="model">shopify.order.payment.ec</field>
         <field name="arch" type="xml">
             <list create="false" duplicate="false">
                 <field name="payment_gateway_id"/>

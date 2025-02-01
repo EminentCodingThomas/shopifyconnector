@@ -8,7 +8,7 @@ from .. import shopify
 from ..shopify.pyactiveresource.connection import ClientError
 
 class ShopifyLocationEpt(models.Model):
-    _name = 'shopify.location.ept'
+    _name = 'shopify.location.ec'
     _description = 'Shopify Stock Location'
 
     name = fields.Char(help="Give this location a short name to make it easy to identify. You’ll see this name in areas"
@@ -19,7 +19,7 @@ class ShopifyLocationEpt(models.Model):
     import_stock_warehouse_id = fields.Many2one('stock.warehouse', string='Warehouse',
                                                 help="Selected warehouse used while Import the stock.")
     shopify_location_id = fields.Char(readonly=True)
-    instance_id = fields.Many2one('shopify.instance.ept', "Instance", readonly=True, ondelete="cascade")
+    instance_id = fields.Many2one('shopify.instance.ec', "Instance", readonly=True, ondelete="cascade")
     legacy = fields.Boolean('Is Legacy Location', help="Whether this is a fulfillment service location. If true, then"
                                                        "the location is a fulfillment service location. If false, then"
                                                        "the location was created by the merchant and isn't tied to a"

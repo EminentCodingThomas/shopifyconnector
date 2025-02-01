@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record model="ir.ui.view" id="product_form_view_common_product_template_image_ec">
-        <field name="name">product.common.template.image.ept</field>
+        <field name="name">product.common.template.image.ec</field>
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">

@@ -13,19 +13,19 @@ _logger = logging.getLogger("Shopify Customer Queue Line")
 
 class ShopifyCustomerDataQueueLineEpt(models.Model):
     """This model is used to handel the customer data queue line"""
-    _name = "shopify.customer.data.queue.line.ept"
+    _name = "shopify.customer.data.queue.line.ec"
     _description = "Shopify Synced Customer Data Line"
 
     state = fields.Selection([("draft", "Draft"), ("failed", "Failed"), ("done", "Done"),
                               ("cancel", "Cancelled")], default="draft")
     shopify_synced_customer_data = fields.Char(string="Shopify Synced Data")
     shopify_customer_data_id = fields.Text(string="Customer ID")
-    synced_customer_queue_id = fields.Many2one("shopify.customer.data.queue.ept",
+    synced_customer_queue_id = fields.Many2one("shopify.customer.data.queue.ec",
                                                string="Shopify Customer",
                                                ondelete="cascade")
     last_process_date = fields.Datetime()
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", string="Instance")
-    common_log_lines_ids = fields.One2many("common.log.lines.ept",
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", string="Instance")
+    common_log_lines_ids = fields.One2many("common.log.lines.ec",
                                            "shopify_customer_data_queue_line_id",
                                            help="Log lines created against which line.")
     name = fields.Char(string="Customer", help="Shopify Customer Name")
@@ -38,7 +38,7 @@ class ShopifyCustomerDataQueueLineEpt(models.Model):
         return True
 
     def shopify_customer_data_queue_line_create(self, result, customer_queue_id):
-        synced_shopify_customers_line_obj = self.env["shopify.customer.data.queue.line.ept"]
+        synced_shopify_customers_line_obj = self.env["shopify.customer.data.queue.line.ec"]
         name = "%s %s" % (result.get("first_name") or "", result.get("last_name") or "")
         customer_id = result.get("id")
         data = json.dumps(result)
@@ -55,13 +55,11 @@ class ShopifyCustomerDataQueueLineEpt(models.Model):
     @api.model
     def sync_shopify_customer_into_odoo(self):
         """
-        This method is used to find customer queue which queue lines have state in draft and is_action_require is False.
-        If cronjob has tried more than 3 times to process any queue then it marks that queue has need process to
-        manually. It will be called from auto queue process cron.
-        :author: Angel Patel @Emipro Technologies Pvt.Ltd on date 02/11/2019.
-        :Task ID: 157065
+        This method is used to get customer queue which queue lines have state in draft and is_action_require is False.
+        It marks that queue has need process to manually, If cron job has tried more than 3 times to process any queue.
+        It will be called from auto queue process cron.
         """
-        shopify_customer_queue_obj = self.env["shopify.customer.data.queue.ept"]
+        shopify_customer_queue_obj = self.env["shopify.customer.data.queue.ec"]
         customer_queue_ids = []
 
         query = """select queue.id
@@ -81,7 +79,7 @@ class ShopifyCustomerDataQueueLineEpt(models.Model):
 
     def filter_customer_queue_lines_and_post_message(self, queues):
 
-        common_log_line_obj = self.env["common.log.line.ept"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
         start = time.time()
         customer_queue_process_cron_time = queues.shopify_instance_id.get_shopify_cron_execution_time(
             "ec_shopify.process_shopify_customer_queue")
@@ -98,7 +96,7 @@ class ShopifyCustomerDataQueueLineEpt(models.Model):
                          "<br/>- Ignore, if this queue is already processed.</p>")
                 queue.message_post(body=note)
                 if queue.shopify_instance_id.is_shopify_create_schedule:
-                    common_log_line_obj.create_crash_queue_schedule_activity(queue, "shopify.customer.data.queue.ept",
+                    common_log_line_obj.create_crash_queue_schedule_activity(queue, "shopify.customer.data.queue.ec",
                                                                              note)
                 continue
             self._cr.commit()
@@ -127,7 +125,7 @@ class ShopifyCustomerDataQueueLineEpt(models.Model):
 
     def customer_queue_commit_and_process(self, queue, instance):
         company_id = False
-        shopify_partner_obj = self.env["shopify.res.partner.ept"]
+        shopify_partner_obj = self.env["shopify.res.partner.ec"]
         commit_count = 0
         for line in self:
             commit_count += 1

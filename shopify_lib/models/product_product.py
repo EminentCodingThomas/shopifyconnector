@@ -8,7 +8,7 @@ from odoo import models, fields, api, _
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
-    ept_image_ids = fields.One2many('common.product.image.ept', 'product_id', string='Product Images')
+    ept_image_ids = fields.One2many('common.product.image.ec', 'product_id', string='Product Images')
     is_drop_ship_product = fields.Boolean(store=False, compute="_compute_is_drop_ship_product")
 
     @api.depends('route_ids')
@@ -49,7 +49,7 @@ class ProductProduct(models.Model):
         for vals in vals_list:
             if vals.get("image_1920", False) and res:
                 image_vals = res.prepare_common_image_vals(vals)
-                self.env["common.product.image.ept"].create(image_vals)
+                self.env["common.product.image.ec"].create(image_vals)
         return res
 
     def write(self, vals):
@@ -58,7 +58,7 @@ class ProductProduct(models.Model):
         """
         res = super(ProductProduct, self).write(vals)
         if vals.get("image_1920", False) and self:
-            common_product_image_obj = self.env["common.product.image.ept"]
+            common_product_image_obj = self.env["common.product.image.ec"]
             for record in self:
                 if vals.get("image_1920"):
                     image_vals = record.prepare_common_image_vals(vals)

@@ -6,7 +6,7 @@ from odoo import models, fields, api
 
 class SaleAutoWorkflowConfiguration(models.Model):
     """This model is used to process order base on auto workflow process."""
-    _name = "sale.auto.workflow.configuration.ept"
+    _name = "sale.auto.workflow.configuration.ec"
     _description = 'Sale auto workflow configuration'
 
     @api.model
@@ -22,10 +22,10 @@ class SaleAutoWorkflowConfiguration(models.Model):
                                          ('refunded', 'The finances have been refunded'),
                                          ('voided', 'The finances have been voided')
                                          ], default="paid")
-    auto_workflow_id = fields.Many2one("sale.workflow.process.ept", "Auto Workflow")
-    payment_gateway_id = fields.Many2one("shopify.payment.gateway.ept", "Payment Gateway", ondelete="restrict")
+    auto_workflow_id = fields.Many2one("sale.workflow.process.ec", "Auto Workflow")
+    payment_gateway_id = fields.Many2one("shopify.payment.gateway.ec", "Payment Gateway", ondelete="restrict")
     payment_term_id = fields.Many2one('account.payment.term', string='Payment Term', default=_default_payment_term)
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", "Instance")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", "Instance")
     active = fields.Boolean("Active", default=True)
 
     _sql_constraints = [('_workflow_unique_constraint',
@@ -38,7 +38,7 @@ class SaleAutoWorkflowConfiguration(models.Model):
         @param instance:
         @param financial_status: Status as paid or not paid.
         """
-        payment_methods = self.env['shopify.payment.gateway.ept'].search([('shopify_instance_id', '=', instance.id)])
+        payment_methods = self.env['shopify.payment.gateway.ec'].search([('shopify_instance_id', '=', instance.id)])
         auto_workflow_record = self.env.ref("shopify_lib.automatic_validation_ec")
 
         for payment_method in payment_methods:

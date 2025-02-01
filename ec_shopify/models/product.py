@@ -9,7 +9,7 @@ class ProductTemplate(models.Model):
 
     def write(self, vals):
         if 'active' in vals.keys():
-            shopify_product_template_obj = self.env['shopify.product.template.ept']
+            shopify_product_template_obj = self.env['shopify.product.template.ec']
             for template in self:
                 shopify_templates = shopify_product_template_obj.search(
                     [('product_tmpl_id', '=', template.id)])
@@ -26,7 +26,7 @@ class ProductProduct(models.Model):
 
     def write(self, vals):
         if 'active' in vals.keys():
-            shopify_product_product_obj = self.env['shopify.product.product.ept']
+            shopify_product_product_obj = self.env['shopify.product.product.ec']
             for product in self:
                 shopify_product = shopify_product_product_obj.search(
                     [('product_id', '=', product.id)])

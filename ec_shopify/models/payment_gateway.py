@@ -12,12 +12,12 @@ from ..shopify.pyactiveresource.connection import ClientError
 
 
 class ShopifyPaymentGateway(models.Model):
-    _name = 'shopify.payment.gateway.ept'
+    _name = 'shopify.payment.gateway.ec'
     _description = "Shopify Payment Gateway"
 
     name = fields.Char(help="Payment method name")
     code = fields.Char(help="Payment method code given by Shopify")
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", required=True, string="Instance")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", required=True, string="Instance")
     active = fields.Boolean(default=True)
 
     def import_payment_gateway(self, instance):
@@ -57,12 +57,12 @@ class ShopifyPaymentGateway(models.Model):
 
     def shopify_search_create_gateway_workflow(self, instance, order_data_queue_line, order_response,
                                                gateway):
-        common_log_line_obj = self.env["common.log.lines.ept"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
         auto_workflow_id = False
 
         shopify_payment_gateway = self.search_or_create_payment_gateway(instance, gateway)
 
-        workflow_config = self.env['sale.auto.workflow.configuration.ept'].search(
+        workflow_config = self.env['sale.auto.workflow.configuration.ec'].search(
             [('shopify_instance_id', '=', instance.id),
              ('payment_gateway_id', '=', shopify_payment_gateway.id),
              ('financial_status', '=', order_response.get('financial_status'))])

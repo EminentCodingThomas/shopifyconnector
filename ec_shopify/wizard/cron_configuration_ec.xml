@@ -3,8 +3,8 @@
     <!--This is a common view for cron configuration wizard -->
     <record id="shopify_cron_configuration_ec_form_view"
             model="ir.ui.view">
-        <field name="name">shopify.cron.configuration.ept.form</field>
-        <field name="model">shopify.cron.configuration.ept</field>
+        <field name="name">shopify.cron.configuration.ec.form</field>
+        <field name="model">shopify.cron.configuration.ec</field>
         <field name="priority">11</field>
         <field name="arch" type="xml">
             <form string="Manual Queue Process" class="o_ec_shopify">
@@ -306,7 +306,7 @@
     <record id="action_wizard_shopify_cron_configuration_ec" model="ir.actions.act_window">
         <field name="name">Scheduled Actions Configuration</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">shopify.cron.configuration.ept</field>
+        <field name="res_model">shopify.cron.configuration.ec</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>

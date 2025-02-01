@@ -6,12 +6,12 @@ from odoo.exceptions import UserError
 
 
 class ShopifyOrderPayment(models.Model):
-    _name = 'shopify.order.payment.ept'
+    _name = 'shopify.order.payment.ec'
     _description = "Shopify Order Payment"
 
     order_id = fields.Many2one("sale.order", string="Sale Order", copy=False)
-    workflow_id = fields.Many2one("sale.workflow.process.ept", string="Auto Sales Workflow", copy=False)
-    payment_gateway_id = fields.Many2one("shopify.payment.gateway.ept", string="Payment Gateway", copy=False)
+    workflow_id = fields.Many2one("sale.workflow.process.ec", string="Auto Sales Workflow", copy=False)
+    payment_gateway_id = fields.Many2one("shopify.payment.gateway.ec", string="Payment Gateway", copy=False)
     amount = fields.Float()
     remaining_refund_amount = fields.Float(help="Remaining refund amount in Shopify Store.")
     payment_transaction_id = fields.Char(help="It is used for a refund.")

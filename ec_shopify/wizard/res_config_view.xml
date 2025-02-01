@@ -66,20 +66,6 @@
                         min-height: 15rem !important;
                         }
                     </style>
-                    <div name="row" style="display: flex;">
-                        <div class='col-md-6' style="display: contents;">
-                            <field name="shopify_api_video_url" invisible="1"/>
-                            <div class="p-2">
-                                <field name="shopify_api_video_embed_code" class="mt-2"/>
-                            </div>
-                        </div>
-                        <div class='col-md-6' style="display: contents;">
-                            <field name="shopify_instance_video_url" invisible="1"/>
-                            <div class="p-2">
-                                <field name="shopify_instance_video_embed_code" class="mt-2"/>
-                            </div>
-                        </div>
-                    </div>
                 </group>
                 <group invisible="context.get('is_calling_from_onboarding_panel', False)" class="o_onboard_padding">
                     <p colspan="2" class="alert alert-warning" role="alert">

@@ -2,7 +2,7 @@
 <odoo>
     <record id="common_log_line_view_search" model="ir.ui.view">
         <field name="name">common.log.line.search.view</field>
-        <field name="model">common.log.lines.ept</field>
+        <field name="model">common.log.lines.ec</field>
         <field name="arch" type="xml">
             <search>
                 <field name="message"/>
@@ -28,7 +28,7 @@
 
     <record id="common_log_line_view_tree" model="ir.ui.view">
         <field name="name">common.log.line.tree.view</field>
-        <field name="model">common.log.lines.ept</field>
+        <field name="model">common.log.lines.ec</field>
         <field name="arch" type="xml">
             <list create="false" default_order="write_date desc" sample="1">
 <!--                <field name="log_book_id"/>-->
@@ -43,7 +43,7 @@
 
     <record id="common_log_line_view_form" model="ir.ui.view">
         <field name="name">common.log.line.form.view</field>
-        <field name="model">common.log.lines.ept</field>
+        <field name="model">common.log.lines.ec</field>
         <field name="arch" type="xml">
             <form create="false" edit="false">
                 <sheet>
@@ -68,7 +68,7 @@
 
     <record id="action_common_log_line_ec" model="ir.actions.act_window">
         <field name="name">Log Lines</field>
-        <field name="res_model">common.log.lines.ept</field>
+        <field name="res_model">common.log.lines.ec</field>
         <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">

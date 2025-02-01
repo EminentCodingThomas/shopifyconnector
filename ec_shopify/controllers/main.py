@@ -24,11 +24,11 @@ class Main(http.Controller):
 
         _logger.info("%s call for product: %s", webhook_route, res.get("title"))
 
-        shopify_template = request.env["shopify.product.template.ept"].sudo().with_context(active_test=False).search(
+        shopify_template = request.env["shopify.product.template.ec"].sudo().with_context(active_test=False).search(
             [("shopify_tmpl_id", "=", res.get("id")), ("shopify_instance_id", "=", instance.id)], limit=1)
 
         if webhook_route == 'shopify_odoo_webhook_for_product_update' and shopify_template or res.get("published_at"):
-            request.env["shopify.product.data.queue.ept"].sudo().create_shopify_product_queue_from_webhook(res,
+            request.env["shopify.product.data.queue.ec"].sudo().create_shopify_product_queue_from_webhook(res,
                                                                                                            instance)
 
         if webhook_route == 'shopify_odoo_webhook_for_product_delete' and shopify_template:
@@ -81,10 +81,10 @@ class Main(http.Controller):
     def get_basic_info(self, route):
         res = request.get_json_data()
         host = request.httprequest.headers.get("X-Shopify-Shop-Domain")
-        instance = request.env["shopify.instance.ept"].sudo().with_context(active_test=False).search(
+        instance = request.env["shopify.instance.ec"].sudo().with_context(active_test=False).search(
             [("shopify_host", "ilike", host)], limit=1)
 
-        webhook = request.env["shopify.webhook.ept"].sudo().search([("delivery_url", "ilike", route),
+        webhook = request.env["shopify.webhook.ec"].sudo().search([("delivery_url", "ilike", route),
                                                                     ("instance_id", "=", instance.id)], limit=1)
 
         if not instance.active or not webhook.state == "active":

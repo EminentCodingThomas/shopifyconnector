@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record model="ir.ui.view" id="product_form_view_common_vendor_stock_ec">
-        <field name="name">Common Vendor Stock Ept</field>
+        <field name="name">Common Vendor Stock EC</field>
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_normal_form_view"/>
         <field name="arch" type="xml">

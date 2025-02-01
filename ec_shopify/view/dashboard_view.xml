@@ -3,7 +3,7 @@
     <!--Dashboard View -->
     <record id="shopify_instance_kanban_view_ec" model="ir.ui.view">
         <field name="name">shopify instance</field>
-        <field name="model">shopify.instance.ept</field>
+        <field name="model">shopify.instance.ec</field>
         <field name="arch" type="xml">
             <!-- <kanban
                     class="oe_background_grey o_kanban_dashboard o_emphasize_colors o_shopify_kanban" sample="1"
@@ -149,7 +149,7 @@
     <record id="shopify_kanban_action_ec"
             model="ir.actions.act_window">
         <field name="name">Shopify Dashboard</field>
-        <field name="res_model">shopify.instance.ept</field>
+        <field name="res_model">shopify.instance.ec</field>
         <field name="view_mode">kanban</field>
         <field name="domain">[('active','=', True)]</field>
         <field name="view_id" ref="shopify_instance_kanban_view_ec"/>

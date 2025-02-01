@@ -16,16 +16,16 @@ _logger = logging.getLogger("Shopify Product")
 
 
 class ShopifyProductProductEpt(models.Model):
-    _name = "shopify.product.product.ept"
+    _name = "shopify.product.product.ec"
     _description = "Shopify Product Product"
     _order = "sequence"
 
     sequence = fields.Integer("Position", default=1)
     name = fields.Char("Title")
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", "Instance", required=True)
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", "Instance", required=True)
     default_code = fields.Char()
     product_id = fields.Many2one("product.product", required=True)
-    shopify_template_id = fields.Many2one("shopify.product.template.ept", required=True,
+    shopify_template_id = fields.Many2one("shopify.product.template.ec", required=True,
                                           ondelete="cascade")
     exported_in_shopify = fields.Boolean(default=False)
     variant_id = fields.Char()
@@ -46,7 +46,7 @@ class ShopifyProductProductEpt(models.Model):
                                                  "tracks this product inventory.if select 'Don't track Inventory' then"
                                                  "after we can not update product stock from odoo")
     active = fields.Boolean(default=True)
-    shopify_image_ids = fields.One2many("shopify.product.image.ept", "shopify_variant_id")
+    shopify_image_ids = fields.One2many("shopify.product.image.ec", "shopify_variant_id")
     taxable = fields.Boolean(default=True)
     last_stock_update_date = fields.Datetime(readonly=True, help="It is used in export stock process.")
 
@@ -194,8 +194,8 @@ class ShopifyProductProductEpt(models.Model):
 
     def shopify_export_products(self, instance, is_set_basic_detail, is_set_price, is_set_images, is_publish,
                                 templates):
-        common_log_line_obj = self.env["common.log.lines.ept"]
-        model = "shopify.product.product.ept"
+        common_log_line_obj = self.env["common.log.lines.ec"]
+        model = "shopify.product.product.ec"
         instance.connect_in_shopify()
 
         for template in templates:
@@ -246,7 +246,7 @@ class ShopifyProductProductEpt(models.Model):
 
     def update_products_in_shopify(self, instance, templates, is_set_price, is_set_images, is_publish,
                                    is_set_basic_detail):
-        model = "shopify.product.product.ept"
+        model = "shopify.product.product.ec"
         instance.connect_in_shopify()
 
         shopify_templates = self.check_available_products_in_shopify(instance)
@@ -299,7 +299,7 @@ class ShopifyProductProductEpt(models.Model):
                     break
 
         available_product_ids = [str(result.id) for result in data_dict]
-        shopify_template_ids = self.env['shopify.product.template.ept'].search(
+        shopify_template_ids = self.env['shopify.product.template.ec'].search(
             [('exported_in_shopify', '=', True), ('shopify_instance_id', '=', instance.id)])
         layer_templates = shopify_template_ids.filtered(
             lambda template: template.shopify_tmpl_id not in available_product_ids)
@@ -320,7 +320,7 @@ class ShopifyProductProductEpt(models.Model):
         except Exception as error:
             message = "Template %s not found in shopify while updating Product.\nError: %s" % (
                 template.shopify_tmpl_id, str(error))
-            self.env["common.log.lines.ept"].create_common_log_line_ec(shopify_instance_id=instance.id,
+            self.env["common.log.lines.ec"].create_common_log_line_ec(shopify_instance_id=instance.id,
                                                                         message=message,
                                                                         model_name=model)
             return False
@@ -507,7 +507,7 @@ class ShopifyProductProductEpt(models.Model):
     @api.model
     def export_stock_in_shopify(self, instance, product_ids):
         product_obj = self.env["product.product"]
-        model = "shopify.product.product.ept"
+        model = "shopify.product.product.ec"
         log_lines = []
         all_products = self.search_shopify_product_for_export_stock(instance, product_ids)
 
@@ -528,7 +528,7 @@ class ShopifyProductProductEpt(models.Model):
             return True
 
         instance.connect_in_shopify()
-        location_ids = self.env["shopify.location.ept"].search(
+        location_ids = self.env["shopify.location.ec"].search(
             [("instance_id", "=", instance.id), ('legacy', '=', False)])
         if not location_ids:
             message = "Location not found for instance %s while update stock" % instance.name
@@ -624,10 +624,10 @@ class ShopifyProductProductEpt(models.Model):
 
     @api.model
     def export_stock_queue(self, instance, product_ids):
-        common_log_line_obj = self.env["common.log.lines.ept"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
         product_obj = self.env["product.product"]
-        export_stock_obj = self.env['shopify.export.stock.queue.ept']
-        model = "shopify.product.product.ept"
+        export_stock_obj = self.env['shopify.export.stock.queue.ec']
+        model = "shopify.product.product.ec"
         all_products = self.search_shopify_product_for_export_stock(instance, product_ids)
 
         if self._context.get('is_process_from_selected_product'):
@@ -648,7 +648,7 @@ class ShopifyProductProductEpt(models.Model):
             return True
 
         instance.connect_in_shopify()
-        location_ids = self.env["shopify.location.ept"].search(
+        location_ids = self.env["shopify.location.ec"].search(
             [("instance_id", "=", instance.id), ('legacy', '=', False)])
         if not location_ids:
             message = "Location not found for instance %s while update stock" % instance.name
@@ -745,7 +745,7 @@ class ShopifyProductProductEpt(models.Model):
     def import_shopify_stock(self, instance, validate_inventory):
         stock_inventory_obj = self.env["stock.quant"]
         stock_inventory_name_obj = self.env["stock.inventory.adjustment.name"]
-        model = "shopify.product.product.ept"
+        model = "shopify.product.product.ec"
         # inventory_records = []
         templates = self.search([("shopify_instance_id", "=", instance.id), ("exported_in_shopify", "=", True)])
         if templates:
@@ -781,7 +781,7 @@ class ShopifyProductProductEpt(models.Model):
         # return inventory_records
 
     def search_shopify_location_for_import_stock(self, instance, model):
-        location_ids = self.env["shopify.location.ept"].search(
+        location_ids = self.env["shopify.location.ec"].search(
             [("legacy", "=", False), ("instance_id", "=", instance.id)])
         if not location_ids:
             message = "Location not found for instance %s while Importing stock" % instance.name
@@ -816,7 +816,7 @@ class ShopifyProductProductEpt(models.Model):
             inventory_item_id = inventory_level.get("inventory_item_id")
             qty = inventory_level.get("available")
 
-            shopify_product = self.env["shopify.product.product.ept"].search(
+            shopify_product = self.env["shopify.product.product.ec"].search(
                 [("inventory_item_id", "=", inventory_item_id), ("exported_in_shopify", "=", True),
                  ("shopify_instance_id", "=", instance.id)], limit=1)
             if shopify_product:
@@ -856,7 +856,7 @@ class ShopifyProductProductEpt(models.Model):
         return sum_inventory_list
 
     def shopify_create_log(self, instance, message=False, model=False):
-        log_line = self.env["common.log.lines.ept"].create_common_log_line_ec(shopify_instance_id=instance.id,
+        log_line = self.env["common.log.lines.ec"].create_common_log_line_ec(shopify_instance_id=instance.id,
                                                                                message=message,
                                                                                model_name=model)
         return log_line

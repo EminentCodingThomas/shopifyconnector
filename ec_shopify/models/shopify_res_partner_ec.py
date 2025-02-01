@@ -4,16 +4,16 @@ from odoo import models, fields, api
 
 
 class ShopifyResPartnerEpt(models.Model):
-    _name = "shopify.res.partner.ept"
+    _name = "shopify.res.partner.ec"
     _description = "Shopify Res Partner"
 
     partner_id = fields.Many2one("res.partner", ondelete="cascade")
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", "Instances")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", "Instances")
     shopify_customer_id = fields.Char()
 
     def shopify_create_contact_partner(self, vals, instance, queue_line):
         partner_obj = self.env["res.partner"]
-        common_log_line_obj = self.env["common.log.lines.ept"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
 
         shopify_instance_id = instance.id
         shopify_customer_id = vals.get("id", False)

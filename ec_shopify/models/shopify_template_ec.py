@@ -31,15 +31,15 @@ class ProductCategory(models.Model):
 
 
 class ShopifyProductTemplateEpt(models.Model):
-    _name = "shopify.product.template.ept"
+    _name = "shopify.product.template.ec"
     _description = "Shopify Product Template"
 
     name = fields.Char(translate=True)
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", "Instance")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", "Instance")
     product_tmpl_id = fields.Many2one("product.template", "Product Template")
     shopify_tmpl_id = fields.Char("Shopify Template Id")
     exported_in_shopify = fields.Boolean(default=False)
-    shopify_product_ids = fields.One2many("shopify.product.product.ept", "shopify_template_id",
+    shopify_product_ids = fields.One2many("shopify.product.product.ec", "shopify_template_id",
                                           "Products")
     template_suffix = fields.Char()
     created_at = fields.Datetime()
@@ -56,7 +56,7 @@ class ShopifyProductTemplateEpt(models.Model):
                                          store=True)
     shopify_product_category = fields.Many2one("product.category", "Product Category")
     active = fields.Boolean(default=True)
-    shopify_image_ids = fields.One2many("shopify.product.image.ept", "shopify_template_id")
+    shopify_image_ids = fields.One2many("shopify.product.image.ec", "shopify_template_id")
 
     @api.depends("shopify_product_ids.exported_in_shopify", "shopify_product_ids.variant_id")
     def _compute_total_sync_variants(self):
@@ -65,7 +65,7 @@ class ShopifyProductTemplateEpt(models.Model):
             template.total_sync_variants = variants and len(variants) or 0
 
     def write(self, vals):
-        shopify_product_product_obj = self.env["shopify.product.product.ept"]
+        shopify_product_product_obj = self.env["shopify.product.product.ec"]
         if "active" in vals.keys():
             for shopify_template in self:
                 shopify_template.shopify_product_ids.write({"active": vals.get("active")})
@@ -186,8 +186,8 @@ class ShopifyProductTemplateEpt(models.Model):
 
     def create_log_line_for_queue_line(self, instance, message, model_name, product_data_line_id, order_data_line_id,
                                        product_sku, create_activity=False):
-        common_log_line_obj = self.env["common.log.lines.ept"]
-        shopify_product_queue_obj = self.env["shopify.product.data.queue.ept"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
+        shopify_product_queue_obj = self.env["shopify.product.data.queue.ec"]
         from_sale = False
 
         if product_data_line_id:
@@ -229,7 +229,7 @@ class ShopifyProductTemplateEpt(models.Model):
 
     def shopify_sync_products(self, product_data_line_id, shopify_tmpl_id, instance,
                               order_data_line_id=False):
-        model_name = "shopify.product.template.ept"
+        model_name = "shopify.product.template.ec"
         instance.connect_in_shopify()
 
         template_data, skip_existing_product = self.convert_shopify_template_response(shopify_tmpl_id,
@@ -314,7 +314,7 @@ class ShopifyProductTemplateEpt(models.Model):
                                                  template_vals, product_data_line_id, order_data_line_id, model_name):
         need_to_archive = False
         variant_ids = []
-        shopify_product_obj = self.env["shopify.product.product.ept"]
+        shopify_product_obj = self.env["shopify.product.product.ec"]
         shopify_attributes = template_data.get("options")
         odoo_template = shopify_template.product_tmpl_id
         name = template_vals.get("template_title", "")
@@ -399,7 +399,7 @@ class ShopifyProductTemplateEpt(models.Model):
 
     def sync_new_product(self, template_data, instance, product_category, model_name, product_data_line_id,
                          order_data_line_id):
-        shopify_product_obj = self.env["shopify.product.product.ept"]
+        shopify_product_obj = self.env["shopify.product.product.ec"]
         need_to_update_template = True
         shopify_template = False
 
@@ -589,7 +589,7 @@ class ShopifyProductTemplateEpt(models.Model):
 
     def create_or_update_shopify_variant(self, variant_vals, shopify_product, shopify_template=False,
                                          odoo_product=False):
-        shopify_product_obj = self.env["shopify.product.product.ept"]
+        shopify_product_obj = self.env["shopify.product.product.ec"]
 
         if not shopify_product and shopify_template and odoo_product:
             variant_vals.update({"name": odoo_product.name,
@@ -612,7 +612,7 @@ class ShopifyProductTemplateEpt(models.Model):
     def shopify_sync_product_images(self, template_data):
         """
         Author: Bhavesh Jadav 18/12/2019
-        This method use for sync image from store and the add reference in shopify.product.image.ept
+        This method use for sync image from store and the add reference in shopify.product.image.ec
         param:instance:use for the shopify instance its type should be object
         param:template_data usr for the product response its type should be dict
         param:shopify_template use for the shopify template  its type should be object
@@ -627,7 +627,7 @@ class ShopifyProductTemplateEpt(models.Model):
         from layer.
         @version: Shopify 13.0.0.23
         """
-        shopify_product_image_obj = shopify_product_images = self.env["shopify.product.image.ept"]
+        shopify_product_image_obj = shopify_product_images = self.env["shopify.product.image.ec"]
         existing_common_template_images = {}
         is_template_image_set = bool(self.product_tmpl_id.image_1920)
         i = 0
@@ -664,7 +664,7 @@ class ShopifyProductTemplateEpt(models.Model):
         return True
 
     def sync_simple_product_images(self, shopify_image_id, existing_common_template_images, url):
-        shopify_product_images = self.env["shopify.product.image.ept"]
+        shopify_product_images = self.env["shopify.product.image.ec"]
         shopify_product_image = self.search_shopify_product_images(self.id, False, shopify_image_id, False)
         if not shopify_product_image:
             try:
@@ -695,7 +695,7 @@ class ShopifyProductTemplateEpt(models.Model):
 
     def search_shopify_product_images(self, shopify_template_id, shopify_variant_id, shopify_image_id,
                                       common_product_image):
-        shopify_product_image_obj = self.env["shopify.product.image.ept"]
+        shopify_product_image_obj = self.env["shopify.product.image.ec"]
 
         shopify_product_image = shopify_product_image_obj.search(
             [("shopify_template_id", "=", shopify_template_id),
@@ -706,7 +706,7 @@ class ShopifyProductTemplateEpt(models.Model):
         return shopify_product_image
 
     def create_shopify_layer_image(self, shopify_image_id, existing_common_template_images, key, shopify_product):
-        shopify_product_image_obj = self.env["shopify.product.image.ept"]
+        shopify_product_image_obj = self.env["shopify.product.image.ec"]
 
         shopify_product_image = shopify_product_image_obj.create({
             "shopify_template_id": self.id,
@@ -718,7 +718,7 @@ class ShopifyProductTemplateEpt(models.Model):
         return shopify_product_image
 
     def create_common_product_image(self, image, url, shopify_product):
-        common_product_image_obj = self.env["common.product.image.ept"]
+        common_product_image_obj = self.env["common.product.image.ec"]
 
         common_product_image = common_product_image_obj.create({
             "name": self.name,
@@ -729,7 +729,7 @@ class ShopifyProductTemplateEpt(models.Model):
         return common_product_image
 
     def sync_variable_product_images(self, shopify_image_id, url, variant_ids, is_template_image_set):
-        shopify_product_images = self.env["shopify.product.image.ept"]
+        shopify_product_images = self.env["shopify.product.image.ec"]
         shopify_products = self.shopify_product_ids.filtered(lambda x: int(x.variant_id) in variant_ids)
         for shopify_product in shopify_products:
             existing_common_variant_images = {}
@@ -819,7 +819,7 @@ class ShopifyProductTemplateEpt(models.Model):
 
     def shopify_search_odoo_product_variant(self, shopify_instance, variant_id, product_sku, barcode):
         odoo_product = self.env["product.product"]
-        shopify_product_obj = self.env["shopify.product.product.ept"]
+        shopify_product_obj = self.env["shopify.product.product.ec"]
 
         shopify_product = shopify_product_obj.search([("variant_id", "=", variant_id),
                                                       ("shopify_instance_id", "=", shopify_instance.id)],
@@ -904,7 +904,7 @@ class ShopifyProductTemplateEpt(models.Model):
 
     def is_product_importable(self, template_data, instance, odoo_product, shopify_product):
         odoo_product_obj = self.env["product.product"]
-        shopify_product_obj = self.env["shopify.product.product.ept"]
+        shopify_product_obj = self.env["shopify.product.product.ec"]
 
         message = ""
         variants = template_data.get("variants")
@@ -967,7 +967,7 @@ class ShopifyProductTemplateEpt(models.Model):
         This method is used to publish/unpublish product in shopify store from the the shopify product form view in
         odoo.
         """
-        common_log_line_obj = self.env["common.log.lines.ept"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
         published_at = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S")
         instance = self.shopify_instance_id
         instance.connect_in_shopify()
@@ -1008,7 +1008,7 @@ class ShopifyProductTemplateEpt(models.Model):
                 message = "Template %s not found in shopify When Publish" % self.shopify_tmpl_id
                 common_log_line_obj.create_common_log_line_ec(shopify_instance_id=instance.id,
                                                                message=message,
-                                                               model_name="shopify.product.template.ept")
+                                                               model_name="shopify.product.template.ec")
 
     def action_product_ref_redirect(self):
         self.ensure_one()

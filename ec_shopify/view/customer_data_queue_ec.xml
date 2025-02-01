@@ -3,7 +3,7 @@
     <!--Tree view of customer data queue-->
     <record id="shopify_synced_customer_data_tree_view_ec" model="ir.ui.view">
         <field name="name">Shopify Synced Customer Data</field>
-        <field name="model">shopify.customer.data.queue.ept</field>
+        <field name="model">shopify.customer.data.queue.ec</field>
         <field name="arch" type="xml">
             <!-- <list create="0" default_order="name desc" decoration-primary="is_process_queue==True" sample="1"
                   js_class="queue_line_ec_dashboard">
@@ -36,7 +36,7 @@
     <!--Form view of customer data queue-->
     <record id="shopify_synced_customer_data_form_view_ec" model="ir.ui.view">
         <field name="name">Shopify Synced Customer Data</field>
-        <field name="model">shopify.customer.data.queue.ept</field>
+        <field name="model">shopify.customer.data.queue.ec</field>
         <field name="arch" type="xml">
             <form string="Shopify Synced Customer Data" create="0" duplicate="0" edit="0">
                 <header>
@@ -186,7 +186,7 @@
     <!--Filter view of customer data queue-->
     <record id="shopify_synced_customer_data_filter" model="ir.ui.view">
         <field name="name">shopify.synced.customer.data.filter</field>
-        <field name="model">shopify.customer.data.queue.ept</field>
+        <field name="model">shopify.customer.data.queue.ec</field>
         <field name="arch" type="xml">
             <search string="Filter State Wise">
                 <field name="name"
@@ -221,7 +221,7 @@
     <!--Action of customer data queue-->
     <record id="action_shopify_synced_customer_data" model="ir.actions.act_window">
         <field name="name">Customer Data Queues</field>
-        <field name="res_model">shopify.customer.data.queue.ept</field>
+        <field name="res_model">shopify.customer.data.queue.ec</field>
         <field name="view_id" ref="shopify_synced_customer_data_tree_view_ec"/>
         <field name="search_view_id" ref="ec_shopify.shopify_synced_customer_data_filter"/>
         <field name="context">{'search_default_draft':

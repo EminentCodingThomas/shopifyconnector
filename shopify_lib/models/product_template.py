@@ -6,7 +6,7 @@ from odoo import models, fields, api
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    ept_image_ids = fields.One2many('common.product.image.ept', 'template_id', string='Product Images')
+    ept_image_ids = fields.One2many('common.product.image.ec', 'template_id', string='Product Images')
 
     def prepare_template_common_image_vals(self, vals):
         """
@@ -30,7 +30,7 @@ class ProductTemplate(models.Model):
         for vals in vals_list:
             if vals.get("image_1920", False) and res:
                 image_vals = res.prepare_template_common_image_vals(vals)
-                self.env["common.product.image.ept"].with_context(main_image=True).create(image_vals)
+                self.env["common.product.image.ec"].with_context(main_image=True).create(image_vals)
         return res
 
     def write(self, vals):
@@ -39,7 +39,7 @@ class ProductTemplate(models.Model):
         """
         res = super(ProductTemplate, self).write(vals)
         if vals.get("image_1920", False) and self:
-            common_product_image_obj = self.env["common.product.image.ept"]
+            common_product_image_obj = self.env["common.product.image.ec"]
             for record in self:
                 if vals.get("image_1920"):
                     image_vals = record.prepare_template_common_image_vals(vals)

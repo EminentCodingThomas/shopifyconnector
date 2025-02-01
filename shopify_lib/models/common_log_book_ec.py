@@ -4,10 +4,10 @@ from odoo import models, fields, api
 
 
 class CommonLogBookEpt(models.Model):
-    _name = "common.log.book.ept"
+    _name = "common.log.book.ec"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = 'id desc'
-    _description = "Common log book Ept"
+    _description = "Common log book EC"
 
     name = fields.Char(readonly=True)
     type = fields.Selection([('import', 'Import'), ('export', 'Export')], string="Operation")
@@ -21,7 +21,7 @@ class CommonLogBookEpt(models.Model):
                                ('tpw_ec', '3PL Connector'),
                                ('walmart_ec', 'Walmart Connector')])
     active = fields.Boolean(default=True)
-    log_lines = fields.One2many('common.log.lines.ept', 'log_book_id')
+    log_lines = fields.One2many('common.log.lines.ec', 'log_book_id')
     message = fields.Text()
     model_id = fields.Many2one("ir.model", help="Model Id", string="Model")
     res_id = fields.Integer(string="Record ID", help="Process record id")
@@ -35,7 +35,7 @@ class CommonLogBookEpt(models.Model):
             @param : vals : Dictionary of common log book create.
         """
         for vals in vals_list:
-            seq = self.env['ir.sequence'].next_by_code('common.log.book.ept') or '/'
+            seq = self.env['ir.sequence'].next_by_code('common.log.book.ec') or '/'
             vals['name'] = seq
         return super(CommonLogBookEpt, self).create(vals_list)
 
@@ -43,7 +43,7 @@ class CommonLogBookEpt(models.Model):
         """
         This method is use to create a log book.
         @param : **kwargs, Pass the argument like,
-        log_book = self.env['common.log.book.ept'].create_common_log_book_ec (module='ec_shopify',
+        log_book = self.env['common.log.book.ec'].create_common_log_book_ec (module='ec_shopify',
         model_name='sale.order',type='import')
         """
         values = {}

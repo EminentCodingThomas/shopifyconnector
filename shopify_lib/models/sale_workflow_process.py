@@ -4,7 +4,7 @@ from odoo import models, fields, api
 
 
 class SaleWorkflowProcess(models.Model):
-    _name = "sale.workflow.process.ept"
+    _name = "sale.workflow.process.ec"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "sale workflow process"
 
@@ -73,7 +73,7 @@ class SaleWorkflowProcess(models.Model):
         Migration done by Haresh Mori on September 2021
         """
         sale_order_obj = self.env['sale.order']
-        workflow_process_obj = self.env['sale.workflow.process.ept']
+        workflow_process_obj = self.env['sale.workflow.process.ec']
         if not auto_workflow_process_id:
             work_flow_process_records = workflow_process_obj.search([])
         else:

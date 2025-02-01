@@ -3,7 +3,7 @@
     <!--Tree view of the instance-->
     <record id="shopify_instance_tree_view_ec" model="ir.ui.view">
         <field name="name">Shopify Instance</field>
-        <field name="model">shopify.instance.ept</field>
+        <field name="model">shopify.instance.ec</field>
         <field name="arch" type="xml">
             <list create="false" sample="1">
                 <field name="name"/>
@@ -17,7 +17,7 @@
     <record id="shopify_instance_search_view_ec"
             model="ir.ui.view">
         <field name="name">Shopify Instance Search View</field>
-        <field name="model">shopify.instance.ept</field>
+        <field name="model">shopify.instance.ec</field>
         <field name="type">search</field>
         <field name="arch" type="xml">
             <search string="Shopify Instance">
@@ -36,7 +36,7 @@
     <!--Form view of the instance-->
     <record id="shopify_instance_form_view_ec" model="ir.ui.view">
         <field name="name">Shopify Instance</field>
-        <field name="model">shopify.instance.ept</field>
+        <field name="model">shopify.instance.ec</field>
         <field name="arch" type="xml">
             <form string="Shopify Instance" create="false" duplicate="1">
                 <header>
@@ -254,7 +254,7 @@
     <record id="action_shopify_instance_ec"
             model="ir.actions.act_window">
         <field name="name">Shopify Instance</field>
-        <field name="res_model">shopify.instance.ept</field>
+        <field name="res_model">shopify.instance.ec</field>
         <field name="view_id" ref="shopify_instance_tree_view_ec"/>
         <field name="help" type="html">
             <div class="oe_empty_shopify_instance">

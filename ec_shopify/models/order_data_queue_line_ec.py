@@ -9,12 +9,12 @@ _logger = logging.getLogger("Shopify Order Queue Line")
 
 
 class ShopifyOrderDataQueueLineEpt(models.Model):
-    _name = "shopify.order.data.queue.line.ept"
+    _name = "shopify.order.data.queue.line.ec"
     _description = "Shopify Order Data Queue Line"
 
-    shopify_order_data_queue_id = fields.Many2one("shopify.order.data.queue.ept",
+    shopify_order_data_queue_id = fields.Many2one("shopify.order.data.queue.ec",
                                                   ondelete="cascade")
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", string="Instance",
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", string="Instance",
                                           help="Order imported from this Shopify Instance.")
     state = fields.Selection([("draft", "Draft"), ("failed", "Failed"), ("done", "Done"),
                               ("cancel", "Cancelled")], default="draft", copy=False)
@@ -29,7 +29,7 @@ class ShopifyOrderDataQueueLineEpt(models.Model):
 
     processed_at = fields.Datetime(help="Shows Date and Time, When the data is processed",
                                    copy=False)
-    shopify_order_common_log_lines_ids = fields.One2many("common.log.lines.ept",
+    shopify_order_common_log_lines_ids = fields.One2many("common.log.lines.ec",
                                                          "shopify_order_data_queue_line_id",
                                                          help="Log lines created against which line.")
     name = fields.Char(help="Order Name")
@@ -83,7 +83,7 @@ class ShopifyOrderDataQueueLineEpt(models.Model):
         return order_queue_list
 
     def search_webhook_order_queue(self, created_by, instance, order, queue_type, need_to_create_queue):
-        shopify_order_queue_obj = self.env["shopify.order.data.queue.ept"]
+        shopify_order_queue_obj = self.env["shopify.order.data.queue.ec"]
 
         order_queue = shopify_order_queue_obj.search(
             [("created_by", "=", created_by), ("state", "=", "draft"), ("shopify_instance_id", "=", instance.id),
@@ -121,10 +121,10 @@ class ShopifyOrderDataQueueLineEpt(models.Model):
             "queue_type": queue_type,
         }
 
-        return self.env["shopify.order.data.queue.ept"].create(order_queue_vals)
+        return self.env["shopify.order.data.queue.ec"].create(order_queue_vals)
 
     def auto_import_order_queue_data(self):
-        shopify_order_queue_obj = self.env["shopify.order.data.queue.ept"]
+        shopify_order_queue_obj = self.env["shopify.order.data.queue.ec"]
         order_queue_ids = []
 
         self.env.cr.execute(
@@ -149,7 +149,7 @@ class ShopifyOrderDataQueueLineEpt(models.Model):
         self.filter_order_queue_lines_and_post_message(queues)
 
     def filter_order_queue_lines_and_post_message(self, queues):
-        common_log_line_obj = self.env["common.log.lines.ept"]
+        common_log_line_obj = self.env["common.log.lines.ec"]
         start = time.time()
         order_queue_process_cron_time = queues.shopify_instance_id.get_shopify_cron_execution_time(
             "ec_shopify.process_shopify_order_queue")
@@ -165,7 +165,7 @@ class ShopifyOrderDataQueueLineEpt(models.Model):
                        "automated action to process this queue,<br/>- Ignore, if this queue is already processed.</p>"
                 queue.message_post(body=note)
                 if queue.shopify_instance_id.is_shopify_create_schedule:
-                    common_log_line_obj.create_crash_queue_schedule_activity(queue, "shopify.order.data.queue.ept",
+                    common_log_line_obj.create_crash_queue_schedule_activity(queue, "shopify.order.data.queue.ec",
                                                                              note)
                 continue
 

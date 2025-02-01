@@ -6,7 +6,7 @@ from odoo import models, fields
 class Digest(models.Model):
     _inherit = 'digest.digest'
 
-    shopify_instance_id = fields.Many2one('shopify.instance.ept')
+    shopify_instance_id = fields.Many2one('shopify.instance.ec')
 
     def _prepare_domain_shopify_digest(self):
         domain = []

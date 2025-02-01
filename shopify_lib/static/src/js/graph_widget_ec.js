@@ -4,7 +4,7 @@ import { useEffect } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { JournalDashboardGraphField } from "@web/views/fields/journal_dashboard_graph/journal_dashboard_graph_field";
 
-export class EmiproDashboardGraph extends JournalDashboardGraphField {
+export class EminentDashboardGraph extends JournalDashboardGraphField {
     static template = "shopify_lib.graph";
     setup() {
         super.setup();
@@ -79,7 +79,7 @@ export class EmiproDashboardGraph extends JournalDashboardGraphField {
           this.context.sort = e.currentTarget.value;
           console.log("res id ", this.props.record.evalContext.id);
           
-          this.orm.silent.call("shopify.instance.ept", "read", [[this.props.record.evalContext.id]], {
+          this.orm.silent.call("shopify.instance.ec", "read", [[this.props.record.evalContext.id]], {
             context: {
                 'sort': e.currentTarget.value
             }
@@ -95,21 +95,21 @@ export class EmiproDashboardGraph extends JournalDashboardGraphField {
       }
 
     _performOpration() {
-        this.orm.silent.call("shopify.instance.ept", "perform_operation", [this.props.record.evalContext.id])
+        this.orm.silent.call("shopify.instance.ec", "perform_operation", [this.props.record.evalContext.id])
           .then((result) => {
             return this.actionService.doAction(result);
           })
     }
 
     _getReport() {
-        this.orm.silent.call("shopify.instance.ept", "open_report", [this.props.record.evalContext.id])
+        this.orm.silent.call("shopify.instance.ec", "open_report", [this.props.record.evalContext.id])
           .then((result) => {
             return this.actionService.doAction(result);
           })
     }
 
     _getLog() {
-        this.orm.silent.call("shopify.instance.ept", "open_logs", [this.props.record.evalContext.id])
+        this.orm.silent.call("shopify.instance.ec", "open_logs", [this.props.record.evalContext.id])
           .then((result) => {
             return this.actionService.doAction(result);
           })
@@ -138,13 +138,13 @@ export class EmiproDashboardGraph extends JournalDashboardGraphField {
     }
 }
 
-export const emiproDashboardGraph = {
-    component: EmiproDashboardGraph,
+export const eminentDashboardGraph = {
+    component: EminentDashboardGraph,
     supportedTypes: ["text"],
     extractProps: ({ attrs }) => ({
         graphType: attrs.graph_type,
     }),
 };
 
-registry.category("fields").add("dashboard_graph_ec", emiproDashboardGraph);
+registry.category("fields").add("dashboard_graph_ec", eminentDashboardGraph);
 

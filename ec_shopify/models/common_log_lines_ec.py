@@ -8,18 +8,18 @@ _logger = logging.getLogger(__name__)
 
 
 class CommonLogLineEpt(models.Model):
-    _inherit = "common.log.lines.ept"
+    _inherit = "common.log.lines.ec"
 
-    shopify_product_data_queue_line_id = fields.Many2one("shopify.product.data.queue.line.ept",
+    shopify_product_data_queue_line_id = fields.Many2one("shopify.product.data.queue.line.ec",
                                                          "Shopify Product Queue Line")
-    shopify_order_data_queue_line_id = fields.Many2one("shopify.order.data.queue.line.ept",
+    shopify_order_data_queue_line_id = fields.Many2one("shopify.order.data.queue.line.ec",
                                                        "Shopify Order Queue Line")
-    shopify_customer_data_queue_line_id = fields.Many2one("shopify.customer.data.queue.line.ept",
+    shopify_customer_data_queue_line_id = fields.Many2one("shopify.customer.data.queue.line.ec",
                                                           "Shopify Customer Queue Line")
-    shopify_payout_report_line_id = fields.Many2one("shopify.payout.report.ept")
-    shopify_export_stock_queue_line_id = fields.Many2one("shopify.export.stock.queue.line.ept",
+    shopify_payout_report_line_id = fields.Many2one("shopify.payout.report.ec")
+    shopify_export_stock_queue_line_id = fields.Many2one("shopify.export.stock.queue.line.ec",
                                                          "Shopify Export Stock Queue Line")
-    shopify_instance_id = fields.Many2one("shopify.instance.ept", "Shopify Instance")
+    shopify_instance_id = fields.Many2one("shopify.instance.ec", "Shopify Instance")
 
     def create_payout_schedule_activity(self, note, payout):
         if self:
@@ -28,7 +28,7 @@ class CommonLogLineEpt(models.Model):
             activity_type_id = payout.instance_id.shopify_activity_type_id.id
             date_deadline = datetime.strftime(
                 datetime.now() + timedelta(days=int(payout.instance_id.shopify_date_deadline)), "%Y-%m-%d")
-            model_id = self.get_model_id("shopify.payout.report.ept")
+            model_id = self.get_model_id("shopify.payout.report.ec")
             group_accountant = self.env.ref('account.group_account_user')
 
             if note:

@@ -5,7 +5,7 @@ from odoo import models
 
 
 class DataQueueMixinEpt(models.AbstractModel):
-    _name = 'data.queue.mixin.ept'
+    _name = 'data.queue.mixin.ec'
     _description = 'Data Queue Mixin'
 
     def delete_data_queue_ec(self, queue_detail=[], is_delete_queue=False):
@@ -37,7 +37,7 @@ class DataQueueMixinEpt(models.AbstractModel):
         :param is_delete_queue: True or False
         :return: Boolean (TRUE/FALSE)
         """
-        log_book_obj = self.env['common.log.book.ept']
+        log_book_obj = self.env['common.log.book.ec']
         model_name = tbl_name.replace('_', '.')
         model = log_book_obj._get_model_id(model_name)
         if is_delete_queue:

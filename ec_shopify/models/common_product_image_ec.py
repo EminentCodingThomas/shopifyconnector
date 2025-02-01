@@ -9,17 +9,17 @@ _logger = logging.getLogger("Shopify Common Image")
 
 
 class ProductImageEpt(models.Model):
-    _inherit = 'common.product.image.ept'
+    _inherit = 'common.product.image.ec'
 
     @api.model_create_multi
     def create(self, vals):
         results = super(ProductImageEpt, self).create(vals)
         for result in results:
             if self.env.user.has_group('ec_shopify.group_ec_shopify'):
-                shopify_product_image_obj = self.env["shopify.product.image.ept"]
+                shopify_product_image_obj = self.env["shopify.product.image.ec"]
                 shopify_product_image_vals = {"odoo_image_id": result.id}
                 if result.product_id:
-                    shopify_variants = self.env['shopify.product.product.ept'].search_read(
+                    shopify_variants = self.env['shopify.product.product.ec'].search_read(
                         [('product_id', '=', result.product_id.id)], ["id", "shopify_template_id"])
                     for shopify_variant in shopify_variants:
                         shopify_product_image_vals.update({"shopify_variant_id": shopify_variant["id"],
@@ -31,7 +31,7 @@ class ProductImageEpt(models.Model):
                 elif result.template_id:
                     if self._context.get("main_image"):
                         shopify_product_image_vals.update({"sequence": 0})
-                    shopify_templates = self.env["shopify.product.template.ept"].search_read(
+                    shopify_templates = self.env["shopify.product.template.ec"].search_read(
                         [("product_tmpl_id", "=", result.template_id.id)], ["id"])
                     for shopify_template in shopify_templates:
                         shopify_product_image_vals.update({'shopify_template_id': shopify_template["id"]})
@@ -41,7 +41,7 @@ class ProductImageEpt(models.Model):
     def write(self, vals):
         result = super(ProductImageEpt, self).write(vals)
         if self.env.user.has_group('ec_shopify.group_ec_shopify'):
-            shopify_product_images = self.env["shopify.product.image.ept"]
+            shopify_product_images = self.env["shopify.product.image.ec"]
             for record in self:
                 shopify_product_images += shopify_product_images.search([("odoo_image_id", "=", record.id)])
             if shopify_product_images:
@@ -49,7 +49,7 @@ class ProductImageEpt(models.Model):
                     shopify_product_images.write({'shopify_variant_id': False})
                 elif vals.get("product_id", ""):
                     for shopify_product_image in shopify_product_images:
-                        shopify_variant = self.env["shopify.product.product.ept"].search_read(
+                        shopify_variant = self.env["shopify.product.product.ec"].search_read(
                             [("product_id", "=", vals.get("product_id")),
                              ("shopify_template_id", "=", shopify_product_image.shopify_template_id.id)], ["id"])
                         if shopify_variant:

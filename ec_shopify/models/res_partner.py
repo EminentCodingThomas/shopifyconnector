@@ -16,7 +16,7 @@ class ResPartner(models.Model):
     @api.model
     def create_shopify_pos_customer(self, order_response, instance):
         address = {}
-        shopify_partner_obj = self.env["shopify.res.partner.ept"]
+        shopify_partner_obj = self.env["shopify.res.partner.ec"]
         partner_obj = self.env["res.partner"]
         customer_data = partner_obj.remove_special_chars_from_partner_vals(order_response.get("customer"))
 

@@ -46,13 +46,13 @@
                 <t t-set="description">Configure the schedule actions for automation.</t>
                 <t t-set="btn_text">Configure</t>
                 <t t-set="method" t-value="'action_shopify_open_cron_configuration_wizard'"/>
-                <t t-set="model" t-value="'shopify.cron.configuration.ept'"/>
+                <t t-set="model" t-value="'shopify.cron.configuration.ec'"/>
                 <t t-set="state" t-value="state.get('shopify_cron_configuration_onboarding_state')"/>
             </t>
         </template>
 
         <!-- ONBOARDING PANEL-->
-        <template id="shopify_instances_onboarding_panel_ec" name="shopify.instances.onboarding.panel.ept">
+        <template id="shopify_instances_onboarding_panel_ec" name="shopify.instances.onboarding.panel.ec">
             <t t-call="onboarding.onboarding_container">
                 <t t-set="is_shopify_panel" t-value="'is_shopify_panel'"/>
                 <t t-set="classes" t-value="'o_onboarding_violet hide_in_mobile_device shopify_onboarding_ec'"/>
@@ -69,12 +69,6 @@
             </t>
         </template>
 
-        <!--
-            Inherited main onboarding view in order to add collapse button
-            @param {is_shopify_panel(to add button in specified view )}
-            Added by: Preet Bhatti @Emipro Technologies
-            Added on: 29/09/2020
-        -->
         <template id="inherit_onboarding_container" inherit_id="onboarding.onboarding_container">
 
             <xpath expr="div[hasclass('o_onboarding_main')]" position="before">

@@ -3,7 +3,7 @@
     <!--Tree view of product data queue line which is use in queue line dashboard-->
     <record id="view_product_data_queue_line_tree" model="ir.ui.view">
         <field name="name">product.data.queue.line.tree</field>
-        <field name="model">shopify.product.data.queue.line.ept</field>
+        <field name="model">shopify.product.data.queue.line.ec</field>
         <field eval="100" name="priority"/>
         <field name="arch" type="xml">
             <list create="false" duplicate="false" edit="false" sample="1" decoration-danger="state=='failed'"
@@ -25,8 +25,8 @@
     <!--Form view of product data queue line-->
     <record id="view_shopify_product_data_queue_line_ec_form"
             model="ir.ui.view">
-        <field name="name">shopify.product.data.queue.line.ept.form</field>
-        <field name="model">shopify.product.data.queue.line.ept</field>
+        <field name="name">shopify.product.data.queue.line.ec.form</field>
+        <field name="model">shopify.product.data.queue.line.ec</field>
         <field name="arch" type="xml">
             <form create="0" edit="0" delete="0">
                 <sheet>

@@ -2,13 +2,13 @@ from odoo import models, _
 
 
 class ShopifyOnboardingConfirmationEpt(models.TransientModel):
-    _name = 'shopify.onboarding.confirmation.ept'
+    _name = 'shopify.onboarding.confirmation.ec'
     _description = 'Shopify Onboarding Confirmation'
 
     def yes(self):
         instance_id = self._context.get('shopify_instance_id', False)
         if instance_id:
-            instance = self.env['shopify.instance.ept'].browse(instance_id)
+            instance = self.env['shopify.instance.ec'].browse(instance_id)
             company = instance.shopify_company_id
             company.write({
                 'shopify_instance_onboarding_state': 'not_done',

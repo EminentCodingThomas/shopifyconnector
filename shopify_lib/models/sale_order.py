@@ -17,7 +17,7 @@ class SaleOrder(models.Model):
         self.moves_count = self.env["stock.move"].search_count([("picking_id", "=", False),
                                                                 ("sale_line_id", "in", self.order_line.ids)])
 
-    auto_workflow_process_id = fields.Many2one("sale.workflow.process.ept", string="Workflow Process", copy=False)
+    auto_workflow_process_id = fields.Many2one("sale.workflow.process.ec", string="Workflow Process", copy=False)
     moves_count = fields.Integer(compute="_compute_stock_move", string="Stock Move", store=False,
                                  help="Stock Move Count for Orders without Picking.")
 
@@ -145,7 +145,7 @@ class SaleOrder(models.Model):
                           "prior to and inclusive of the lock date %s. " \
                           "So, order is created but invoice is not created." % (
                               self.name, format_date(self.env, fiscalyear_lock_date))
-                self.env['common.log.lines.ept'].create({
+                self.env['common.log.lines.ec'].create({
                     'message': message,
                     'order_ref': self.name,
                     'log_book_id': log_book_id

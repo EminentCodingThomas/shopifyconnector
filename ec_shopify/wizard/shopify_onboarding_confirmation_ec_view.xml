@@ -2,7 +2,7 @@
 <odoo>
     <record id="shopify_onboarding_confirmation_wizard_view" model="ir.ui.view">
         <field name="name">shopify.onboarding.done.confirmation.wizard.form</field>
-        <field name="model">shopify.onboarding.confirmation.ept</field>
+        <field name="model">shopify.onboarding.confirmation.ec</field>
         <field name="arch" type="xml">
             <form string="Confirmation?" class="o_ec_shopify">
                 <h1 class="font-weight-bold o_on_board_heading">
@@ -47,7 +47,7 @@
 
     <record id="shopify_onboarding_confirmation_wizard_action" model="ir.actions.act_window">
         <field name="name">Confirmation?</field>
-        <field name="res_model">shopify.onboarding.confirmation.ept</field>
+        <field name="res_model">shopify.onboarding.confirmation.ec</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
         <field name="view_id" ref="shopify_onboarding_confirmation_wizard_view"/>

@@ -2,8 +2,8 @@
 <odoo>
     <!--Tree view of customer data queue line which is use in queue line dashboard-->
     <record id="view_customer_data_queue_line_tree" model="ir.ui.view">
-        <field name="name">shopify.customer.data.queue.line.ept.tree</field>
-        <field name="model">shopify.customer.data.queue.line.ept</field>
+        <field name="name">shopify.customer.data.queue.line.ec.tree</field>
+        <field name="model">shopify.customer.data.queue.line.ec</field>
         <field name="arch" type="xml">
             <list create="0" duplicate="0" edit="false" sample="1" decoration-danger="state=='failed'"
                   decoration-success="state=='done'" decoration-info="state=='draft'">
@@ -23,7 +23,7 @@
     <!--Form view of customer queue line.-->
     <record id="shopify_shopify_customer_data_queue_line_ec_form_view" model="ir.ui.view">
         <field name="name">Shopify Synced Customer Line</field>
-        <field name="model">shopify.customer.data.queue.line.ept</field>
+        <field name="model">shopify.customer.data.queue.line.ec</field>
         <field name="arch" type="xml">
             <form string="Shopify Synced Customer Line">
                 <sheet>

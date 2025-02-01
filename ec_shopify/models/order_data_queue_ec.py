@@ -18,20 +18,20 @@ _logger = logging.getLogger("Shopify Order Queue")
 
 
 class ShopifyOrderDataQueueEpt(models.Model):
-    _name = "shopify.order.data.queue.ept"
+    _name = "shopify.order.data.queue.ec"
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = "Shopify Order Data Queue"
 
     name = fields.Char(help="Sequential name of imported order.", copy=False)
-    shopify_instance_id = fields.Many2one('shopify.instance.ept', string='Instance',
+    shopify_instance_id = fields.Many2one('shopify.instance.ec', string='Instance',
                                           help="Order imported from this Shopify Instance.")
     state = fields.Selection([('draft', 'Draft'), ('partially_completed', 'Partially Completed'),
                               ('completed', 'Completed'), ('failed', 'Failed')], tracking=True,
                              default='draft', copy=False, compute="_compute_queue_state",
                              store=True)
-    shopify_order_common_log_lines_ids = fields.One2many("common.log.lines.ept", compute="_compute_log_lines")
+    shopify_order_common_log_lines_ids = fields.One2many("common.log.lines.ec", compute="_compute_log_lines")
 
-    order_data_queue_line_ids = fields.One2many("shopify.order.data.queue.line.ept",
+    order_data_queue_line_ids = fields.One2many("shopify.order.data.queue.line.ec",
                                                 "shopify_order_data_queue_id")
     order_queue_line_total_record = fields.Integer(string='Total Records',
                                                    compute='_compute_order_queue_line_record')
@@ -99,7 +99,7 @@ class ShopifyOrderDataQueueEpt(models.Model):
         """
         if isinstance(ctx, dict):
             instance_id = ctx.get('shopify_instance_id')
-            instance = self.env['shopify.instance.ept'].browse(instance_id)
+            instance = self.env['shopify.instance.ec'].browse(instance_id)
             from_date = instance.last_date_order_import
             to_date = datetime.now()
             if not from_date:
@@ -114,7 +114,7 @@ class ShopifyOrderDataQueueEpt(models.Model):
         if not isinstance(ctx, dict):
             return True
         instance_id = ctx.get('shopify_instance_id')
-        instance = self.env['shopify.instance.ept'].browse(instance_id)
+        instance = self.env['shopify.instance.ec'].browse(instance_id)
         from_date = instance.last_shipped_order_import_date
         to_date = datetime.now()
         if not from_date:
@@ -139,7 +139,7 @@ class ShopifyOrderDataQueueEpt(models.Model):
 
     def shopify_create_order_data_queues(self, instance, from_date, to_date, created_by="import",
                                          order_type="unshipped"):
-        order_data_queue_line_obj = self.env["shopify.order.data.queue.line.ept"]
+        order_data_queue_line_obj = self.env["shopify.order.data.queue.line.ec"]
         start = time.time()
         order_queues = []
         instance.connect_in_shopify()
@@ -179,7 +179,7 @@ class ShopifyOrderDataQueueEpt(models.Model):
         return order_ids
 
     def shopify_shipped_order_request(self, instance, from_date, to_date, order_type, created_by):
-        order_data_queue_line_obj = self.env["shopify.order.data.queue.line.ept"]
+        order_data_queue_line_obj = self.env["shopify.order.data.queue.line.ec"]
         order_queues = []
         queue_type = 'shipped'
         order_ids = self.shopify_order_request(instance, from_date, to_date, order_type)
@@ -195,7 +195,7 @@ class ShopifyOrderDataQueueEpt(models.Model):
         return order_queues
 
     def list_all_orders(self, result, instance, created_by, queue_type):
-        order_data_queue_line_obj = self.env["shopify.order.data.queue.line.ept"]
+        order_data_queue_line_obj = self.env["shopify.order.data.queue.line.ec"]
         order_queue_list = []
         catch = ""
 
@@ -233,8 +233,8 @@ class ShopifyOrderDataQueueEpt(models.Model):
         :param instance: Browsable object of shopify instance.
         :param order_ids: It contain the comma separated ids of shopify orders and its type is String.
         """
-        order_data_queue_line_obj = self.env["shopify.order.data.queue.line.ept"]
-        order_queue_obj = self.env["shopify.order.data.queue.ept"]
+        order_data_queue_line_obj = self.env["shopify.order.data.queue.line.ec"]
+        order_queue_obj = self.env["shopify.order.data.queue.ec"]
         queue_type = 'unshipped'
         if order_ids:
             instance.connect_in_shopify()
@@ -264,7 +264,7 @@ class ShopifyOrderDataQueueEpt(models.Model):
     def create_schedule_activity(self, queue_id):
         mail_activity_obj = self.env['mail.activity']
         ir_model_obj = self.env['ir.model']
-        model_id = ir_model_obj.search([('model', '=', 'shopify.order.data.queue.ept')])
+        model_id = ir_model_obj.search([('model', '=', 'shopify.order.data.queue.ec')])
         activity_type_id = queue_id and queue_id.shopify_instance_id.shopify_activity_type_id.id
         date_deadline = datetime.strftime(
             datetime.now() + timedelta(days=int(queue_id.shopify_instance_id.shopify_date_deadline)), "%Y-%m-%d")
@@ -301,4 +301,4 @@ class ShopifyOrderDataQueueEpt(models.Model):
         :return:
         """
         dashboard = self.env['queue.line.dashboard']
-        return dashboard.get_data(table='shopify.order.data.queue.line.ept')
+        return dashboard.get_data(table='shopify.order.data.queue.line.ec')

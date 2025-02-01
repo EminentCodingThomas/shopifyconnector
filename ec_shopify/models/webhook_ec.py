@@ -10,7 +10,7 @@ from .. import shopify
 _logger = logging.getLogger("Shopify Webhook")
 
 class ShopifyWebhookEpt(models.Model):
-    _name = "shopify.webhook.ept"
+    _name = "shopify.webhook.ec"
     _description = 'Shopify Webhook'
 
     state = fields.Selection([('active', 'Active'), ('inactive', 'Inactive')], default='inactive')
@@ -23,7 +23,7 @@ class ShopifyWebhookEpt(models.Model):
                                        ])
     webhook_id = fields.Char('Webhook Id in Shopify')
     delivery_url = fields.Text("Delivery URL")
-    instance_id = fields.Many2one("shopify.instance.ept", string="Webhook created by this Shopify Instance.",
+    instance_id = fields.Many2one("shopify.instance.ec", string="Webhook created by this Shopify Instance.",
                                   ondelete="cascade")
 
     @api.model

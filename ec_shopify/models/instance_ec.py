@@ -21,7 +21,7 @@ _secondsConverter = {
 
 
 class ShopifyInstanceEpt(models.Model):
-    _name = "shopify.instance.ept"
+    _name = "shopify.instance.ec"
     _description = 'Shopify Instance'
 
     @api.model
@@ -159,7 +159,7 @@ class ShopifyInstanceEpt(models.Model):
     color = fields.Integer(string='Color Index')
 
     # fields for kanban view
-    product_ids = fields.One2many('shopify.product.template.ept', 'shopify_instance_id',
+    product_ids = fields.One2many('shopify.product.template.ec', 'shopify_instance_id',
                                   string="Products")
 
     shopify_user_ids = fields.Many2many('res.users', 'shopify_instance_ec_res_users_rel',
@@ -178,7 +178,7 @@ class ShopifyInstanceEpt(models.Model):
                                                    "products",
                                               default=True)
 
-    webhook_ids = fields.One2many("shopify.webhook.ept", "instance_id", "Webhooks")
+    webhook_ids = fields.One2many("shopify.webhook.ec", "instance_id", "Webhooks")
     create_shopify_products_webhook = fields.Boolean("Manage Products via Webhooks",
                                                      help="True : It will create all product related webhooks.\n"
                                                           "False : All product related webhooks will be deactivated.")
@@ -196,7 +196,7 @@ class ShopifyInstanceEpt(models.Model):
     auto_import_shipped_order = fields.Boolean(default=False)
 
     # Shopify Payout Report
-    transaction_line_ids = fields.One2many("shopify.payout.account.config.ept", "instance_id",
+    transaction_line_ids = fields.One2many("shopify.payout.account.config.ec", "instance_id",
                                            string="Transaction Line")
     shopify_settlement_report_journal_id = fields.Many2one('account.journal',
                                                            string='Payout Report Journal')
@@ -315,11 +315,8 @@ class ShopifyInstanceEpt(models.Model):
 
     def get_graph_data(self, record):
         """
-        Use: To get the details of shopify sale orders and total amount month wise or year wise to prepare the graph
-        Task: 167063
-        Added by: Preet Bhatti @Emipro Technologies
-        Added on: 29/10/20
-        :return: shopify sale order date or month and sum of sale orders amount of current instance
+        Function to get the details of shopify sale orders and total amount month wise or year wise to prepare the graph
+        and provide shopify sale order date or month and sum of sale orders amount of current instance
         """
 
         def get_current_week_date(record):
@@ -408,7 +405,7 @@ class ShopifyInstanceEpt(models.Model):
     def get_compare_data(self, record):
         """
         :param record: Shopify instance
-        :return: Comparison ratio of orders (weekly,monthly and yearly based on selection)
+        Comparison ratio of orders (weekly,monthly and yearly based on selection)
         """
         data_type = False
         total_percentage = 0.0
@@ -500,11 +497,8 @@ class ShopifyInstanceEpt(models.Model):
 
     def get_total_orders(self):
         """
-        Use: To get the list of shopify sale orders month wise or year wise
-        Task: 167063
-        Added by: Preet Bhatti @Emipro Technologies
-        Added on: 29/10/20
-        :return: total number of shopify sale orders ids and action for sale orders of current instance
+        Function to get the list of shopify sale orders month wise or year wise.
+        Total number of shopify sale orders ids and action for sale orders of current instance
         """
         order_query = """select id from sale_order where shopify_instance_id= %s and state in ('sale','done')""" % \
                       self.id
@@ -550,11 +544,8 @@ class ShopifyInstanceEpt(models.Model):
 
     def get_shipped_orders(self):
         """
-        Use: To get the list of shopify shipped orders month wise or year wise
-        Task: 167063
-        Added by: Preet Bhatti @Emipro Technologies
-        Added on: 29/10/20
-        :return: total number of shopify shipped orders ids and action for shipped orders of current instance
+        This fucntion is to get the list of shopify shipped orders month wise or year wise.
+        Total number of shopify shipped orders ids and action for shipped orders of current instance
         """
         shipped_query = """select so.id from stock_picking sp
                              inner join sale_order so on so.procurement_group_id=sp.group_id inner 
@@ -598,11 +589,8 @@ class ShopifyInstanceEpt(models.Model):
 
     def get_total_products(self):
         """
-        Use: To get the list of products exported from shopify instance
-        Task: 167063
-        Added by: Preet Bhatti @Emipro Technologies
-        Added on: 29/10/20
-        :return: total number of shopify products ids and action for products
+        This function is to get the list of products exported from shopify instance
+        Total number of shopify products ids and action for products
         """
         product_data = {}
         self._cr.execute("""select count(id) as total_count from shopify_product_template_ec where
@@ -617,11 +605,8 @@ class ShopifyInstanceEpt(models.Model):
 
     def get_customers(self):
         """
-        Use: To get the list of customers with shopify instance for current shopify instance
-        Task: 167063
-        Added by: Preet Bhatti @Emipro Technologies
-        Added on: 29/10/20
-        :return: total number of customer ids and action for customers
+        This Function is to get the list of customers with shopify instance for current shopify instance.
+        Total number of customer ids and action for customers
         """
         customer_data = {}
         self._cr.execute("""select partner_id from shopify_res_partner_ec where shopify_instance_id = %s"""
@@ -635,11 +620,7 @@ class ShopifyInstanceEpt(models.Model):
 
     def get_refund(self):
         """
-        Use: To get the list of refund orders of shopify instance for current shopify instance
-        Task: 167349
-        Added by: Preet Bhatti @Emipro Technologies
-        Added on: 03/11/20
-        :return: total number of refund order ids and action for customers
+        This Fuction is to get the list of refund orders of shopify instance for current shopify instance
         """
         refund_query = """select id from account_move where shopify_instance_id=%s and
                             move_type='out_refund'""" % self.id
@@ -679,13 +660,6 @@ class ShopifyInstanceEpt(models.Model):
         return refund_data
 
     def prepare_action(self, view, domain):
-        """
-        Use: To prepare action dictionary
-        Task: 167063
-        Added by: Preet Bhatti @Emipro Technologies
-        Added on: 29/10/20
-        :return: action details
-        """
         action = {
             'name': view.get('name'),
             'type': view.get('type'),
@@ -703,13 +677,6 @@ class ShopifyInstanceEpt(models.Model):
 
     @api.model
     def perform_operation(self, record_id):
-        """
-        Use: To prepare shopify operation action
-        Task: 167063
-        Added by: Preet Bhatti @Emipro Technologies
-        Added on: 29/10/20
-        :return: shopify operation action details
-        """
         view = self.env.ref('ec_shopify.action_wizard_shopify_instance_import_export_operations').sudo().read()[0]
         action = self.prepare_action(view, [])
         action.update({'context': {'default_shopify_instance_id': record_id}})
@@ -717,13 +684,6 @@ class ShopifyInstanceEpt(models.Model):
 
     @api.model
     def open_report(self, record_id):
-        """
-        Use: To prepare shopify report action
-        Task: 167063
-        Added by: Preet Bhatti @Emipro Technologies
-        Added on: 29/10/20
-        :return: shopify report action details
-        """
         sale_report_obj = self.env['sale.report']
         view = sale_report_obj.shopify_sale_report()
         # view = self.env.ref('ec_shopify.shopify_sale_report_action_dashboard').sudo().read()[0]
@@ -735,11 +695,7 @@ class ShopifyInstanceEpt(models.Model):
     @api.model
     def open_logs(self, record_id):
         """
-        Use: To prepare shopify logs action
-        Task: 167063
-        Added by: Preet Bhatti @Emipro Technologies
-        Added on: 29/10/20
-        :return: shopify logs action details
+        This Fuction is to return prepare shopify logs action
         """
         view = self.env.ref('ec_shopify.action_shopify_common_log_line_ec').sudo().read()[0]
         return self.prepare_action(view, [('shopify_instance_id', '=', record_id)])
@@ -813,12 +769,12 @@ class ShopifyInstanceEpt(models.Model):
 
     def shopify_action_archive_unarchive(self):
         domain = [("shopify_instance_id", "=", self.id)]
-        shopify_template_obj = self.env["shopify.product.template.ept"]
-        sale_auto_workflow_configuration_obj = self.env["sale.auto.workflow.configuration.ept"]
-        shopify_payment_gateway_obj = self.env["shopify.payment.gateway.ept"]
-        shopify_webhook_obj = self.env["shopify.webhook.ept"]
-        shopify_location_obj = self.env["shopify.location.ept"]
-        data_queue_mixin_obj = self.env['data.queue.mixin.ept']
+        shopify_template_obj = self.env["shopify.product.template.ec"]
+        sale_auto_workflow_configuration_obj = self.env["sale.auto.workflow.configuration.ec"]
+        shopify_payment_gateway_obj = self.env["shopify.payment.gateway.ec"]
+        shopify_webhook_obj = self.env["shopify.webhook.ec"]
+        shopify_location_obj = self.env["shopify.location.ec"]
+        data_queue_mixin_obj = self.env['data.queue.mixin.ec']
         if self.active:
             activate = {"active": False}
             domain_for_webhook_location = [("instance_id", "=", self.id)]
@@ -898,7 +854,7 @@ class ShopifyInstanceEpt(models.Model):
         self.configure_webhooks(topic_list)
 
     def configure_webhooks(self, topic_list):
-        webhook_obj = self.env["shopify.webhook.ept"]
+        webhook_obj = self.env["shopify.webhook.ec"]
 
         resource = topic_list[0].split('/')[0]
         instance_id = self.id
@@ -927,16 +883,16 @@ class ShopifyInstanceEpt(models.Model):
         webhook_ids = []
         for webhook in responses:
             webhook_ids.append(str(webhook.id))
-        _logger.info("Emipro-Webhook: Current webhook present in shopify is %s", webhook_ids)
-        webhook_obj = self.env['shopify.webhook.ept'].search(
+        _logger.info("Shopify-Webhook: Current webhook present in shopify is %s", webhook_ids)
+        webhook_obj = self.env['shopify.webhook.ec'].search(
             [('instance_id', '=', self.id), ('webhook_id', 'not in', webhook_ids)])
-        _logger.info("Emipro-Webhook: Webhook not present in odoo is %s", webhook_obj)
+        _logger.info("Shopify-Webhook: Webhook not present in odoo is %s", webhook_obj)
 
         if webhook_obj:
             for webhooks in webhook_obj:
-                _logger.info("Emipro-Webhook: deleting the %s shopify.webhook.ept record", webhooks.id)
+                _logger.info("Shopify-Webhook: deleting the %s shopify.webhook.ec record", webhooks.id)
                 self._cr.execute("DELETE FROM shopify_webhook_ec WHERE id = %s", [webhooks.id], log_exceptions=False)
-        _logger.info("Emipro-Webhook: refresh process done")
+        _logger.info("Shopify-Webhook: refresh process done")
         return True
 
     def search_shopify_instance(self):
@@ -968,7 +924,7 @@ class ShopifyInstanceEpt(models.Model):
         return {
             'name': _('Instance Active/Archive Details'),
             'type': 'ir.actions.act_window',
-            'res_model': 'shopify.queue.process.ept',
+            'res_model': 'shopify.queue.process.ec',
             'views': [(view.id, 'form')],
             'target': 'new',
             'context': self._context,

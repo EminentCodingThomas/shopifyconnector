@@ -79,10 +79,10 @@
     'auto_install': False,
     'application': True,
     'currency': 'EUR',
-    'assets': {
-        'web.assets_backend': [
-            'ec_shopify/static/src/js/shopify_button_collapse.js',
-            'ec_shopify/static/src/css/shopify_base.css',
-        ],
-    },
+    # 'assets': {
+    #     'web.assets_backend': [
+    #         'ec_shopify/static/src/js/shopify_button_collapse.js',
+    #         'ec_shopify/static/src/css/shopify_base.css',
+    #     ],
+    # },
 }
